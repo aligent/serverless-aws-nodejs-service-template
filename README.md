@@ -13,5 +13,5 @@ alias serverless='node-run serverless'
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
 
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --name my-service --path ./my-service`
+Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
 Then install dependencies with `node-run npm install`.

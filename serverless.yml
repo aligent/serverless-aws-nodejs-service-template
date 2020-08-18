@@ -36,22 +36,8 @@ provider:
     #         - '/*'
 
 functions:
-  setToken:
-    handler: src/set-token.handler
-    environment:
-      config_bucket: ${self:custom.myob.s3.configBucket}
-      myob_token_s3_key: ${self:custom.myob.s3.tokenKey}
-  refreshToken:
-    handler: src/refresh-token.handler
-    events:
-      - schedule: rate(15 minutes)
-  getToken:
-    handler: src/get-token.handler
-    environment:
-      config_bucket: ${self:custom.myob.s3.configBucket}
-      myob_token_s3_key: ${self:custom.myob.s3.tokenKey}
-  initialiseToken:
-    handler: src/initialise-token.handler
+  hello:
+    handler: src/handler.hello
 
 resources:
   Resources:

@@ -9,7 +9,7 @@
     "target": "es2017",
     "outDir": "lib"
   },
-  "include": ["./**/*.ts"],
+  "include": ["./src/**/*.ts"],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
