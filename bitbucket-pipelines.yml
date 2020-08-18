@@ -1,0 +1,18 @@
+image: aligent/serverless
+
+pipelines:
+  branches:
+    "{production,staging}":
+      - step:
+          caches:
+            - node
+          script: 
+            - mkdir -p ~/.aws
+            - echo "[bitbucket-deployer]" >> ~/.aws/credentials 
+            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID"  >> ~/.aws/credentials 
+            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY"  >> ~/.aws/credentials 
+            - npm install
+            - | 
+              [[ "$BITBUCKET_BRANCH" == "production" ]] && stage="production" || stage="staging"
+              echo "Deploying to $stage..."
+            - /serverless/node_modules/serverless/bin/serverless.js deploy --stage $stage --aws-profile bitbucket-deployer
