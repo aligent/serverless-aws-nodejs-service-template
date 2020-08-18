@@ -1,0 +1,62 @@
+service:
+  name: myob-token-service
+
+package:
+  include:
+    - src/
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  s3:
+    port: 8888
+    directory: /app/.s3-local
+
+plugins:
+  - serverless-webpack
+  - serverless-s3-local
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'staging'}
+  region: ${opt:region, 'ap-southeast-2'} 
+  memorySize: 192 #mb (default for all)
+  iamRoleStatements:
+    # - Effect: "Allow"
+    #   Action:
+    #     - "s3:*"
+    #   Resource:
+    #     - Fn::Join:
+    #       - ''
+    #       - - 'arn:aws:s3:::'
+    #         - Ref: S3BucketConfig
+    #         - '/*'
+
+functions:
+  setToken:
+    handler: src/set-token.handler
+    environment:
+      config_bucket: ${self:custom.myob.s3.configBucket}
+      myob_token_s3_key: ${self:custom.myob.s3.tokenKey}
+  refreshToken:
+    handler: src/refresh-token.handler
+    events:
+      - schedule: rate(15 minutes)
+  getToken:
+    handler: src/get-token.handler
+    environment:
+      config_bucket: ${self:custom.myob.s3.configBucket}
+      myob_token_s3_key: ${self:custom.myob.s3.tokenKey}
+  initialiseToken:
+    handler: src/initialise-token.handler
+
+resources:
+  Resources:
+    # S3BucketConfig:
+    #   Type: AWS::S3::Bucket
+    #   Properties:
+    #     BucketName: ${self:custom.s3.configBucket}
+    #   DeletionPolicy: Delete
