@@ -12,10 +12,18 @@ custom:
   s3:
     port: 8888
     directory: /app/.s3-local
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 3003
+      inMemory: true
+      migrate: true
 
 plugins:
   - serverless-webpack
   - serverless-s3-local
+  - serverless-dynamodb-local
   - serverless-offline
 
 provider:
@@ -46,3 +54,17 @@ resources:
     #   Properties:
     #     BucketName: ${self:custom.s3.configBucket}
     #   DeletionPolicy: Delete
+
+    # DBUsers:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
+    #     TableName: usersTable
+    #     AttributeDefinitions:
+    #       - AttributeName: email
+    #         AttributeType: S
+    #     KeySchema:
+    #       - AttributeName: email
+    #         KeyType: HASH
+    #     ProvisionedThroughput:
+    #       ReadCapacityUnits: 1
+    #       WriteCapacityUnits: 1

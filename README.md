@@ -41,3 +41,8 @@ This will ensure that it uses a local S3 instance in this case when invoked with
 
 Run `docker-compose up` to run the serverless offline services. Then to invoke functions 
 run `sls-invoke initialiseToken --stage dev`.
+
+#### DynamoDB ####
+
+If you want to use DynamoDB offline, you'll need to run `serverless dynamodb install` in your project once, to
+download the local dynamodb code.

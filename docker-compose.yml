@@ -2,8 +2,8 @@ version: '3.2'
 
 services:
   offline:
-    image: aligent/serverless
-    command: serverless offline --stage dev
+    image: aligent/serverless:offline
+    command: serverless offline start --stage dev
     volumes: 
       - .:/app
       - ~/.npm:/home/node/.npm

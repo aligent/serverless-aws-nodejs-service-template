@@ -9,6 +9,11 @@ export const S3Params : S3.Types.ClientConfiguration = UseAWSLocal ? {
     s3ForcePathStyle: true
 } : {};
 
+export const DynamoDBParams : DynamoDB.Types.ClientConfiguration = UseAWSLocal ? {
+    region: 'localhost',
+    endpoint: 'http://localhost:3003'
+} : {};
+
 export const LambdaParams : Lambda.Types.ClientConfiguration = UseAWSLocal ? {
     endpoint: 'http://localhost:3002'
 } : {};
