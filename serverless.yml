@@ -19,11 +19,15 @@ custom:
       port: 3003
       inMemory: true
       migrate: true
+  serverless-offline-ssm:
+    stages:
+      - dev
 
 plugins:
   - serverless-webpack
   - serverless-s3-local
   - serverless-dynamodb-local
+  - serverless-offline-ssm
   - serverless-offline
 
 provider:
