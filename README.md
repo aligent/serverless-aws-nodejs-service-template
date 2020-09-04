@@ -61,7 +61,7 @@ clientSecret: ${ssm:/myob/staging/client_secret~true}
 
 *.env*
 ```
-/myob/staging/client_secret="shh"
+/myob/staging/client_secret=shh
 ```
 
 
