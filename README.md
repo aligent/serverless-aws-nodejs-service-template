@@ -47,7 +47,7 @@ run `sls-invoke initialiseToken --stage dev`.
 If you want to use DynamoDB offline, you'll need to run `serverless dynamodb install` in your project once, to
 download the local dynamodb code.
 
-#### SSM Paramteres ####
+#### SSM Parameters ####
 
 For stages defined in `custom:serverless-offline-ssm:stages` (by default _dev_), serverless offline will use 
 a .env file instead of called AWS SSM. The .env file contains variables that match the full path, for example:
