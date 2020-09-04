@@ -18,7 +18,7 @@ Add the following to your `.bashrc` file:
 ```
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias sls-invoke='docker-compose exec offline /serverless/node_modules/serverless/bin/serverless.js --no-build invoke local --function'
+alias sls-invoke='docker-compose exec -u node offline /serverless/node_modules/serverless/bin/serverless.js --no-build invoke local --function'
 ```
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
