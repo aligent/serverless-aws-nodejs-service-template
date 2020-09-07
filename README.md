@@ -18,7 +18,7 @@ Add the following to your `.bashrc` file:
 ```
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias sls-invoke='docker-compose exec offline /serverless/node_modules/serverless/bin/serverless.js --no-build invoke local --function'
+alias sls-invoke='docker-compose exec -u node offline /serverless/node_modules/serverless/bin/serverless.js --no-build invoke local --function'
 ```
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
@@ -47,7 +47,7 @@ run `sls-invoke initialiseToken --stage dev`.
 If you want to use DynamoDB offline, you'll need to run `serverless dynamodb install` in your project once, to
 download the local dynamodb code.
 
-#### SSM Paramteres ####
+#### SSM Parameters ####
 
 For stages defined in `custom:serverless-offline-ssm:stages` (by default _dev_), serverless offline will use 
 a .env file instead of called AWS SSM. The .env file contains variables that match the full path, for example:
@@ -61,7 +61,7 @@ clientSecret: ${ssm:/myob/staging/client_secret~true}
 
 *.env*
 ```
-/myob/staging/client_secret="shh"
+/myob/staging/client_secret=shh
 ```
 
 
