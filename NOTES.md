@@ -1,3 +1,7 @@
+### General gotchas ###
+* Resource names have a limit of 64 characters - if prepending the service name/stage, those should be kept short.
+* Variables of the form `#{AWS::AccountId}` require the `serverless-psuedo-parameters` plugin: https://www.serverless.com/plugins/serverless-pseudo-parameters
+
 ### Api Keys ###
 Documentation: https://www.serverless.com/framework/docs/providers/aws/events/apigateway/#setting-api-keys-for-your-rest-api
 
@@ -22,3 +26,10 @@ provider:
 ```
 
 Use the `--conceal` flag in bitbucket pipeline deployment scripts.
+
+### Step Functions ###
+Documentation: https://www.serverless.com/plugins/serverless-step-functions
+
+#### Notes: ####
+* If a step fails with the very unhelpful "lambda did not return an error" message, it may be caused by a process timing out.
+* Input and output mapping can get quite complex and is not covered by the serverless documentation. Suggest reading the AWS docs: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-input-output-filtering.html
