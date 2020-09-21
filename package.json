@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.62",
-    "@types/node": "^14.10.1",
+    "@types/node": "^14.11.1",
     "@types/serverless": "^1.72.6",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
     "serverless-offline-ssm": "^5.0.2",
