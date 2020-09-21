@@ -17,7 +17,7 @@
     "@types/node": "^14.10.1",
     "@types/serverless": "^1.72.6",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
-    "serverless-offline-ssm": "^5.0.2",
+    "serverless-offline-ssm": "^5.1.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.3",
     "ts-node": "^9.0.0",
