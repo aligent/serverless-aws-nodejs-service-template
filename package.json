@@ -9,7 +9,7 @@
   "dependencies": {
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.8.0",
-    "serverless-s3-local": "^0.6.5",
+    "serverless-s3-local": "^0.6.7",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
