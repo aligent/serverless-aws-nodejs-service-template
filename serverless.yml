@@ -1,6 +1,8 @@
 service:
   name: myob-token-service
 
+configValidationMode: error
+
 package:
   include:
     - src/
