@@ -1,9 +1,8 @@
 name: Test serverless package
 
 on:
-  push:
-    pull_request:
-      - master
+  pull_request:
+    - master
 
 jobs:
   deploy:
