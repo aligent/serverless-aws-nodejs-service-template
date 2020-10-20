@@ -53,8 +53,8 @@ functions:
   hello:
     handler: src/handler.hello
 
-resources:
-  Resources:
+#resources:
+#  Resources:
     # S3BucketConfig:
     #   Type: AWS::S3::Bucket
     #   Properties:
