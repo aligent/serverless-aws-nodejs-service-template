@@ -1,6 +1,8 @@
 service:
   name: myob-token-service
 
+configValidationMode: error
+
 package:
   include:
     - src/
@@ -51,8 +53,8 @@ functions:
   hello:
     handler: src/handler.hello
 
-resources:
-  Resources:
+#resources:
+#  Resources:
     # S3BucketConfig:
     #   Type: AWS::S3::Bucket
     #   Properties:
