@@ -1,4 +1,4 @@
-name: Deploy master branch
+name: Test serverless package
 
 on:
   push:
@@ -18,5 +18,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm install
     - name: serverless package
       uses: serverless/github-action@master
