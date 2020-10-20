@@ -1,0 +1,22 @@
+name: Deploy master branch
+
+on:
+  push:
+    pull_request:
+      - master
+
+jobs:
+  deploy:
+    name: Test package building
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: serverless package
+      uses: serverless/github-action@master
