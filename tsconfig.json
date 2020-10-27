@@ -7,7 +7,8 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "target": "es2017",
-    "outDir": "lib"
+    "outDir": "lib",
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["./src/**/*.ts"],
   "exclude": [
@@ -15,6 +16,7 @@
     ".serverless/**/*",
     ".webpack/**/*",
     "_warmup/**/*",
-    ".vscode/**/*"
+    ".vscode/**/*",
+    "types"
   ]
 }
