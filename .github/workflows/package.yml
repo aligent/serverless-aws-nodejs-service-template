@@ -23,7 +23,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - name: invoke hello world
-      run: serverless invoke local -f hello
+      uses: serverless/github-action@master
+      with:
+        args: invoke local -f hello
     - name: serverless package
       uses: serverless/github-action@master
       with:
