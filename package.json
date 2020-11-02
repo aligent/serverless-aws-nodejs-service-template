@@ -7,9 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "serverless-dynamodb-local": "^0.2.39",
-    "serverless-offline": "^6.8.0",
-    "serverless-s3-local": "^0.6.7",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
@@ -17,6 +14,9 @@
     "@types/node": "^14.14.3",
     "@types/serverless": "^1.78.6",
     "fork-ts-checker-webpack-plugin": "^5.2.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.8.0",
+    "serverless-s3-local": "^0.6.7",
     "serverless-offline-ssm": "^5.1.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.7",
