@@ -17,7 +17,7 @@
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.8.0",
     "serverless-s3-local": "^0.6.7",
-    "serverless-offline-ssm": "^5.1.0",
+    "serverless-offline-ssm": "^5.2.0",
     "serverless-webpack": "^5.3.5",
     "ts-loader": "^8.0.11",
     "ts-node": "^9.0.0",
