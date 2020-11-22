@@ -13,7 +13,7 @@
     "@types/aws-lambda": "^8.10.64",
     "@types/node": "^14.14.9",
     "@types/serverless": "^1.78.9",
-    "fork-ts-checker-webpack-plugin": "^6.0.2",
+    "fork-ts-checker-webpack-plugin": "^6.0.3",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-offline": "^6.8.0",
     "serverless-s3-local": "^0.6.7",
