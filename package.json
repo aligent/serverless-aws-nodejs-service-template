@@ -10,7 +10,7 @@
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.64",
+    "@types/aws-lambda": "^8.10.66",
     "@types/node": "^14.14.10",
     "@types/serverless": "^1.78.12",
     "fork-ts-checker-webpack-plugin": "^6.0.6",
