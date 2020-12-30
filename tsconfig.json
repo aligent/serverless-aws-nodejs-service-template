@@ -14,7 +14,7 @@
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
-    ".webpack/**/*",
+    ".build/**/*",
     "_warmup/**/*",
     ".vscode/**/*",
     "types"
