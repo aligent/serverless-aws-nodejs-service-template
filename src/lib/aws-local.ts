@@ -1,4 +1,4 @@
-import { S3, Lambda } from "aws-sdk";
+import { S3, Lambda, DynamoDB } from "aws-sdk";
 
 export const UseAWSLocal: boolean = (process.env.IS_LOCAL || process.env.IS_OFFLINE) === 'true';
 

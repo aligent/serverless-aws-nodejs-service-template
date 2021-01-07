@@ -1,5 +1,4 @@
-service:
-  name: myob-token-service
+service: myob-token-service
 
 configValidationMode: error
 
@@ -8,9 +7,9 @@ package:
     - src/
 
 custom:
-  webpack:
-    webpackConfig: ./webpack.config.js
-    includeModules: true
+  esbuild:
+    bundle: true
+    minify: true
   s3:
     port: 8888
     directory: /app/.s3-local
@@ -26,17 +25,17 @@ custom:
       - dev
 
 plugins:
-  - serverless-webpack
   - serverless-s3-local
   - serverless-dynamodb-local
   - serverless-offline-ssm
   - serverless-offline
+  - serverless-esbuild
 
 provider:
   name: aws
   runtime: nodejs12.x
   stage: ${opt:stage, 'staging'}
-  region: ${opt:region, 'ap-southeast-2'} 
+  region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
   iamRoleStatements:
     # - Effect: "Allow"
