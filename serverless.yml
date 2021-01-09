@@ -10,6 +10,7 @@ custom:
   esbuild:
     bundle: true
     minify: true
+    target: node12
   s3:
     port: 8888
     directory: /app/.s3-local
