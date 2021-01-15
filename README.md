@@ -44,7 +44,7 @@ run `sls-invoke initialiseToken --stage dev`.
 
 #### DynamoDB ####
 
-If you want to use DynamoDB offline, you'll need to run `serverless dynamodb install` in your project once, to
+If you want to use DynamoDB offline, uncomment the line `- serverless-dynamodb-local` in serverless.yml. You'll need to run `serverless dynamodb install` in your project once, to
 download the local dynamodb code.
 
 #### SSM Parameters ####
