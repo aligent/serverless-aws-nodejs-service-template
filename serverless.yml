@@ -27,7 +27,7 @@ custom:
 
 plugins:
   - serverless-s3-local
-  - serverless-dynamodb-local
+  # - serverless-dynamodb-local # local dynamoDB requires running `serverless dynamodb install`
   - serverless-offline-ssm
   - serverless-offline
   - serverless-esbuild
