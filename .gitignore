@@ -9,3 +9,6 @@ jspm_packages
 .build
 
 vscode
+
+# Localstack directories
+.localstack
