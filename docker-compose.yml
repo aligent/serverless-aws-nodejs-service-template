@@ -30,6 +30,7 @@ services:
       - START_WEB=0
     volumes:
       - ./.localstack:/tmp/localstack
+      - ./.localstack-init/init.sh:/docker-entrypoint-initaws.d/localstack-init.sh
       - "/var/run/docker.sock:/var/run/docker.sock"
 
 networks:
