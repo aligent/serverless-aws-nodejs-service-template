@@ -22,10 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - name: invoke hello world
-      uses: serverless/github-action@master
-      with:
-        args: invoke local -f hello
     - name: serverless package
       uses: serverless/github-action@master
       with:
