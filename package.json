@@ -10,7 +10,7 @@
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.75",
+    "@types/aws-lambda": "^8.10.76",
     "@types/node": "^15.0.1",
     "@types/serverless": "^1.78.26",
     "serverless-dynamodb-local": "^0.2.39",
