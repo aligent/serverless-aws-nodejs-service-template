@@ -50,6 +50,27 @@ Then install dependencies with `node-run npm install`.
 
 Start the development environment `docker-compose up`
 
+Deploy the serverless stack
+`sls-deploy-local`
+
+Invoke the step function
+`sls-invoke-stepf helloWorld`
+
+Invoke the step function with data
+`sls-invoke-stepf helloWorld --data='{}'`
+
+Invoke the step function with json file
+`sls-invoke-stepf helloWorld --path='input.json'`
+
+Invoke individual lambdas
+`sls-invoke hello`
+
+Invoke individual lambdas with data
+`sls-invoke hello --data='{}'`
+
+Invoke individual lambdas json file
+`sls-invoke hello --path='input.json'`
+
 ### Local NPM
 Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
 
@@ -58,6 +79,27 @@ Start with the template: `serverless create --template-url https://github.com/al
 Install dependencies with `npm install`
 
 Start the development environment `docker-compose up`
+
+Deploy the serverless stack
+`npm run deploy-local`
+
+Invoke the step function
+`npm run invoke-local-stepf helloWorld`
+
+Invoke the step function with data
+`npm run invoke-local-stepf helloWorld --data='{}'`
+
+Invoke the step function with json file
+`npm run invoke-local-stepf helloWorld --path='input.json'`
+
+Invoke individual lambdas
+`npm run invoke-local hello`
+
+Invoke individual lambdas with data
+`npm run invoke-local hello --data='{}'`
+
+Invoke individual lambdas json file
+`npm run invoke-local hello --path='input.json'`
 
 ## Offline Usage
 
