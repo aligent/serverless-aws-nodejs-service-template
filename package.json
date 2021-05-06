@@ -14,7 +14,7 @@
     "@types/node": "^15.0.1",
     "@types/serverless": "^1.78.26",
     "serverless-dynamodb-local": "^0.2.39",
-    "serverless-esbuild": "^1.10.2",
+    "serverless-esbuild": "^1.10.5",
     "serverless-offline": "^7.0.0",
     "serverless-offline-ssm": "^5.2.0",
     "serverless-s3-local": "^0.6.14",
