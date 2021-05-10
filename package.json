@@ -17,7 +17,7 @@
     "serverless-esbuild": "^1.10.2",
     "serverless-offline": "^7.0.0",
     "serverless-offline-ssm": "^5.2.0",
-    "serverless-s3-local": "^0.6.14",
+    "serverless-s3-local": "^0.6.15",
     "ts-loader": "^9.1.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
