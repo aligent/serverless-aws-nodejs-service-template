@@ -1,4 +1,4 @@
-service: myob-token-service
+service: local-stack-template # NOTE: update this with your service name
 
 configValidationMode: error
 
@@ -11,31 +11,25 @@ custom:
     bundle: true
     minify: true
     target: node12
-  s3:
-    port: 8888
-    directory: /app/.s3-local
-  dynamodb:
+  localstack:
+    debug: true
+    autostart: false
     stages:
       - dev
-    start:
-      port: 3003
-      inMemory: true
-      migrate: true
-  serverless-offline-ssm:
-    stages:
-      - dev
+    host: http://localstack
+    edgePort: 4566
+    lambda:
+      mountCode: false
 
 plugins:
-  - serverless-s3-local
-  # - serverless-dynamodb-local # local dynamoDB requires running `serverless dynamodb install`
-  - serverless-offline-ssm
-  - serverless-offline
   - serverless-esbuild
+  - serverless-localstack
+  - serverless-step-functions
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${opt:stage, 'staging'}
+  stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
   iamRoleStatements:
@@ -51,8 +45,33 @@ provider:
 
 functions:
   hello:
-    handler: src/handler.hello
+    handler: src/hello.handler
+  world:
+    handler: src/world.handler
 
+stepFunctions:
+  stateMachines:
+    helloWorld:
+      name: helloWorld
+      definition:
+        StartAt: Hello
+        States:
+          Hello:
+            Type: Task
+            Resource: 
+              Fn::GetAtt: [hello, Arn]
+            Next: World
+          World:
+            Type: Task
+            Resource: 
+              Fn::GetAtt: [world, Arn]
+            Next: Passthru
+          Passthru:
+            Type: Pass
+            Next: Stop
+          Stop:
+            Type: Pass
+            End: true
 #resources:
 #  Resources:
     # S3BucketConfig:
