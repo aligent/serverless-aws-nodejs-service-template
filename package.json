@@ -15,7 +15,7 @@
     "@types/aws-lambda": "^8.10.76",
     "@types/node": "^15.0.1",
     "@types/serverless": "^1.78.26",
-    "serverless-esbuild": "^1.10.2",
+    "serverless-esbuild": "^1.10.7",
     "serverless-localstack": "^0.4.30",
     "serverless-step-functions": "^2.29.0",
     "ts-loader": "^9.1.1",
