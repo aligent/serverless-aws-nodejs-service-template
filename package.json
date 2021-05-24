@@ -14,7 +14,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.76",
     "@types/node": "^15.6.0",
-    "@types/serverless": "^1.78.26",
+    "@types/serverless": "^1.78.28",
     "serverless-esbuild": "^1.10.7",
     "serverless-localstack": "^0.4.30",
     "serverless-step-functions": "^2.29.0",
