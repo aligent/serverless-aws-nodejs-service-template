@@ -48,6 +48,25 @@ functions:
     handler: src/hello.handler
   world:
     handler: src/world.handler
+  simpleGetRequest:
+    handler: src/api-gateway-examples/simple-get-request.handler
+    events:
+      - http:
+          path: api-gateway
+          method: get
+  postS3RecordById:
+    handler: src/api-gateway-examples/post-by-id.handler
+    events:
+      - http:
+          path: records/{id}
+          method: post
+  getS3RecordById:
+    handler: src/api-gateway-examples/get-by-id.handler
+    events:
+      - http:
+          path: records/{id}
+          method: get
+  
 
 stepFunctions:
   stateMachines:
