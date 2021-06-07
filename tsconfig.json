@@ -10,7 +10,10 @@
     "outDir": "lib",
     "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["./src/**/*.ts"],
+  "include": [
+      "./src/**/*.ts",
+      "./tests/**/*.ts"
+    ],
   "exclude": [
     "node_modules/**/*",
     ".serverless/**/*",
