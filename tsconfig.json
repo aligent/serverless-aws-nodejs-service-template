@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "lib": ["es2019"],
+    "noImplicitAny": true,
     "removeComments": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
