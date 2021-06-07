@@ -3,6 +3,7 @@
     "lib": ["es2019"],
     "removeComments": true,
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
