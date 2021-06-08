@@ -6,18 +6,22 @@
   "scripts": {
     "deploy-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev",
     "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
-    "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name "
+    "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name ",
+    "test": "jest"
   },
   "dependencies": {
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.76",
+    "@types/jest": "^26.0.23",
     "@types/node": "^15.12.1",
     "@types/serverless": "^1.78.28",
+    "jest": "^27.0.4",
     "serverless-esbuild": "^1.10.7",
     "serverless-localstack": "^0.4.30",
     "serverless-step-functions": "^2.29.0",
+    "ts-jest": "^27.0.3",
     "ts-loader": "^9.1.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.3.2"
