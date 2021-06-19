@@ -22,7 +22,7 @@
     "serverless-localstack": "^0.4.30",
     "serverless-step-functions": "^2.29.0",
     "ts-jest": "^27.0.3",
-    "ts-loader": "^9.1.1",
+    "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "typescript": "^4.3.2"
   },
