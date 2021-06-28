@@ -18,7 +18,7 @@
     "@types/node": "^15.12.2",
     "@types/serverless": "^1.78.28",
     "jest": "^27.0.4",
-    "serverless-esbuild": "^1.12.0",
+    "serverless-esbuild": "^1.14.1",
     "serverless-localstack": "^0.4.30",
     "serverless-step-functions": "^2.29.0",
     "ts-jest": "^27.0.3",
