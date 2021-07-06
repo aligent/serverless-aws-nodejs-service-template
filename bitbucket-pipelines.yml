@@ -15,4 +15,4 @@ pipelines:
             - | 
               [[ "$BITBUCKET_BRANCH" == "production" ]] && stage="production" || stage="staging"
               echo "Deploying to $stage..."
-            - /serverless/node_modules/serverless/bin/serverless.js deploy --stage $stage --aws-profile bitbucket-deployer
+            - /serverless/node_modules/serverless/bin/serverless.js deploy --stage $stage --aws-profile bitbucket-deployer --conceal
