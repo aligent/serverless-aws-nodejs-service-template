@@ -25,9 +25,9 @@ pipelines:
       - step:
           <<: *push-serverless
           name: "Deploy Production"
-          deployment: Production 
+          deployment: Production
     staging:
       - step:
           <<: *push-serverless
           name: "Deploy Staging"
-          deployment: Staging 
+          deployment: Staging
