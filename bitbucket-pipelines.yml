@@ -1,18 +1,33 @@
 image: aligent/serverless
 
+definitions:
+  steps:
+    - step: &test
+        name: Test
+        script:
+          - npm ci
+          - npm run test
+    - step: &push-serverless
+        name: "Deploy service"
+        script:
+          - pipe: docker://aligent/microservice-deploy-pipe:latest
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              DEBUG: ${CI_DEBUG}
+
 pipelines:
+  pull-requests:
+    '**':
+      - step: *test
   branches:
-    "{production,staging}":
+    production:
       - step:
-          caches:
-            - node
-          script: 
-            - mkdir -p ~/.aws
-            - echo "[bitbucket-deployer]" >> ~/.aws/credentials 
-            - echo "aws_access_key_id=$AWS_ACCESS_KEY_ID"  >> ~/.aws/credentials 
-            - echo "aws_secret_access_key=$AWS_SECRET_ACCESS_KEY"  >> ~/.aws/credentials 
-            - npm install
-            - | 
-              [[ "$BITBUCKET_BRANCH" == "production" ]] && stage="production" || stage="staging"
-              echo "Deploying to $stage..."
-            - /serverless/node_modules/serverless/bin/serverless.js deploy --stage $stage --aws-profile bitbucket-deployer --conceal
+          <<: *push-serverless
+          name: "Deploy Production"
+          deployment: Production
+    staging:
+      - step:
+          <<: *push-serverless
+          name: "Deploy Staging"
+          deployment: Staging
