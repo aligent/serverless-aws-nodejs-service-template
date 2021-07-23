@@ -1,4 +1,4 @@
-service: local-stack-template # NOTE: update this with your service name
+service: <SERVICE_NAME>
 
 configValidationMode: error
 
