@@ -28,6 +28,7 @@ plugins:
 
 provider:
   name: aws
+  cfnRole: <ARN_OF_CLOUDFORMATION_SERVICE_ROLE>
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
