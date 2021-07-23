@@ -1,4 +1,4 @@
-service: <SERVICE_NAME>
+service: SERVICE_NAME # To be replaced
 
 configValidationMode: error
 
@@ -28,7 +28,7 @@ plugins:
 
 provider:
   name: aws
-  cfnRole: <ARN_OF_CLOUDFORMATION_SERVICE_ROLE>
+  cfnRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
