@@ -23,7 +23,7 @@
     "eslint": "^7.31.0",
     "jest": "^27.0.6",
     "serverless-esbuild": "^1.16.1",
-    "serverless-localstack": "^0.4.33",
+    "serverless-localstack": "^0.4.34",
     "serverless-step-functions": "^2.32.0",
     "ts-jest": "^27.0.4",
     "ts-loader": "^9.2.5",
