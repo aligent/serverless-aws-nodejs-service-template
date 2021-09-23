@@ -28,7 +28,10 @@ plugins:
 
 provider:
   name: aws
-  cfnRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
+  # It is a good security practice to use a CloudFormation service
+  # role for performing deployments.
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
+  # cfnRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
