@@ -7,7 +7,7 @@
     "deploy-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev",
     "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
     "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name ",
-    "test": "jest",
+    "test": "jest --coverage",
     "lint": "eslint . --ext .ts"
   },
   "dependencies": {
