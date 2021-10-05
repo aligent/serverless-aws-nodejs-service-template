@@ -12,3 +12,6 @@ vscode
 
 # Localstack directories
 .localstack
+
+# Jest coverage output
+converage
