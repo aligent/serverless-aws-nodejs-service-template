@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es2019"],
+    "lib": ["ES2019"],
     "noImplicitAny": true,
     "removeComments": true,
     "moduleResolution": "node",
@@ -8,7 +8,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "sourceMap": true,
-    "target": "es2017",
+    "target": "ES2019",
     "outDir": "lib",
     "typeRoots": ["./types", "./node_modules/@types"]
   },
