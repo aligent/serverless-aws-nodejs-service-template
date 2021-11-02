@@ -10,7 +10,7 @@ custom:
   esbuild:
     bundle: true
     minify: true
-    target: node12
+    target: node14
   localstack:
     debug: true
     autostart: false
