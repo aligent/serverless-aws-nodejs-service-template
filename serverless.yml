@@ -31,7 +31,8 @@ provider:
   # It is a good security practice to use a CloudFormation service
   # role for performing deployments.
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
-  # cfnRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
+  # iam:
+  #   deploymentRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
@@ -56,18 +57,18 @@ functions:
 stepFunctions:
   stateMachines:
     helloWorld:
-      name: helloWorld
+      name: ${self:service}-helloWorld
       definition:
         StartAt: Hello
         States:
           Hello:
             Type: Task
-            Resource: 
+            Resource:
               Fn::GetAtt: [hello, Arn]
             Next: World
           World:
             Type: Task
-            Resource: 
+            Resource:
               Fn::GetAtt: [world, Arn]
             Next: Passthru
           Passthru:
