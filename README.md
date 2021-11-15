@@ -58,13 +58,13 @@ Invoke the step function with json file
 `serverless invoke stepf helloWorld --path='input.json' --aws-profile profileName --stage staging`
 
 Invoke individual lambdas
-`serverless invoke hello --aws-profile profileName --stage staging`
+`serverless invoke --function hello --aws-profile profileName --stage staging`
 
 Invoke individual lambdas with data
-`sls-invoke hello --data='{}' --aws-profile profileName --stage staging`
+`serverless invoke --function hello --data='{}' --aws-profile profileName --stage staging`
 
 Invoke individual lambdas json file
-`sls-invoke hello --path='input.json' --aws-profile profileName --stage staging`
+`serverless invoke --function hello --path='input.json' --aws-profile profileName --stage staging`
 
 **Replace _profileName_ with your AWS profile and _staging_ with another stage, if desired**
 
