@@ -14,24 +14,9 @@ This template includes:
 # Usage
 
 ## Setup
-Add localstack credentials block to ~/.aws/credentials (creds don't matter)
-
-```
-[localstack]
-aws_access_key_id = localstack
-aws_secret_access_key = localstack
-```
-
-Add localstack profile block to ~/.aws/config
-```
-[profile localstack]
-region = ap-southeast-2
-output = json
-```
 
 ### Aliased NPM
 This ensures all serverless commands are run inside the serverless docker container so that you don't need to install node, npm and serverless globally.
-
 
 Add the following to your `.bashrc` file:
 ```
@@ -48,7 +33,62 @@ Start with the template: `serverless create --template-url https://github.com/al
 
 Then install dependencies with `node-run npm install`.
 
-Start the development environment `docker-compose up`
+### Local NPM
+Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
+
+Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
+
+Install dependencies with `npm install`
+
+## Online usage
+
+Add AWS profile credentials to ~/.aws/credentials
+https://www.serverless.com/framework/docs/providers/aws/guide/credentials#use-an-existing-aws-profile
+
+Deploy the serverless stack
+`serverless deploy --aws-profile profileName --stage staging`
+
+Invoke the step function
+`serverless invoke stepf helloWorld --aws-profile profileName --stage staging`
+
+Invoke the step function with data
+`serverless invoke stepf helloWorld --data='{}' --aws-profile profileName --stage staging`
+
+Invoke the step function with json file
+`serverless invoke stepf helloWorld --path='input.json' --aws-profile profileName --stage staging`
+
+Invoke individual lambdas
+`serverless invoke hello --aws-profile profileName --stage staging`
+
+Invoke individual lambdas with data
+`sls-invoke hello --data='{}' --aws-profile profileName --stage staging`
+
+Invoke individual lambdas json file
+`sls-invoke hello --path='input.json' --aws-profile profileName --stage staging`
+
+**Replace _profileName_ with your AWS profile and _staging_ with another stage, if desired**
+
+Refer to the [https://www.serverless.com/framework/docs/providers/aws/cli-reference](Serverless CLI Reference for AWS) for further details.
+
+## Offline Usage
+
+Add localstack credentials block to ~/.aws/credentials (creds don't matter)
+
+```
+[localstack]
+aws_access_key_id = localstack
+aws_secret_access_key = localstack
+```
+
+Add localstack profile block to ~/.aws/config
+```
+[profile localstack]
+region = ap-southeast-2
+output = json
+```
+
+Start the development environment
+`docker-compose up`
 
 Deploy the serverless stack
 `sls-deploy-local`
@@ -71,39 +111,7 @@ Invoke individual lambdas with data
 Invoke individual lambdas json file
 `sls-invoke hello --path='input.json'`
 
-### Local NPM
-Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
-
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
-
-Install dependencies with `npm install`
-
-Start the development environment `docker-compose up`
-
-Deploy the serverless stack
-`npm run deploy-local`
-
-Invoke the step function
-`npm run invoke-local-stepf helloWorld`
-
-Invoke the step function with data
-`npm run invoke-local-stepf helloWorld --data='{}'`
-
-Invoke the step function with json file
-`npm run invoke-local-stepf helloWorld --path='input.json'`
-
-Invoke individual lambdas
-`npm run invoke-local hello`
-
-Invoke individual lambdas with data
-`npm run invoke-local hello --data='{}'`
-
-Invoke individual lambdas json file
-`npm run invoke-local hello --path='input.json'`
-
-## Offline Usage
-
-Whenever using a AWS service, ensure you use the params defined in the lib/aws-local file, eg:
+Whenever using an AWS service, ensure you use the params defined in the lib/aws-local file, eg:
 
 ###S3
 ```typescript
@@ -120,9 +128,6 @@ const db = new DynamoDB(DynamoDBParams);
 ```
 
 This will ensure that it uses a localstack instance in this case when invoked with `invoke local`.
-
-Run `docker-compose up` to run the localstack services. Then to invoke functions run `sls-invoke hello --stage dev`.
-
 
 #### SSM Parameters ####
 The .localstack-init folder contains a bash script that is run after localstack has successfully started up. In it you can add the creation of any AWS resource you want
