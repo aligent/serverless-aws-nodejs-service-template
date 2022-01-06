@@ -1,4 +1,4 @@
-service: example-service-name # To be replaced
+service: example-name # To be replaced
 
 configValidationMode: error
 
