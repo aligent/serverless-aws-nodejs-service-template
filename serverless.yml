@@ -1,4 +1,4 @@
-service: example-service-name # To be replaced
+service: example-name # To be replaced
 
 configValidationMode: error
 
@@ -32,13 +32,13 @@ provider:
   # It is a good security practice to use a CloudFormation service
   # role for performing deployments.
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
-  # iam:
-  #   deploymentRole: ARN_OF_CLOUDFORMATION_SERVICE_ROLE # To be replaced
+  iam:
+    deploymentRole: arn:aws:iam::123456789000:role/example.serverless # To be replaced
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  iamRoleStatements:
+  # iamRoleStatements:
     # - Effect: "Allow"
     #   Action:
     #     - "s3:*"
