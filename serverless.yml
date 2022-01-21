@@ -34,7 +34,7 @@ provider:
   # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
   iam:
     deploymentRole: arn:aws:iam::123456789000:role/example.serverless # To be replaced
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
