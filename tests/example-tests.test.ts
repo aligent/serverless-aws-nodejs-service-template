@@ -5,8 +5,8 @@ describe('Passing tests', () => {
         expect(1).toBeTruthy();
     });
 
-    test('Failing test', () => {
-        expect(1).toBeGreaterThan(0);
+    test.skip('Skipped/Failing test', () => {
+        expect(-1).toBeGreaterThan(0);
     });
 });
 
