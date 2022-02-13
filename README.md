@@ -31,14 +31,22 @@ You will then need to reload your bashrc file, either by running `. ~/.bashrc` o
 
 Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
 
-Then install dependencies with `node-run npm install`.
+Then install dependencies:
+
+`cd my-service`
+
+`node-run npm install`.
 
 ### Local NPM
 Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
 
 Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
 
-Install dependencies with `npm install`
+Then install dependencies:
+
+`cd my-service`
+
+`node-run npm install`.
 
 ## Online usage
 
