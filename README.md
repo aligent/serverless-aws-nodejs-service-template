@@ -29,22 +29,22 @@ alias sls-invoke-stepf='docker-compose exec -u node -w /app offline /serverless/
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
 
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
+Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project`
 
 Then install dependencies:
 
-`cd my-service`
+`cd my-project`
 
 `node-run npm install`.
 
 ### Local NPM
 Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
 
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-service`
+Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project`
 
 Then install dependencies:
 
-`cd my-service`
+`cd my-project`
 
 `node-run npm install`.
 
