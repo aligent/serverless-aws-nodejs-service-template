@@ -57,13 +57,13 @@ Deploy the serverless stack
 `serverless deploy --aws-profile profileName --stage staging`
 
 Invoke the step function
-`serverless invoke stepf helloWorld --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --aws-profile profileName --stage staging`
 
 Invoke the step function with data
-`serverless invoke stepf helloWorld --data='{}' --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --data='{}' --aws-profile profileName --stage staging`
 
 Invoke the step function with json file
-`serverless invoke stepf helloWorld --path='input.json' --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --path='input.json' --aws-profile profileName --stage staging`
 
 Invoke individual lambdas
 `serverless invoke --function hello --aws-profile profileName --stage staging`
