@@ -1,4 +1,4 @@
-import { simpleObject } from "./__data__/example-data";
+import { simpleObject } from './__data__/example-data';
 
 describe('Passing tests', () => {
     test('Passing test', () => {
@@ -14,4 +14,4 @@ describe('Simple object tests', () => {
     test('Object has correct name', () => {
         expect(simpleObject.name).toEqual('Test Object');
     });
-})
+});

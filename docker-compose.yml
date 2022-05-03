@@ -1,11 +1,11 @@
-version: "3.7"
+version: '3.7'
 services:
   offline:
     image: aligent/serverless:offline
     networks:
       - localstack-net
     command: tail -f /dev/null
-    volumes: 
+    volumes:
       - .:/app
       - ~/.npm:/home/node/.npm
       - ~/.aws:/home/node/.aws
@@ -15,8 +15,8 @@ services:
     networks:
       - localstack-net
     ports:
-      - "4566:4566"
-      - "4571:4571"
+      - '4566:4566'
+      - '4571:4571'
     environment:
       - SERVICES=serverless,cloudformation,stepfunctions,ssm
       - DEBUG=1
@@ -31,7 +31,7 @@ services:
     volumes:
       - ./.localstack:/tmp/localstack
       - ./.localstack-init/init.sh:/docker-entrypoint-initaws.d/localstack-init.sh
-      - "/var/run/docker.sock:/var/run/docker.sock"
+      - '/var/run/docker.sock:/var/run/docker.sock'
 
 networks:
   localstack-net:

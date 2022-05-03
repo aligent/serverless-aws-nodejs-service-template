@@ -9,7 +9,7 @@ definitions:
           - npm run lint
           - npm run test
     - step: &push-serverless
-        name: "Deploy service"
+        name: 'Deploy service'
         script:
           - pipe: docker://aligent/serverless-deploy-pipe:latest
             variables:
@@ -25,10 +25,10 @@ pipelines:
     production:
       - step:
           <<: *push-serverless
-          name: "Deploy Production"
+          name: 'Deploy Production'
           deployment: Production
     staging:
       - step:
           <<: *push-serverless
-          name: "Deploy Staging"
+          name: 'Deploy Staging'
           deployment: Staging
