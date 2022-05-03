@@ -29,11 +29,6 @@ plugins:
 
 provider:
   name: aws
-  # It is a good security practice to use a CloudFormation service
-  # role for performing deployments.
-  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
-  iam:
-    deploymentRole: arn:aws:iam::123456789000:role/example.serverless # To be replaced
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}

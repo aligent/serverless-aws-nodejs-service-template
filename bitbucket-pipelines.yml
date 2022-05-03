@@ -15,6 +15,7 @@ definitions:
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
               DEBUG: ${CI_DEBUG}
 
 pipelines:
