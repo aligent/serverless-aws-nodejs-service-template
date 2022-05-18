@@ -15,7 +15,7 @@
     "@aligent/serverless-conventions": "latest"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.93",
+    "@types/aws-lambda": "^8.10.97",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.31",
     "@types/serverless": "^3.0.1",
