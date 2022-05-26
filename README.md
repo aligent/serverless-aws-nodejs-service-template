@@ -52,6 +52,16 @@ Then install dependencies:
 
 `node-run npm install`.
 
+## Development Environment
+
+This template comes with jest, tslint and prettier configured. Each can be run for the entire repository with npm scripts in `package.json` e.g.
+
+`node-run npm run jest` - run all tests and produce coverage statistics. Use the `--silent` flag to suppress console logs in output
+
+`node-run npm run lint` - lint all typescript files and report warnings/errors
+
+`node-run npm run format` - format and save all source files according to prettier configuration
+
 ## Online usage
 
 Add AWS profile credentials to ~/.aws/credentials
