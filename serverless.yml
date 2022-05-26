@@ -25,7 +25,7 @@ plugins:
   - serverless-esbuild
   - serverless-localstack
   - serverless-step-functions
-  - "@aligent/serverless-conventions"
+  - '@aligent/serverless-conventions'
 
 provider:
   name: aws
@@ -34,15 +34,15 @@ provider:
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
   # iamRoleStatements:
-    # - Effect: "Allow"
-    #   Action:
-    #     - "s3:*"
-    #   Resource:
-    #     - Fn::Join:
-    #       - ''
-    #       - - 'arn:aws:s3:::'
-    #         - Ref: S3BucketConfig
-    #         - '/*'
+  # - Effect: "Allow"
+  #   Action:
+  #     - "s3:*"
+  #   Resource:
+  #     - Fn::Join:
+  #       - ''
+  #       - - 'arn:aws:s3:::'
+  #         - Ref: S3BucketConfig
+  #         - '/*'
 
 functions:
   hello:
@@ -75,22 +75,22 @@ stepFunctions:
             End: true
 #resources:
 #  Resources:
-    # S3BucketConfig:
-    #   Type: AWS::S3::Bucket
-    #   Properties:
-    #     BucketName: ${self:custom.s3.configBucket}
-    #   DeletionPolicy: Delete
+# S3BucketConfig:
+#   Type: AWS::S3::Bucket
+#   Properties:
+#     BucketName: ${self:custom.s3.configBucket}
+#   DeletionPolicy: Delete
 
-    # DBUsers:
-    #   Type: AWS::DynamoDB::Table
-    #   Properties:
-    #     TableName: usersTable
-    #     AttributeDefinitions:
-    #       - AttributeName: email
-    #         AttributeType: S
-    #     KeySchema:
-    #       - AttributeName: email
-    #         KeyType: HASH
-    #     ProvisionedThroughput:
-    #       ReadCapacityUnits: 1
-    #       WriteCapacityUnits: 1
+# DBUsers:
+#   Type: AWS::DynamoDB::Table
+#   Properties:
+#     TableName: usersTable
+#     AttributeDefinitions:
+#       - AttributeName: email
+#         AttributeType: S
+#     KeySchema:
+#       - AttributeName: email
+#         KeyType: HASH
+#     ProvisionedThroughput:
+#       ReadCapacityUnits: 1
+#       WriteCapacityUnits: 1

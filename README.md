@@ -1,4 +1,5 @@
 # serverless-aws-nodejs-service-template
+
 AWS Template for creating microservices
 
 # Introduction
@@ -16,9 +17,11 @@ This template includes:
 ## Setup
 
 ### Aliased NPM
+
 This ensures all serverless commands are run inside the serverless docker container so that you don't need to install node, npm and serverless globally.
 
 Add the following to your `.bashrc` file:
+
 ```
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
@@ -38,6 +41,7 @@ Then install dependencies:
 `node-run npm install`.
 
 ### Local NPM
+
 Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
 
 Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project`
@@ -47,6 +51,16 @@ Then install dependencies:
 `cd my-project`
 
 `node-run npm install`.
+
+## Development Environment
+
+This template comes with jest, tslint and prettier configured. Each can be run for the entire repository with npm scripts in `package.json` e.g.
+
+`node-run npm run jest` - run all tests and produce coverage statistics. Use the `--silent` flag to suppress console logs in output
+
+`node-run npm run lint` - lint all typescript files and report warnings/errors
+
+`node-run npm run format` - format and save all source files according to prettier configuration
 
 ## Online usage
 
@@ -89,6 +103,7 @@ aws_secret_access_key = localstack
 ```
 
 Add localstack profile block to ~/.aws/config
+
 ```
 [profile localstack]
 region = ap-southeast-2
@@ -122,6 +137,7 @@ Invoke individual lambdas json file
 Whenever using an AWS service, ensure you use the params defined in the lib/aws-local file, eg:
 
 ###S3
+
 ```typescript
 import { S3Params } from './lib/localstack';
 
@@ -129,6 +145,7 @@ const s3 = new S3(S3Params);
 ```
 
 ###DynamoDB
+
 ```typescript
 import { DynamoDBParams } from './lib/localstack';
 
@@ -137,11 +154,13 @@ const db = new DynamoDB(DynamoDBParams);
 
 This will ensure that it uses a localstack instance in this case when invoked with `invoke local`.
 
-#### SSM Parameters ####
+#### SSM Parameters
+
 The .localstack-init folder contains a bash script that is run after localstack has successfully started up. In it you can add the creation of any AWS resource you want
-using the awslocal cli tool. 
+using the awslocal cli tool.
 
 The script currently contains an example on how to create an SSM value:
+
 ```
 awslocal ssm put-parameter --name "/example/ssm/param" --type String --value "some-value" --overwrite
 ```

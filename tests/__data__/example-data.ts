@@ -1,4 +1,4 @@
 export const simpleObject = {
     name: 'Test Object',
-    id: 123
-}
+    id: 123,
+};

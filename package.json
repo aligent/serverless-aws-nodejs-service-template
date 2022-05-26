@@ -8,11 +8,12 @@
     "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
     "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name ",
     "test": "jest --coverage",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --write ."
   },
   "dependencies": {
-    "source-map-support": "^0.5.21",
-    "@aligent/serverless-conventions": "latest"
+    "@aligent/serverless-conventions": "latest",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.97",
@@ -23,6 +24,7 @@
     "@typescript-eslint/parser": "^5.23.0",
     "eslint": "^8.11.0",
     "jest": "^27.5.1",
+    "prettier": "2.6.2",
     "serverless-esbuild": "^1.27.1",
     "serverless-localstack": "^0.4.35",
     "serverless-step-functions": "^3.5.1",
