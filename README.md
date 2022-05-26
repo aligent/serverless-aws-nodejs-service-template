@@ -25,9 +25,9 @@ Add the following to your `.bashrc` file:
 ```
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias sls-deploy-local='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev'
-alias sls-invoke='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function'
-alias sls-invoke-stepf='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name'
+alias sls-deploy-local='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --verbose --aws-profile localstack --stage dev'
+alias sls-invoke='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --verbose --aws-profile localstack --stage dev --function'
+alias sls-invoke-stepf='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --verbose --aws-profile localstack --stage dev --name'
 ```
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
@@ -71,13 +71,13 @@ Deploy the serverless stack
 `serverless deploy --aws-profile profileName --stage staging`
 
 Invoke the step function
-`serverless invoke stepf helloWorld --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --aws-profile profileName --stage staging`
 
 Invoke the step function with data
-`serverless invoke stepf helloWorld --data='{}' --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --data='{}' --aws-profile profileName --stage staging`
 
 Invoke the step function with json file
-`serverless invoke stepf helloWorld --path='input.json' --aws-profile profileName --stage staging`
+`serverless invoke stepf --name helloWorld --path='input.json' --aws-profile profileName --stage staging`
 
 Invoke individual lambdas
 `serverless invoke --function hello --aws-profile profileName --stage staging`
