@@ -1,6 +1,9 @@
 image: aligent/serverless
 
 definitions:
+  services:
+    docker:
+      memory: 3072
   steps:
     - step: &test
         name: Test
