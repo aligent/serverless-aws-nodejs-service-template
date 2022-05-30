@@ -25,7 +25,7 @@
     "eslint": "^8.11.0",
     "jest": "^27.5.1",
     "prettier": "2.6.2",
-    "serverless-esbuild": "^1.27.1",
+    "serverless-esbuild": "^1.30.0",
     "serverless-localstack": "^0.4.35",
     "serverless-step-functions": "^3.5.1",
     "ts-jest": "^27.1.0",
