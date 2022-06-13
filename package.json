@@ -18,7 +18,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.100",
     "@types/jest": "^27.4.1",
-    "@types/node": "~16.11.7",
+    "@types/node": "~16.11.39",
     "@types/serverless": "^3.12.7",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.28.0",
