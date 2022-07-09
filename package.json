@@ -21,7 +21,7 @@
     "@types/node": "~16.11.43",
     "@types/serverless": "^3.12.7",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.5",
     "eslint": "^8.19.0",
     "jest": "^27.5.1",
     "prettier": "2.7.1",
