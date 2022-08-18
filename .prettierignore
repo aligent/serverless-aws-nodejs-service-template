@@ -1,0 +1,4 @@
+# Ignore artifacts:
+.esbuild
+.localstack-volume
+.serverless
