@@ -38,5 +38,5 @@
     "node" : "~16.11.0"
   },
   "author": "Aligent Consulting",
-  "license": "GPL-3.0"
+  "license": "MIT"
 }
