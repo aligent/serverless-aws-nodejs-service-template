@@ -1,40 +1,28 @@
 version: '3.7'
-services:
-  offline:
-    image: aligent/serverless:offline
-    networks:
-      - localstack-net
-    command: tail -f /dev/null
-    volumes:
-      - .:/app
-      - ~/.npm:/home/node/.npm
-      - ~/.aws:/home/node/.aws
 
+services:
   localstack:
-    image: localstack/localstack:0.12.7
+    image: localstack/localstack:1.0.4
+    container_name: localstack-debug
     networks:
-      - localstack-net
-    ports:
-      - '4566:4566'
-      - '4571:4571'
+      localstack-net:
+        ipv4_address: 172.20.0.102
     environment:
-      - SERVICES=serverless,cloudformation,stepfunctions,ssm
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
+      - PERSISTENCE=1
       - LAMBDA_EXECUTOR=docker-reuse
-      - LAMBDA_REMOTE_DOCKER=true
-      - LAMBDA_REMOVE_CONTAINERS=true
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - HOST_TMP_FOLDER=${PWD}/.localstack/tmp
       - DEFAULT_REGION=ap-southeast-2
       - START_WEB=0
     volumes:
-      - ./.localstack:/tmp/localstack
-      - ./.localstack-init/init.sh:/docker-entrypoint-initaws.d/localstack-init.sh
+      - ./.localstack-volume:/var/lib/localstack
       - '/var/run/docker.sock:/var/run/docker.sock'
 
 networks:
   localstack-net:
+    name: localstack-net
     external: false
     driver: bridge
-    name: localstack-net
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
