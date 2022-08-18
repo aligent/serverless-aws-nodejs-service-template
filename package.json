@@ -4,9 +4,10 @@
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "deploy-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev",
-    "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
-    "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name ",
+    "jest-test-debug": "export $(cat ./debug/.dev.env | xargs) && node --inspect=0.0.0.0:9229 node_modules/.bin/jest --runInBand",
+    "invoke-local-debug": "export $(cat ./debug/.dev.env | xargs) && node --inspect=0.0.0.0:9229 ./node_modules/.bin/serverless invoke local",
+    "deploy-localstack": "./node_modules/.bin/serverless deploy --verbose --aws-profile localstack --stage dev",
+    "invoke-local-stepf": "./node_modules/.bin/serverless invoke stepf --aws-profile localstack --stage dev",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
