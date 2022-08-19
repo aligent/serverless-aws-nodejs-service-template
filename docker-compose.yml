@@ -6,7 +6,7 @@ services:
     container_name: localstack-debug
     networks:
       localstack-net:
-        ipv4_address: 172.20.0.102
+        ipv4_address: ${AWS_LOCALSTACK:-172.20.0.100}
     environment:
       - DEBUG=1
       - PERSISTENCE=1
@@ -15,7 +15,8 @@ services:
       - DEFAULT_REGION=ap-southeast-2
       - START_WEB=0
     volumes:
-      - ./.localstack-volume:/var/lib/localstack
+      - ./.localstack:/var/lib/localstack
+      - ./.localstack-init/init.sh:/docker-entrypoint-initaws.d/localstack-init.sh
       - '/var/run/docker.sock:/var/run/docker.sock'
 
 networks:
