@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Invoke Local Debug",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "port": 9229,
+            "sourceMaps": true,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/app",
+            "outFiles": ["${workspaceFolder}/.esbuild/**/*.js"],
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "sls-docker: invoke-local-debug"
+        },
+        {
+            "name": "Jest Test Debug",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "port": 9229,
+            "sourceMaps": true,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/app",
+            "outFiles": ["${workspaceFolder}/.esbuild/**/*.js"],
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "sls-docker: jest-test-debug"
+        }
+    ]
+}

@@ -1,0 +1,280 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "functionName",
+            "type": "promptString",
+            "default": "hello",
+            "description": "I am invoking local function: "
+        },
+        {
+            "id": "stateMachine",
+            "type": "promptString",
+            "default": "helloWorld",
+            "description": "I am invoking local step function: "
+        },
+        {
+            "id": "specName",
+            "type": "promptString",
+            "default": "name-of-spec",
+            "description": "I am debugging test case: "
+        },
+        {
+            "id": "payloadData",
+            "type": "promptString",
+            "default": "'{\"foo\":\"bar\"}'",
+            "description": "Please use this payload data: "
+        },
+        {
+            // This must be inside our workspace folder as we only mount bind $pwd:/app
+            // NOTE: Do not add / at the beginning of the input
+            "id": "dataFile",
+            "type": "promptString",
+            "default": "debug/dev.invoke.json",
+            "description": "Please use the data from this file: "
+        }
+    ],
+    "tasks": [
+        // Invoke local with debugger
+        {
+            "type": "docker-run",
+            "label": "sls-docker: invoke-local-debug",
+            "icon": { "color": "terminal.ansiYellow", "id": "debug-alt" },
+            "dockerRun": {
+                "image": "aligent/serverless:debug",
+                "containerName": "invoke-local-debug",
+                "remove": true,
+                "portsPublishAll": false,
+                "network": "localstack-net",
+                "ports": [
+                    {
+                        "containerPort": 9229,
+                        "hostPort": 9229
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run invoke-local-debug -- -f ${input:functionName} -d ${input:payloadData}"
+                // "command": "npm run invoke-local-debug -- -f ${input:functionName} -p ${input:dataFile}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        // Run a test with debugger
+        {
+            "type": "docker-run",
+            "label": "sls-docker: jest-test-debug",
+            "icon": { "color": "terminal.ansiYellow", "id": "beaker" },
+            "dockerRun": {
+                "image": "aligent/serverless:debug",
+                "containerName": "jest-test-debug",
+                "remove": true,
+                "portsPublishAll": false,
+                "ports": [
+                    {
+                        "containerPort": 9229,
+                        "hostPort": 9229
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run jest-test-debug -- -t ${input:specName}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        // Invoke Stepfunction in localstack with data
+        {
+            "type": "shell",
+            "label": "sls-docker: invoke-stef-local-data",
+            "icon": { "color": "terminal.ansiYellow", "id": "symbol-object" },
+            "command": [
+                "docker run -t --rm",
+                "--name invoke-stef-local",
+                "--network localstack-net",
+                "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.npm:/home/node/.npm",
+                "--volume ${workspaceFolder}:/app",
+                "aligent/serverless:debug",
+                "npm run serverless-local --",
+                "invoke stepf --verbose --aws-profile localstack --stage dev",
+                "-n ${input:stateMachine}",
+                "-d ${input:payloadData}"
+            ],
+            "dependsOn": ["sls-docker: start-localstack"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        // Invoke Stepfunction in localstack with json file
+        {
+            "type": "shell",
+            "label": "sls-docker: invoke-stef-local-file",
+            "icon": { "color": "terminal.ansiYellow", "id": "file" },
+            "command": [
+                "docker run -t --rm",
+                "--name invoke-stef-local",
+                "--network localstack-net",
+                "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.npm:/home/node/.npm",
+                "--volume ${workspaceFolder}:/app",
+                "aligent/serverless:debug",
+                "npm run serverless-local --",
+                "invoke stepf --verbose --aws-profile localstack --stage dev",
+                "-n ${input:stateMachine}",
+                "-p ${input:dataFile}"
+            ],
+            "dependsOn": ["sls-docker: start-localstack"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        // Deploy to localstack in interactive mode
+        {
+            "type": "shell",
+            "label": "sls-docker: deploy-localstack",
+            "icon": { "color": "terminal.ansiGreen", "id": "rocket" },
+            "command": [
+                "docker run -t --rm",
+                "--name deploy-localstack",
+                "--network localstack-net",
+                "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.npm:/home/node/.npm",
+                "--volume ${workspaceFolder}:/app",
+                "aligent/serverless:debug",
+                "npm run serverless-local --",
+                "deploy --verbose --aws-profile localstack --stage dev"
+            ],
+            "dependsOn": ["sls-docker: start-localstack"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        // Deploy to localstack in detach mode
+        // KAI: I'm hiding this from the list of quick run task for now.
+        // I would prefer using interactive mode to see the deployment result.
+        // A feature request was sent to vscode-docker team to support interactive mode.
+        {
+            "type": "docker-run",
+            "label": "sls-docker: deploy-localstack-detach",
+            "icon": { "color": "terminal.ansiWhite", "id": "rocket" },
+            "hide": true,
+            "dockerRun": {
+                "image": "aligent/serverless:debug",
+                "containerName": "deploy-localstack-detach",
+                "portsPublishAll": false,
+                "network": "localstack-net",
+                "remove": true,
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run serverless-local -- deploy --verbose --aws-profile localstack --stage dev"
+            },
+            "dependsOn": ["sls-docker: start-localstack"],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false,
+                "close": false,
+                "revealProblems": "onProblem"
+            }
+        },
+        {
+            "type": "docker-compose",
+            "label": "sls-docker: start-localstack",
+            "icon": { "color": "terminal.ansiGreen", "id": "debug-start" },
+            "dockerCompose": {
+                "up": {
+                    "detached": true,
+                    "build": true
+                },
+                "envFile": "${workspaceFolder}/debug/.dev.env",
+                "files": ["${workspaceFolder}/docker-compose.yml"]
+            },
+            "presentation": {
+                "reveal": "silent",
+                "close": true
+            }
+        },
+        {
+            "type": "docker-compose",
+            "label": "sls-docker: stop-localstack",
+            "icon": { "color": "terminal.ansiRed", "id": "stop-circle" },
+            "dockerCompose": {
+                "down": {},
+                "files": ["${workspaceFolder}/docker-compose.yml"]
+            },
+            "presentation": {
+                "reveal": "silent",
+                "close": true
+            }
+        }
+    ]
+}

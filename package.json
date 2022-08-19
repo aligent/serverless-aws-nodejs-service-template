@@ -4,10 +4,9 @@
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "jest-test-debug": "export $(cat ./debug/.dev.env | xargs) && node --inspect=0.0.0.0:9229 node_modules/.bin/jest --runInBand",
-    "invoke-local-debug": "export $(cat ./debug/.dev.env | xargs) && node --inspect=0.0.0.0:9229 ./node_modules/.bin/serverless invoke local",
-    "deploy-localstack": "./node_modules/.bin/serverless deploy --verbose --aws-profile localstack --stage dev",
-    "invoke-local-stepf": "./node_modules/.bin/serverless invoke stepf --aws-profile localstack --stage dev",
+    "jest-test-debug": "export $(cat ./debug/.dev.env | xargs) && node --inspect-brk=0.0.0.0:9229 ./node_modules/.bin/jest --runInBand",
+    "invoke-local-debug": "export $(cat ./debug/.dev.env | xargs) &&  node --inspect=0.0.0.0:9229 ./node_modules/.bin/serverless invoke local",
+    "serverless-local": "export $(cat ./debug/.dev.env | xargs) && ./node_modules/.bin/serverless",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
