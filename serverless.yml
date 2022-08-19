@@ -9,14 +9,15 @@ package:
 custom:
   esbuild:
     bundle: true
-    minify: true
+    minify: ${strToBool(${env:MINIFY, 'true'})}
     target: node16
+    sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}
   localstack:
     debug: true
     autostart: false
     stages:
       - dev
-    host: http://localstack
+    host: http://${env:AWS_LOCALSTACK, 'localstack'}
     edgePort: 4566
     lambda:
       mountCode: false
