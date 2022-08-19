@@ -11,6 +11,7 @@ This template includes:
 - BitBucket pipelines for deploying production and staging
 - Localstack packages for local development
 - Dockerised local development so you don't have to install the serverless client or localstack
+- Step though debugging support for VSCode
 
 # Usage
 
@@ -18,39 +19,57 @@ This template includes:
 
 ### Aliased NPM
 
+#### Prerequisite
+- Docker
+- Docker-compose
+- (Optional) Visual Studio Code with [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) installed.
+
 This ensures all serverless commands are run inside the serverless docker container so that you don't need to install node, npm and serverless globally.
 
-Add the following to your `.bashrc` file:
+Add the following to your `.bashrc` or `.zshrc` file:
 
-```
+```bash
+# Normal aliases for normal usage & interacting with online AWS
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias sls-deploy-local='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --verbose --aws-profile localstack --stage dev'
-alias sls-invoke='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --verbose --aws-profile localstack --stage dev --function'
-alias sls-invoke-stepf='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --verbose --aws-profile localstack --stage dev --name'
+alias npm='node-run npm'
+alias aws='node-run aws'
+
+# Local aliases for interacting with localstack
+alias local-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app --network localstack-net aligent/serverless:latest'
+alias sls-local='local-run npm run serverless-local --'
+alias sls-local-deploy='sls-local deploy --verbose --aws-profile localstack --stage dev'
+alias sls-local-invoke='sls-local invoke --verbose --aws-profile localstack --stage dev'
+alias sls-local-invoke-stepf='sls-local invoke stepf --verbose --aws-profile localstack --stage dev'
+alias aws-local='local-run aws --endpoint-url=http://172.20.0.100:4566'
 ```
 
-You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
-
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project`
-
-Then install dependencies:
-
-`cd my-project`
-
-`node-run npm install`.
+#### Notes
+- You will then need to reload your bashrc file, either by running `. ~/.bashrc` (or `. ~/.zshrc`) or starting a new terminal session.
+- These aliases only works when you are inside the project folder.
+- For the local aliases to work, you need the localstack container running in background. Check Offline Usage for more details.
 
 ### Local NPM
 
 Install serverless globally see: https://www.serverless.com/framework/docs/getting-started/
 
-Start with the template: `serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project`
+### Quick start
+Start with the template: 
+```bash
+serverless create --template-url https://github.com/aligent/serverless-aws-nodejs-service-template --path my-project
+```
 
 Then install dependencies:
+```bash
+cd my-project
+npm install
+```
 
-`cd my-project`
-
-`node-run npm install`.
+If you want to use the pre-configured VSCode debugging setup:
+```bash
+mkdir .vscode
+cp .vscode-configs/. .vscode
+```
 
 ## Development Environment
 
@@ -61,6 +80,24 @@ This template comes with jest, tslint and prettier configured. Each can be run f
 `node-run npm run lint` - lint all typescript files and report warnings/errors
 
 `node-run npm run format` - format and save all source files according to prettier configuration
+
+### Step through debug with VSCode
+This template comes with some pre-configured. This setup is a combination of:
+1. [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) - makes it easy to build, manage, and deploy containerized applications from VSCode
+2. `.vscode-configs` folder:
+    - `launch.json` - launch VSCode debugger and attached to our docker container for debugging by `invoke local` or by running a test.
+    - `tasks.json` -  tasks used by `launch.json` or support deploy to localstack.
+3. `debug` folder:
+    - `.dev.env` - contain some environment variables that support debugging.
+    - `dev.invoke.json` - contain dummy data that can be used for `invoke local` or `invoke stepf`.
+4. `src/lib/localstack.ts` - support connection to localstack from our main docker container.
+5. `docker-compose.yml` - contain definition for localstack.
+6. `Dockerfile` - support building debug docker image from `aligent/serverless:latest` (expose Nodejs debug port 9229).
+7. `package.json` file:
+    - `jest-test-debug` - support debug against a Jest test case by running `Jest Test Debug` configuration.
+    - `invoke-local-debug` - support debug through `invoke local` by running `Invoke Local Debug` configuration.
+    - `serverless-local` - support running serverless command against localstack.
+8. `serverless.yml` - enable/disable `minify` and `sourcemap` for `esbuild` based on environment variable.
 
 ## Online usage
 
@@ -110,33 +147,53 @@ region = ap-southeast-2
 output = json
 ```
 
-Start the development environment
-`docker-compose up`
+Start up the localstack environment
+```bash
+docker-compose --env-file ./debug/.dev.env up [-d]
+# or run the `sls-docker: start-localstack` task in VSCode
+```
 
-Deploy the serverless stack
-`sls-deploy-local`
+Deploy the serverless stack to localstack
+```bash
+sls-local-deploy
+# or run the `sls-docker: deploy-localstack` task in VSCode
+```
 
-Invoke the step function
-`sls-invoke-stepf helloWorld`
+Invoke individual lambdas in localstack
+```bash
+sls-local-invoke -f hello
+```
 
-Invoke the step function with data
-`sls-invoke-stepf helloWorld --data='{}'`
+Invoke individual lambdas in localstack with data
+```bash
+sls-local-invoke -f hello -d '{}'
+```
 
-Invoke the step function with json file
-`sls-invoke-stepf helloWorld --path='input.json'`
+Invoke individual lambdas in localstack with json file
+```bash
+sls-local-invoke -f hello -p 'input.json'
+```
 
-Invoke individual lambdas
-`sls-invoke hello`
+Invoke the step function in localstack
+```bash
+sls-local-invoke-stepf -n helloWorld
+```
 
-Invoke individual lambdas with data
-`sls-invoke hello --data='{}'`
+Invoke the step function in localstack with data
+```bash
+sls-local-invoke-stepf -n helloWorld -d '{}'
+# or run the `sls-docker: invoke-stef-local-data` task in VSCode
+```
 
-Invoke individual lambdas json file
-`sls-invoke hello --path='input.json'`
+Invoke the step function in localstack with json file
+```bash
+sls-local-invoke-stepf -n helloWorld -p 'input.json'
+# or run the `sls-docker: invoke-stef-local-file` task in VSCode
+```
 
-Whenever using an AWS service, ensure you use the params defined in the lib/aws-local file, eg:
+Whenever using an AWS service, ensure you use the params defined in the `.lib/localstack.ts` file, eg:
 
-###S3
+#### S3
 
 ```typescript
 import { S3Params } from './lib/localstack';
@@ -144,7 +201,7 @@ import { S3Params } from './lib/localstack';
 const s3 = new S3(S3Params);
 ```
 
-###DynamoDB
+#### DynamoDB
 
 ```typescript
 import { DynamoDBParams } from './lib/localstack';
@@ -161,7 +218,7 @@ using the awslocal cli tool.
 
 The script currently contains an example on how to create an SSM value:
 
-```
+```bash
 awslocal ssm put-parameter --name "/example/ssm/param" --type String --value "some-value" --overwrite
 ```
 
@@ -170,3 +227,21 @@ Which can be used in your serverless.yml file like:
 ```yaml
 example: ${ssm:/example/ssm/param}
 ```
+
+### VSCode debugger
+Debugging with VSCode debugger is supported by a mix of `invoke local` and localstack. Localstack is used to simulate AWS resources. If you don't use them, no need to spin up localstack docker container.
+
+Start up the localstack environment
+```bash
+docker-compose --env-file ./debug/.dev.env up [-d]
+# or run the `sls-docker: start-localstack` task in VSCode
+```
+
+Deploy the serverless stack to localstack (for usage of AWS resources like DynamoDB)
+```bash
+sls-local-deploy
+# or run the `sls-docker: deploy-localstack` task in VSCode
+```
+
+Launch VSCode debugger using the `Invoke Local Debug` configuration to debug with `invoke local`.
+Having a failed test and you don't know why? Try out the `Jest Test Debug` configuration.
