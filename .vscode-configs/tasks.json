@@ -110,7 +110,7 @@
                         "containerPath": "/app"
                     }
                 ],
-                "command": "npm run jest-test-debug -- -t ${input:specName}"
+                "command": "npm run jest-test-debug -- -t \"${input:specName}\""
             },
             "presentation": {
                 "echo": true,
