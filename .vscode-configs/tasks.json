@@ -71,6 +71,10 @@
                 "command": "npm run invoke-local-debug -- -f ${input:functionName} -d ${input:payloadData}"
                 // "command": "npm run invoke-local-debug -- -f ${input:functionName} -p ${input:dataFile}"
             },
+            "dependsOn": [
+                "build-serverless-debug",
+                "sls-docker: start-localstack"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -112,6 +116,9 @@
                 ],
                 "command": "npm run jest-test-debug -- -t \"${input:specName}\""
             },
+            "dependsOn": [
+                "build-serverless-debug"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -139,7 +146,10 @@
                 "-n ${input:stateMachine}",
                 "-d ${input:payloadData}"
             ],
-            "dependsOn": ["sls-docker: start-localstack"],
+            "dependsOn": [
+                "build-serverless-debug",
+                "sls-docker: start-localstack"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -167,7 +177,10 @@
                 "-n ${input:stateMachine}",
                 "-p ${input:dataFile}"
             ],
-            "dependsOn": ["sls-docker: start-localstack"],
+            "dependsOn": [
+                "build-serverless-debug",
+                "sls-docker: start-localstack"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -193,7 +206,10 @@
                 "npm run serverless-local --",
                 "deploy --verbose --aws-profile localstack --stage dev"
             ],
-            "dependsOn": ["sls-docker: start-localstack"],
+            "dependsOn": [
+                "build-serverless-debug",
+                "sls-docker: start-localstack"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -246,6 +262,27 @@
                 "revealProblems": "onProblem"
             }
         },
+        // Build debug image if it's not exist
+        {
+            "type": "shell",
+            "label": "sls-docker: build-serverless-debug",
+            "icon": { "color": "terminal.ansiGreen", "id": "package" },
+            "command": [
+                "[[ -n \"$(docker images -q aligent/serverless:debug)\" ]]",
+                "||",
+                "docker build . -t aligent/serverless:debug"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            }
+        },
+        // Start localstack in background
         {
             "type": "docker-compose",
             "label": "sls-docker: start-localstack",
@@ -263,6 +300,7 @@
                 "close": true
             }
         },
+        // Stop localstack
         {
             "type": "docker-compose",
             "label": "sls-docker: stop-localstack",
