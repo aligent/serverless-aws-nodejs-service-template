@@ -32,7 +32,6 @@ Add the following to your `.bashrc` or `.zshrc` file:
 # Normal aliases for normal usage & interacting with online AWS
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias npm='node-run npm'
 alias aws='node-run aws'
 
 # Local aliases for interacting with localstack
@@ -68,7 +67,7 @@ npm install
 If you want to use the pre-configured VSCode debugging setup:
 ```bash
 mkdir .vscode
-cp .vscode-configs/. .vscode
+cp -r .vscode-configs/. .vscode
 ```
 
 ## Development Environment
