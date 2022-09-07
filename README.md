@@ -22,25 +22,29 @@ This template includes:
 #### Prerequisite
 - Docker
 - Docker-compose
-- (Optional) Visual Studio Code with [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) installed.
+- (Optional) Visual Studio Code with [VSCode Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) installed. For more details, please check [Step through debug with VSCode](#step-through-debug-with-vscode) section
 
-This ensures all serverless commands are run inside the serverless docker container so that you don't need to install node, npm and serverless globally.
+This ensures all serverless commands are run inside the serverless docker container so that you don't need to install  serverless globally.
 
 Add the following to your `.bashrc` or `.zshrc` file:
 
 ```bash
 # Normal aliases for normal usage & interacting with online AWS
-alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
+alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume "$PWD:/app" aligent/serverless'
 alias serverless='node-run serverless'
 alias aws='node-run aws'
 
-# Local aliases for interacting with localstack
-alias local-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app --network localstack-net aligent/serverless:latest'
+# Local aliases for interacting with localstack.
+alias local-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume "$PWD:/app" --network localstack-net aligent/serverless:latest'
 alias sls-local='local-run npm run serverless-local --'
 alias sls-local-deploy='sls-local deploy --verbose --aws-profile localstack --stage dev'
 alias sls-local-invoke='sls-local invoke --verbose --aws-profile localstack --stage dev'
 alias sls-local-invoke-stepf='sls-local invoke stepf --verbose --aws-profile localstack --stage dev'
 alias aws-local='local-run aws --endpoint-url=http://172.20.0.100:4566'
+# Aliases for start/stop localstack
+alias localstack-config="docker inspect -f '{{index .Config.Labels \"com.docker.compose.project.config_files\"}}' localstack-debug"
+alias localstack-down='docker-compose --file $(localstack-config) down'
+alias localstack-up='if [[ -n "$(docker ps -q -f name=localstack-debug)" ]] ; then echo "Localstack is already running"; else docker-compose --env-file ./debug/.dev.env --file "$PWD/docker-compose.yml" up --detach ; fi'
 ```
 
 #### Notes
@@ -81,8 +85,8 @@ This template comes with jest, tslint and prettier configured. Each can be run f
 `node-run npm run format` - format and save all source files according to prettier configuration
 
 ### Step through debug with VSCode
-This template comes with some pre-configured. This setup is a combination of:
-1. [Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) - makes it easy to build, manage, and deploy containerized applications from VSCode
+This template comes with some pre-configured settings for VSCode. The setup is a combination of:
+1. [VSCode Docker extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) - makes it easy to build, manage, and deploy containerized applications from VSCode
 2. `.vscode-configs` folder:
     - `launch.json` - launch VSCode debugger and attached to our docker container for debugging by `invoke local` or by running a test.
     - `tasks.json` -  tasks used by `launch.json` or support deploy to localstack.
