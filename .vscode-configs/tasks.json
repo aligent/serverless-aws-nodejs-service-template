@@ -37,11 +37,13 @@
         }
     ],
     "tasks": [
-        // Invoke local with debugger
         {
             "type": "docker-run",
             "label": "sls-docker: invoke-local-debug",
-            "icon": { "color": "terminal.ansiYellow", "id": "debug-alt" },
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "debug-alt"
+            },
             "dockerRun": {
                 "image": "aligent/serverless:debug",
                 "containerName": "invoke-local-debug",
@@ -69,7 +71,6 @@
                     }
                 ],
                 "command": "npm run invoke-local-debug -- -f ${input:functionName} -d ${input:payloadData}"
-                // "command": "npm run invoke-local-debug -- -f ${input:functionName} -p ${input:dataFile}"
             },
             "dependsOn": [
                 "build-serverless-debug",
@@ -84,11 +85,13 @@
                 "clear": false
             }
         },
-        // Run a test with debugger
         {
             "type": "docker-run",
             "label": "sls-docker: jest-test-debug",
-            "icon": { "color": "terminal.ansiYellow", "id": "beaker" },
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "beaker"
+            },
             "dockerRun": {
                 "image": "aligent/serverless:debug",
                 "containerName": "jest-test-debug",
@@ -128,11 +131,13 @@
                 "clear": false
             }
         },
-        // Invoke Stepfunction in localstack with data
         {
             "type": "shell",
             "label": "sls-docker: invoke-stef-local-data",
-            "icon": { "color": "terminal.ansiYellow", "id": "symbol-object" },
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "symbol-object"
+            },
             "command": [
                 "docker run -t --rm",
                 "--name invoke-stef-local",
@@ -159,11 +164,13 @@
                 "clear": false
             }
         },
-        // Invoke Stepfunction in localstack with json file
         {
             "type": "shell",
             "label": "sls-docker: invoke-stef-local-file",
-            "icon": { "color": "terminal.ansiYellow", "id": "file" },
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "file"
+            },
             "command": [
                 "docker run -t --rm",
                 "--name invoke-stef-local",
@@ -190,11 +197,13 @@
                 "clear": false
             }
         },
-        // Deploy to localstack in interactive mode
         {
             "type": "shell",
             "label": "sls-docker: deploy-localstack",
-            "icon": { "color": "terminal.ansiGreen", "id": "rocket" },
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "rocket"
+            },
             "command": [
                 "docker run -t --rm",
                 "--name deploy-localstack",
@@ -219,14 +228,13 @@
                 "clear": false
             }
         },
-        // Deploy to localstack in detach mode
-        // KAI: I'm hiding this from the list of quick run task for now.
-        // I would prefer using interactive mode to see the deployment result.
-        // A feature request was sent to vscode-docker team to support interactive mode.
         {
             "type": "docker-run",
             "label": "sls-docker: deploy-localstack-detach",
-            "icon": { "color": "terminal.ansiWhite", "id": "rocket" },
+            "icon": {
+                "color": "terminal.ansiWhite",
+                "id": "rocket"
+            },
             "hide": true,
             "dockerRun": {
                 "image": "aligent/serverless:debug",
@@ -250,7 +258,9 @@
                 ],
                 "command": "npm run serverless-local -- deploy --verbose --aws-profile localstack --stage dev"
             },
-            "dependsOn": ["sls-docker: start-localstack"],
+            "dependsOn": [
+                "sls-docker: start-localstack"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -262,11 +272,13 @@
                 "revealProblems": "onProblem"
             }
         },
-        // Build debug image if it's not exist
         {
             "type": "shell",
             "label": "sls-docker: build-serverless-debug",
-            "icon": { "color": "terminal.ansiGreen", "id": "package" },
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "package"
+            },
             "command": [
                 "[[ -n \"$(docker images -q aligent/serverless:debug)\" ]]",
                 "||",
@@ -282,35 +294,45 @@
                 "close": true
             }
         },
-        // Start localstack in background
         {
-            "type": "docker-compose",
+            "type": "shell",
             "label": "sls-docker: start-localstack",
-            "icon": { "color": "terminal.ansiGreen", "id": "debug-start" },
-            "dockerCompose": {
-                "up": {
-                    "detached": true,
-                    "build": true
-                },
-                "envFile": "${workspaceFolder}/debug/.dev.env",
-                "files": ["${workspaceFolder}/docker-compose.yml"]
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "debug-start"
             },
+            "command": [
+                "if [[ -n \"$(docker ps -q -f name=localstack-debug)\" ]] ;",
+                "then echo \"Localstack is already running.\";",
+                "else docker-compose",
+                "--env-file ./debug/.dev.env",
+                "--file \"${workspaceFolder}/docker-compose.yml\"",
+                "up --detach ;",
+                "fi"
+            ],
             "presentation": {
-                "reveal": "silent",
+                "reveal": "always",
                 "close": true
             }
         },
-        // Stop localstack
         {
-            "type": "docker-compose",
+            "type": "shell",
             "label": "sls-docker: stop-localstack",
-            "icon": { "color": "terminal.ansiRed", "id": "stop-circle" },
-            "dockerCompose": {
-                "down": {},
-                "files": ["${workspaceFolder}/docker-compose.yml"]
+            "icon": {
+                "color": "terminal.ansiRed",
+                "id": "stop-circle"
             },
+            "command": [
+                "if [[ -n \"$(docker ps -q -f name=localstack-debug)\" ]] ;",
+                "then docker-compose",
+                "--file",
+                "$(docker inspect -f '{{index .Config.Labels \"com.docker.compose.project.config_files\"}}' localstack-debug)",
+                "down;",
+                "else echo \"Localstack has been stopped.\" ;",
+                "fi"
+            ],
             "presentation": {
-                "reveal": "silent",
+                "reveal": "always",
                 "close": true
             }
         }
