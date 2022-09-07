@@ -43,8 +43,8 @@ alias sls-local-invoke-stepf='sls-local invoke stepf --verbose --aws-profile loc
 alias aws-local='local-run aws --endpoint-url=http://172.20.0.100:4566'
 # Aliases for start/stop localstack
 alias localstack-config="docker inspect -f '{{index .Config.Labels \"com.docker.compose.project.config_files\"}}' localstack-debug"
-alias localstack-down='docker-compose --file $(localstack-config) down'
-alias localstack-up='if [[ -n "$(docker ps -q -f name=localstack-debug)" ]] ; then echo "Localstack is already running"; else docker-compose --env-file ./debug/.dev.env --file "$PWD/docker-compose.yml" up --detach ; fi'
+alias localstack-do='if [[ -n "$(docker ps -q -f name=localstack-debug)" ]] ; then docker-compose --file $(localstack-config) down; else echo "Localstack has been stopped" ; fi'
+alias localstack-up='if [[ -n "$(docker ps -q -f name=localstack-debug)" ]] ; then echo "Localstack is already running."; else docker-compose --env-file ./debug/.dev.env --file "$PWD/docker-compose.yml" up --detach ; fi'
 ```
 
 #### Notes
