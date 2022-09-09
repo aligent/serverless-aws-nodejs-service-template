@@ -37,6 +37,7 @@
         }
     ],
     "tasks": [
+        // Invoke local lambda function with debug enabled
         {
             "type": "docker-run",
             "label": "sls-docker: invoke-local-debug",
@@ -62,6 +63,10 @@
                         "containerPath": "/home/node/.aws"
                     },
                     {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
                         "localPath": "${userHome}/.npm",
                         "containerPath": "/home/node/.npm"
                     },
@@ -85,6 +90,7 @@
                 "clear": false
             }
         },
+        // Run a Jest test with debug enabled
         {
             "type": "docker-run",
             "label": "sls-docker: jest-test-debug",
@@ -109,6 +115,10 @@
                         "containerPath": "/home/node/.aws"
                     },
                     {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
                         "localPath": "${userHome}/.npm",
                         "containerPath": "/home/node/.npm"
                     },
@@ -131,6 +141,7 @@
                 "clear": false
             }
         },
+        // Invoke step function deployed in localstack with data input
         {
             "type": "shell",
             "label": "sls-docker: invoke-stef-local-data",
@@ -143,6 +154,7 @@
                 "--name invoke-stef-local",
                 "--network localstack-net",
                 "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.azure:/home/node/.azure",
                 "--volume ${userHome}/.npm:/home/node/.npm",
                 "--volume ${workspaceFolder}:/app",
                 "aligent/serverless:debug",
@@ -164,6 +176,7 @@
                 "clear": false
             }
         },
+        // Invoke step function deployed in localstack with data file
         {
             "type": "shell",
             "label": "sls-docker: invoke-stef-local-file",
@@ -176,6 +189,7 @@
                 "--name invoke-stef-local",
                 "--network localstack-net",
                 "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.azure:/home/node/.azure",
                 "--volume ${userHome}/.npm:/home/node/.npm",
                 "--volume ${workspaceFolder}:/app",
                 "aligent/serverless:debug",
@@ -197,6 +211,7 @@
                 "clear": false
             }
         },
+        // Deploy to localstack
         {
             "type": "shell",
             "label": "sls-docker: deploy-localstack",
@@ -209,6 +224,7 @@
                 "--name deploy-localstack",
                 "--network localstack-net",
                 "--volume ${userHome}/.aws:/home/node/.aws",
+                "--volume ${userHome}/.azure:/home/node/.azure",
                 "--volume ${userHome}/.npm:/home/node/.npm",
                 "--volume ${workspaceFolder}:/app",
                 "aligent/serverless:debug",
@@ -228,6 +244,9 @@
                 "clear": false
             }
         },
+        // Deploy to localstack using Docker extension
+        // This is hidden as it's same as the one above but running in detach mode.
+        // I personally prefer showing the deployment output for debugging purpose.
         {
             "type": "docker-run",
             "label": "sls-docker: deploy-localstack-detach",
@@ -246,6 +265,10 @@
                     {
                         "localPath": "${userHome}/.aws",
                         "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
                     },
                     {
                         "localPath": "${userHome}/.npm",
@@ -272,6 +295,8 @@
                 "revealProblems": "onProblem"
             }
         },
+        // Build aligent/serverless:debug image if it does not exist
+        // This is hidden because it will be run automatically when needed.
         {
             "type": "shell",
             "label": "sls-docker: build-serverless-debug",
@@ -279,6 +304,7 @@
                 "color": "terminal.ansiGreen",
                 "id": "package"
             },
+            "hide": true,
             "command": [
                 "[[ -n \"$(docker images -q aligent/serverless:debug)\" ]]",
                 "||",
@@ -294,6 +320,9 @@
                 "close": true
             }
         },
+        // Start localstack in background (detach mode)
+        // You generally don't need to run this.
+        // It will be automatically triggered when running deploy task
         {
             "type": "shell",
             "label": "sls-docker: start-localstack",
@@ -315,6 +344,7 @@
                 "close": true
             }
         },
+        // Stop localstack (docker-compose down)
         {
             "type": "shell",
             "label": "sls-docker: stop-localstack",
