@@ -81,6 +81,7 @@
                 "build-serverless-debug",
                 "sls-docker: start-localstack"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -132,6 +133,7 @@
             "dependsOn": [
                 "build-serverless-debug"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -167,6 +169,7 @@
                 "build-serverless-debug",
                 "sls-docker: start-localstack"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -202,6 +205,7 @@
                 "build-serverless-debug",
                 "sls-docker: start-localstack"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -235,6 +239,7 @@
                 "build-serverless-debug",
                 "sls-docker: start-localstack"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -284,6 +289,7 @@
             "dependsOn": [
                 "sls-docker: start-localstack"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -310,6 +316,7 @@
                 "||",
                 "docker build . -t aligent/serverless:debug"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -333,12 +340,21 @@
             "command": [
                 "if [[ -n \"$(docker ps -q -f name=localstack-debug)\" ]] ;",
                 "then echo \"Localstack is already running.\";",
-                "else docker-compose",
+                "else",
+                "if [[ -n \"$(docker ps -aq -f name=localstack-debug)\" ]] ;",
+                "then docker-compose",
+                "--file",
+                "$(docker inspect -f '{{index .Config.Labels \"com.docker.compose.project.config_files\"}}' localstack-debug)",
+                "down;",
+                "else echo \"Localstack has been stopped.\" ;",
+                "fi;",
+                "docker-compose",
                 "--env-file ./debug/.dev.env",
                 "--file \"${workspaceFolder}/docker-compose.yml\"",
                 "up --detach ;",
                 "fi"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "reveal": "always",
                 "close": true
@@ -353,7 +369,7 @@
                 "id": "stop-circle"
             },
             "command": [
-                "if [[ -n \"$(docker ps -q -f name=localstack-debug)\" ]] ;",
+                "if [[ -n \"$(docker ps -aq -f name=localstack-debug)\" ]] ;",
                 "then docker-compose",
                 "--file",
                 "$(docker inspect -f '{{index .Config.Labels \"com.docker.compose.project.config_files\"}}' localstack-debug)",
@@ -361,6 +377,7 @@
                 "else echo \"Localstack has been stopped.\" ;",
                 "fi"
             ],
+            "problemMatcher":[],
             "presentation": {
                 "reveal": "always",
                 "close": true
