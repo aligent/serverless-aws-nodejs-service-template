@@ -15,7 +15,7 @@ services:
       - DEFAULT_REGION=ap-southeast-2
       - START_WEB=0
     volumes:
-      - ./.localstack:/var/lib/localstack
+      - ~/.localstack:/var/lib/localstack
       - ./.localstack-init/init.sh:/docker-entrypoint-initaws.d/localstack-init.sh
       - '/var/run/docker.sock:/var/run/docker.sock'
 
