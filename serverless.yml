@@ -51,6 +51,7 @@ functions:
     handler: src/world.handler
 
 stepFunctions:
+  validate: true
   stateMachines:
     helloWorld:
       name: ${self:service}-helloWorld
