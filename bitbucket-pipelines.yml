@@ -20,7 +20,9 @@ definitions:
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
               DEBUG: ${CI_DEBUG}
-
+              UPLOAD_BADGE: true
+              APP_USERNAME: ${APP_USERNAME}
+              APP_PASSWORD: ${APP_PASSWORD}
 pipelines:
   pull-requests:
     '**':
