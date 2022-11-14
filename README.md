@@ -170,3 +170,20 @@ Which can be used in your serverless.yml file like:
 ```yaml
 example: ${ssm:/example/ssm/param}
 ```
+
+### Bitbucket pipelines
+
+```yaml
+    - step: &push-serverless
+        name: 'Deploy service'
+        script:
+          - pipe: docker://aligent/serverless-deploy-pipe:latest
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              UPLOAD_BADGE: true
+              APP_USERNAME: ${APP_USERNAME}
+              APP_PASSWORD: ${APP_PASSWORD}
+```
