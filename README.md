@@ -170,3 +170,25 @@ Which can be used in your serverless.yml file like:
 ```yaml
 example: ${ssm:/example/ssm/param}
 ```
+
+### Bitbucket pipelines
+This repository comes with a default pipeline for Bitbucket pipeline that will execute linting and testing on Pull Requests and automatically deploy when PRs are merged to the staging and production branches.
+
+To set this pipeline up you need to add all of the variables below to either the repository variables section or the deployments section in your repository configuration.
+
+`APP_USERNAME` and `APP_PASSWORD` can be created for a user by following the bitbcket documentation here: https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/ These are used by the pipeline to upload a deployment status badge to the repositories "Downloads" section. We recommend creating a dedicated Bot user account and using it's credentials for this.
+
+```yaml
+    - step: &push-serverless
+        name: 'Deploy service'
+        script:
+          - pipe: docker://aligent/serverless-deploy-pipe:latest
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              UPLOAD_BADGE: true
+              APP_USERNAME: ${APP_USERNAME}
+              APP_PASSWORD: ${APP_PASSWORD}
+```
