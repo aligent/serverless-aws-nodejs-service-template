@@ -8,10 +8,17 @@ package:
 
 custom:
   esbuild:
+    format: 'esm'
+    outputFileExtension: '.mjs'
     bundle: true
     minify: ${strToBool(${env:MINIFY, 'true'})}
-    target: node16
     sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}
+    exclude: ['@aws-sdk']
+    # This is a temporary solution for an issue from esbuild
+    # Ref: https://github.com/evanw/esbuild/pull/2067
+    # More info: https://bajtos.net/posts/2022-05-bundling-nodejs-for-aws-lambda/
+    banner:
+      js: import { createRequire } from 'module'; const require = createRequire(import.meta.url);
   localstack:
     debug: true
     autostart: false
@@ -30,7 +37,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
