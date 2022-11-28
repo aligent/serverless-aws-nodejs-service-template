@@ -4,18 +4,15 @@
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "jest-test-debug": "DOTENV_CONFIG_PATH=./debug/.dev.env && node --inspect=0.0.0.0:9229 ./node_modules/.bin/jest --runInBand",
-    "invoke-local-debug": "DOTENV_CONFIG_PATH=./debug/.dev.env &&  node --inspect=0.0.0.0:9229 ./node_modules/.bin/serverless invoke local",
-    "serverless-local": "DOTENV_CONFIG_PATH=./debug/.dev.env && ./node_modules/.bin/serverless",
+    "jest-test-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/jest --runInBand",
+    "invoke-local-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/serverless invoke local",
+    "serverless-local": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/serverless",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
-  "dependencies": {
-    "@aligent/serverless-conventions": "latest",
-    "source-map-support": "^0.5.21"
-  },
   "devDependencies": {
+    "@aligent/serverless-conventions": "latest",
     "@types/aws-lambda": "^8.10.108",
     "@types/jest": "^27.4.1",
     "@types/node": "~16.18.0",
