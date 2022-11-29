@@ -8,7 +8,7 @@
     "jest-test-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/jest --runInBand",
     "invoke-local-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/serverless invoke local",
     "serverless-local": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/serverless",
-    "test": "jest --coverage",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
