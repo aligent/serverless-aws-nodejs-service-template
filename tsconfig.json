@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "lib": [
-            "ES2020"
+            "ES2022"
         ],
         "noImplicitAny": true,
         "removeComments": true,
@@ -10,13 +10,13 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "sourceMap": true,
-        "target": "ES2020",
+        "target": "ES2022",
         "outDir": "lib",
         "typeRoots": [
             "./types",
             "./node_modules/@types"
         ],
-        "module": "ES2020",
+        "module": "ES2022",
         "resolveJsonModule": true,
     },
     "include": [
