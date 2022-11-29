@@ -7,18 +7,7 @@ package:
     - src/
 
 custom:
-  esbuild:
-    format: 'esm'
-    outputFileExtension: '.mjs'
-    bundle: true
-    minify: ${strToBool(${env:MINIFY, 'true'})}
-    sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}
-    exclude: ['@aws-sdk']
-    # This is a temporary solution for an issue from esbuild
-    # Ref: https://github.com/evanw/esbuild/pull/2067
-    # More info: https://bajtos.net/posts/2022-05-bundling-nodejs-for-aws-lambda/
-    banner:
-      js: import { createRequire } from 'module'; const require = createRequire(import.meta.url);
+  esbuild: ${file(./esbuild-config/${self.custom.buildFormat}.yml)}
   localstack:
     debug: true
     autostart: false
@@ -28,6 +17,11 @@ custom:
     edgePort: 4566
     lambda:
       mountCode: false
+  buildFormat: es-module # or commonjs
+  ssm: ${self:service}/${self:provider.stage}
+  environments:
+    ssm: &ssm
+      SSM_ROOT: /${self:custom.ssm}
 
 plugins:
   - serverless-esbuild
@@ -41,16 +35,13 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  # iamRoleStatements:
-  # - Effect: "Allow"
-  #   Action:
-  #     - "s3:*"
-  #   Resource:
-  #     - Fn::Join:
-  #       - ''
-  #       - - 'arn:aws:s3:::'
-  #         - Ref: S3BucketConfig
-  #         - '/*'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParametersByPath
+        - ssm:GetParameter
+      Resource:
+        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
 
 functions:
   hello:
@@ -68,13 +59,11 @@ stepFunctions:
         States:
           Hello:
             Type: Task
-            Resource:
-              Fn::GetAtt: [hello, Arn]
+            Resource: !GetAtt hello.Arn
             Next: World
           World:
             Type: Task
-            Resource:
-              Fn::GetAtt: [world, Arn]
+            Resource: !GetAtt world.Arn
             Next: Passthru
           Passthru:
             Type: Pass
@@ -82,24 +71,24 @@ stepFunctions:
           Stop:
             Type: Pass
             End: true
-#resources:
-#  Resources:
-# S3BucketConfig:
-#   Type: AWS::S3::Bucket
-#   Properties:
-#     BucketName: ${self:custom.s3.configBucket}
-#   DeletionPolicy: Delete
+# resources:
+#   Resources:
+#     S3BucketConfig:
+#       Type: AWS::S3::Bucket
+#       Properties:
+#         BucketName: ${self:custom.s3.configBucket}
+#       DeletionPolicy: Delete
 
-# DBUsers:
-#   Type: AWS::DynamoDB::Table
-#   Properties:
-#     TableName: usersTable
-#     AttributeDefinitions:
-#       - AttributeName: email
-#         AttributeType: S
-#     KeySchema:
-#       - AttributeName: email
-#         KeyType: HASH
-#     ProvisionedThroughput:
-#       ReadCapacityUnits: 1
-#       WriteCapacityUnits: 1
+#     DBUsers:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: usersTable
+#         AttributeDefinitions:
+#           - AttributeName: email
+#             AttributeType: S
+#         KeySchema:
+#           - AttributeName: email
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
