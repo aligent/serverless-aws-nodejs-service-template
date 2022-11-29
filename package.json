@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
+  "type": "module",
   "scripts": {
     "jest-test-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/jest --runInBand",
     "invoke-local-debug": "DOTENV_CONFIG_PATH=./development/.dev.env && ./node_modules/.bin/serverless invoke local",
@@ -10,6 +11,12 @@
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.216.0",
+    "@aws-sdk/client-s3": "^3.216.0",
+    "@aws-sdk/client-ssm": "^3.216.0",
+    "axios": "^1.2.0"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
