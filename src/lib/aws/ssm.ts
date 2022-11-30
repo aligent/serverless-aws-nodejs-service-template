@@ -39,7 +39,9 @@ export const getParametersByPath = async (
             : newParams;
     } catch (error) {
         console.error(
-            `Unable to get SSM Parameters for ${command.input}.`,
+            `Unable to get SSM Parameters for ${JSON.stringify(
+                command.input
+            )}.`,
             error.toString()
         );
 

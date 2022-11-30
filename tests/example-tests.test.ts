@@ -1,12 +1,14 @@
 import { simpleObject } from './__data__/example-data';
 
-describe('Passing tests', () => {
-    test('Passing test', () => {
-        expect(1).toBeTruthy();
+describe('Function name', () => {
+    test('Passes example test when result is truthy', () => {
+        const result = 1;
+        expect(result).toBeTruthy();
     });
 
-    test.skip('Skipped/Failing test', () => {
-        expect(-1).toBeGreaterThan(0);
+    test.skip('Skipped/Failed example test when result is less than 0', () => {
+        const result = -1;
+        expect(result).toBeGreaterThan(0);
     });
 });
 
