@@ -44,7 +44,22 @@ describe('getConfigurations', () => {
         });
     });
 
-    it.todo(
-        'throws the correct error when when one of the param names is incorrect'
-    );
+    it('throws the correct error when when one of the param names is incorrect', async () => {
+        // Arrange
+        const ssmPath = 'mocked';
+        const paramNames = ['name10', 'name2'] as const;
+        const errorMessage =
+            'SSM parameter named /ssm/root/mocked/name10 does not exist';
+
+        try {
+            // Act
+            await getConfigurations<typeof paramNames[number]>(
+                ssmPath,
+                paramNames
+            );
+        } catch (error) {
+            // Assert
+            expect(error.message).toEqual(errorMessage);
+        }
+    });
 });

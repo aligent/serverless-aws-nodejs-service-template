@@ -12,8 +12,10 @@ describe('Function name', () => {
     });
 });
 
-describe('Simple object tests', () => {
+describe('Simple object', () => {
     test('Object has correct name', () => {
         expect(simpleObject.name).toEqual('Test Object');
     });
+
+    test.todo('Object has correct id');
 });
