@@ -35,6 +35,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
+  # environment:
+  #   NODE_OPTIONS: '--enable-source-maps'
   iamRoleStatements:
     - Effect: Allow
       Action:
