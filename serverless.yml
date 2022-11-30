@@ -1,4 +1,4 @@
-service: example-name # To be replaced
+service: kai-example-name # To be replaced
 
 configValidationMode: error
 
@@ -50,6 +50,8 @@ functions:
     handler: src/hello.handler
   world:
     handler: src/world.handler
+    environment:
+      <<: [*ssm]
 
 stepFunctions:
   validate: true
