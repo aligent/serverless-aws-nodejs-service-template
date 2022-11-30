@@ -7,7 +7,7 @@ package:
     - src/
 
 custom:
-  esbuild: ${file(./esbuild-config/${self.custom.buildFormat}.yml)}
+  esbuild: ${file(./esbuild-config/${self:custom.buildFormat}.yml)}
   localstack:
     debug: true
     autostart: false
