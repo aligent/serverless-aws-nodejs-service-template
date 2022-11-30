@@ -1,4 +1,4 @@
-service: kai-example-name # To be replaced
+service: example-name # To be replaced
 
 configValidationMode: error
 
@@ -37,13 +37,13 @@ provider:
   memorySize: 192 #mb (default for all)
   # environment:
   #   NODE_OPTIONS: '--enable-source-maps'
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - ssm:GetParametersByPath
-        - ssm:GetParameter
-      Resource:
-        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #       - ssm:GetParametersByPath
+  #       - ssm:GetParameter
+  #     Resource:
+  #       - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
 
 functions:
   hello:
