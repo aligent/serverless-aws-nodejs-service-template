@@ -1,0 +1,5 @@
+format: 'cjs'
+outputFileExtension: '.js'
+bundle: true
+minify: ${strToBool(${env:MINIFY, 'true'})}
+sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}

@@ -7,10 +7,7 @@ package:
     - src/
 
 custom:
-  esbuild:
-    bundle: true
-    minify: true
-    target: node16
+  esbuild: ${file(./esbuild-config/${self:custom.buildFormat}.yml)}
   localstack:
     debug: true
     autostart: false
@@ -20,6 +17,7 @@ custom:
     edgePort: 4566
     lambda:
       mountCode: false
+  buildFormat: es-module # or commonjs
 
 plugins:
   - serverless-esbuild
