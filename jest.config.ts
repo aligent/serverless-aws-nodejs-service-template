@@ -17,7 +17,7 @@ const jestConfig: JestConfigWithTsJest = {
         ],
     },
     transformIgnorePatterns: ['<rootDir>/node_modules/'],
-    setupFiles: ['./tests/__config__/jest-env.js'],
+    setupFiles: ['./tests/__config__/jest-env.ts'],
     coverageThreshold: {
         global: {
             branches: 80,
