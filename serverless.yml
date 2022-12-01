@@ -18,6 +18,10 @@ custom:
     lambda:
       mountCode: false
   buildFormat: es-module # or commonjs
+  ssm: ${self:service}/${self:provider.stage}
+  environments:
+    ssm: &ssm
+      SSM_ROOT: /${self:custom.ssm}
 
 plugins:
   - serverless-esbuild
@@ -31,22 +35,21 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  # iamRoleStatements:
-  # - Effect: "Allow"
-  #   Action:
-  #     - "s3:*"
-  #   Resource:
-  #     - Fn::Join:
-  #       - ''
-  #       - - 'arn:aws:s3:::'
-  #         - Ref: S3BucketConfig
-  #         - '/*'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParametersByPath
+        - ssm:GetParameter
+      Resource:
+        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
 
 functions:
   hello:
     handler: src/hello.handler
   world:
     handler: src/world.handler
+    environment:
+      <<: [*ssm]
 
 stepFunctions:
   validate: true
@@ -58,13 +61,11 @@ stepFunctions:
         States:
           Hello:
             Type: Task
-            Resource:
-              Fn::GetAtt: [hello, Arn]
+            Resource: !GetAtt hello.Arn
             Next: World
           World:
             Type: Task
-            Resource:
-              Fn::GetAtt: [world, Arn]
+            Resource: !GetAtt world.Arn
             Next: Passthru
           Passthru:
             Type: Pass
