@@ -25,7 +25,6 @@
     "@types/serverless": "^3.12.8",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.41.0",
-    "asl-validator": "^3.0.5",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "jest": "^29.3.1",
