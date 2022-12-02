@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
+  "type": "module",
   "scripts": {
     "deploy-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev",
     "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
