@@ -35,13 +35,13 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - ssm:GetParametersByPath
-        - ssm:GetParameter
-      Resource:
-        - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
+  # iamRoleStatements:
+  #   - Effect: Allow
+  #     Action:
+  #       - ssm:GetParametersByPath
+  #       - ssm:GetParameter
+  #     Resource:
+  #       - arn:aws:ssm:${aws:region}:${aws:accountId}:parameter/${self:custom.ssm}/*
 
 functions:
   hello:
