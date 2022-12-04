@@ -1,0 +1,12 @@
+services:
+  shared:
+    path: "services/shared"
+
+  lkp-hello:
+    path: "services/lkp-hello"
+    params:
+      productsTableName: ${shared.productsTableName}
+      productsTableArn: ${shared.productsTableArn}
+  
+  lkp-world:
+    path: "services/lkp-world"

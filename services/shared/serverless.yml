@@ -1,0 +1,53 @@
+service: shd-monorepo-example # To be replaced
+
+configValidationMode: error
+
+package:
+  include:
+    - src/
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    target: node16
+  localstack:
+    debug: true
+    autostart: false
+    stages:
+      - dev
+    edgePort: 4566
+    lambda:
+      mountCode: false
+  dynamoTables:
+    productTable: '${self:service}-${self:provider.stage}-product'
+
+plugins:
+  - '@aligent/serverless-conventions'
+
+provider: ${file(../../serverless.common.yml):provider}
+
+resources:
+  Resources:
+    DBTableProductTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.dynamoTables.productTable}
+        AttributeDefinitions:
+          - AttributeName: productId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: productId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+  Outputs:
+    productsTableName:
+      Value:
+        Ref: DBTableProductTable
+
+    productsTableArn:
+      Value:
+        Fn::GetAtt: ['DBTableProductTable', 'Arn']

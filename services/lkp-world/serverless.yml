@@ -1,4 +1,4 @@
-service: example-name # To be replaced
+service: lkp-world # To be replaced
 
 configValidationMode: error
 
@@ -21,48 +21,22 @@ custom:
     lambda:
       mountCode: false
 
-plugins:
-  - serverless-esbuild
-  - serverless-localstack
-  - serverless-step-functions
-  - '@aligent/serverless-conventions'
+plugins: ${file(../../serverless.common.yml):plugins}
 
-provider:
-  name: aws
-  runtime: nodejs16.x
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-southeast-2'}
-  memorySize: 192 #mb (default for all)
-  # iamRoleStatements:
-  # - Effect: "Allow"
-  #   Action:
-  #     - "s3:*"
-  #   Resource:
-  #     - Fn::Join:
-  #       - ''
-  #       - - 'arn:aws:s3:::'
-  #         - Ref: S3BucketConfig
-  #         - '/*'
+provider: ${file(../../serverless.common.yml):provider}
 
 functions:
-  hello:
-    handler: src/hello.handler
   world:
-    handler: src/world.handler
+    handler: src/lambda/world.handler
 
 stepFunctions:
   validate: true
   stateMachines:
-    helloWorld:
-      name: ${self:service}-helloWorld
+    world:
+      name: ${self:service}-world
       definition:
-        StartAt: Hello
+        StartAt: World
         States:
-          Hello:
-            Type: Task
-            Resource:
-              Fn::GetAtt: [hello, Arn]
-            Next: World
           World:
             Type: Task
             Resource:

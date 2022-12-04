@@ -1,0 +1,92 @@
+service: lkp-hello # To be replaced
+
+configValidationMode: error
+
+package:
+  include:
+    - src/
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    target: node16
+  localstack:
+    debug: true
+    autostart: false
+    stages:
+      - dev
+    host: http://localstack
+    edgePort: 4566
+    lambda:
+      mountCode: false
+  dynamoTables:
+    productsTableName: ${param:productsTableName}
+    productsTableArn: ${param:productsTableArn}
+  defaults:
+    provider: &provider ${file(../../serverless.common.yml):provider}
+
+plugins: ${file(../../serverless.common.yml):plugins}
+
+provider:
+  <<: provider
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:Scan'
+        - 'dynamodb:PutItem'
+        - 'dynamodb:GetItem'
+      Resource:
+        - Fn::Join:
+            [
+              '/',
+              ['${self:custom.dynamoTables.productsTableArn}', 'index', '*'],
+            ]
+        - ${self:custom.dynamoTables.productsTableArn}
+
+functions:
+  hello:
+    handler: src/lambda/hello.handler
+    environment:
+      productTable: ${self:custom.dynamoTables.productsTableName}
+
+stepFunctions:
+  validate: true
+  stateMachines:
+    hello:
+      name: ${self:service}-hello
+      definition:
+        StartAt: Hello
+        States:
+          Hello:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [hello, Arn]
+            Next: Passthru
+          Passthru:
+            Type: Pass
+            Next: Stop
+          Stop:
+            Type: Pass
+            End: true
+#resources:
+#  Resources:
+# S3BucketConfig:
+#   Type: AWS::S3::Bucket
+#   Properties:
+#     BucketName: ${self:custom.s3.configBucket}
+#   DeletionPolicy: Delete
+
+# DBUsers:
+#   Type: AWS::DynamoDB::Table
+#   Properties:
+#     TableName: usersTable
+#     AttributeDefinitions:
+#       - AttributeName: email
+#         AttributeType: S
+#     KeySchema:
+#       - AttributeName: email
+#         KeyType: HASH
+#     ProvisionedThroughput:
+#       ReadCapacityUnits: 1
+#       WriteCapacityUnits: 1
