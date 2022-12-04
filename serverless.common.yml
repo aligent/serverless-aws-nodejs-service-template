@@ -7,6 +7,5 @@ provider:
 
 plugins:
   - serverless-esbuild
-  - serverless-localstack
   - serverless-step-functions
   - '@aligent/serverless-conventions'

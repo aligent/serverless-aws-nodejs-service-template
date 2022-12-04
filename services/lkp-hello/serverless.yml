@@ -29,7 +29,11 @@ custom:
 plugins: ${file(../../serverless.common.yml):plugins}
 
 provider:
-  <<: provider
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-southeast-2'}
+  memorySize: 192 #mb (default for all)
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
