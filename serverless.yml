@@ -11,19 +11,9 @@ custom:
     bundle: true
     minify: true
     target: node16
-  localstack:
-    debug: true
-    autostart: false
-    stages:
-      - dev
-    host: http://localstack
-    edgePort: 4566
-    lambda:
-      mountCode: false
 
 plugins:
   - serverless-esbuild
-  - serverless-localstack
   - serverless-step-functions
   - '@aligent/serverless-conventions'
 
