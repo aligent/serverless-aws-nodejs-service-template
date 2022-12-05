@@ -1,3 +1,5 @@
+// Util has been started - purely for testing of the monorepo - Remainder of util to be completed in MICRO-52
+
 import AWS from 'aws-sdk';
 
 const DynamoDB = new AWS.DynamoDB();

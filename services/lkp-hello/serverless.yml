@@ -23,17 +23,18 @@ custom:
   dynamoTables:
     productsTableName: ${param:productsTableName}
     productsTableArn: ${param:productsTableArn}
-  defaults:
-    provider: &provider ${file(../../serverless.common.yml):provider}
+  default:
+    provider: ${file(../../serverless.common.yml):provider}
+    plugins: ${file(../../serverless.common.yml):plugins}
 
-plugins: ${file(../../serverless.common.yml):plugins}
+plugins: ${self:custom.default.plugins}
 
 provider:
-  name: aws
-  runtime: nodejs18.x
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'ap-southeast-2'}
-  memorySize: 192 #mb (default for all)
+  name: ${self:custom.default.provider.name}
+  runtime: ${self:custom.default.provider.runtime}
+  stage: ${self:custom.default.provider.stage}
+  region: ${self:custom.default.provider.region}
+  memorySize: ${self:custom.default.provider.memorySize}
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
