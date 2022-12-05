@@ -8,10 +8,8 @@ jspm_packages
 # ESBuild directories
 .build
 
-vscode
-
-# Localstack directories
-.localstack
+# VSCode directory
+.vscode
 
 # Jest coverage output
 coverage

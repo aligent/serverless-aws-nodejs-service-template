@@ -8,9 +8,8 @@ This template includes:
 
 - The setup from the base aws typescript template
 - AWS local lib for working online/offline
-- BitBucket pipelines for deploying production and staging
-- Localstack packages for local development
-- Dockerised local development so you don't have to install the serverless client or localstack
+- Bitbucket pipelines for deploying production and staging
+- Dockerised local development so you don't have to install the serverless client
 
 # Usage
 
@@ -25,9 +24,6 @@ Add the following to your `.bashrc` file:
 ```
 alias node-run='docker run --rm -it --volume ~/.aws:/home/node/.aws --volume ~/.npm:/home/node/.npm --volume $PWD:/app aligent/serverless'
 alias serverless='node-run serverless'
-alias sls-deploy-local='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --verbose --aws-profile localstack --stage dev'
-alias sls-invoke='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --verbose --aws-profile localstack --stage dev --function'
-alias sls-invoke-stepf='docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --verbose --aws-profile localstack --stage dev --name'
 ```
 
 You will then need to reload your bashrc file, either by running `. ~/.bashrc` or starting a new terminal session.
@@ -92,103 +88,25 @@ Invoke individual lambdas json file
 
 Refer to the [https://www.serverless.com/framework/docs/providers/aws/cli-reference](Serverless CLI Reference for AWS) for further details.
 
-## Offline Usage
+## Bitbucket pipelines
 
-Add localstack credentials block to ~/.aws/credentials (creds don't matter)
-
-```
-[localstack]
-aws_access_key_id = localstack
-aws_secret_access_key = localstack
-```
-
-Add localstack profile block to ~/.aws/config
-
-```
-[profile localstack]
-region = ap-southeast-2
-output = json
-```
-
-Start the development environment
-`docker-compose up`
-
-Deploy the serverless stack
-`sls-deploy-local`
-
-Invoke the step function
-`sls-invoke-stepf helloWorld`
-
-Invoke the step function with data
-`sls-invoke-stepf helloWorld --data='{}'`
-
-Invoke the step function with json file
-`sls-invoke-stepf helloWorld --path='input.json'`
-
-Invoke individual lambdas
-`sls-invoke hello`
-
-Invoke individual lambdas with data
-`sls-invoke hello --data='{}'`
-
-Invoke individual lambdas json file
-`sls-invoke hello --path='input.json'`
-
-Whenever using an AWS service, ensure you use the params defined in the lib/aws-local file, eg:
-
-###S3
-
-```typescript
-import { S3Params } from './lib/localstack';
-
-const s3 = new S3(S3Params);
-```
-
-###DynamoDB
-
-```typescript
-import { DynamoDBParams } from './lib/localstack';
-
-const db = new DynamoDB(DynamoDBParams);
-```
-
-This will ensure that it uses a localstack instance in this case when invoked with `invoke local`.
-
-#### SSM Parameters
-
-The .localstack-init folder contains a bash script that is run after localstack has successfully started up. In it you can add the creation of any AWS resource you want
-using the awslocal cli tool.
-
-The script currently contains an example on how to create an SSM value:
-
-```
-awslocal ssm put-parameter --name "/example/ssm/param" --type String --value "some-value" --overwrite
-```
-
-Which can be used in your serverless.yml file like:
-
-```yaml
-example: ${ssm:/example/ssm/param}
-```
-
-### Bitbucket pipelines
 This repository comes with a default pipeline for Bitbucket pipeline that will execute linting and testing on Pull Requests and automatically deploy when PRs are merged to the staging and production branches.
 
 To set this pipeline up you need to add all of the variables below to either the repository variables section or the deployments section in your repository configuration.
 
-`APP_USERNAME` and `APP_PASSWORD` can be created for a user by following the bitbcket documentation here: https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/ These are used by the pipeline to upload a deployment status badge to the repositories "Downloads" section. We recommend creating a dedicated Bot user account and using it's credentials for this.
+`APP_USERNAME` and `APP_PASSWORD` can be created for a user by following the Bitbucket documentation here: https://support.atlassian.com/bitbucket-cloud/docs/app-passwords/ These are used by the pipeline to upload a deployment status badge to the repositories "Downloads" section. We recommend creating a dedicated Bot user account and using it's credentials for this.
 
 ```yaml
-    - step: &push-serverless
-        name: 'Deploy service'
-        script:
-          - pipe: docker://aligent/serverless-deploy-pipe:latest
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              CFN_ROLE: ${CFN_ROLE}
-              DEBUG: ${CI_DEBUG}
-              UPLOAD_BADGE: true
-              APP_USERNAME: ${APP_USERNAME}
-              APP_PASSWORD: ${APP_PASSWORD}
+- step: &push-serverless
+    name: 'Deploy service'
+    script:
+      - pipe: docker://aligent/serverless-deploy-pipe:latest
+        variables:
+          AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+          AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+          CFN_ROLE: ${CFN_ROLE}
+          DEBUG: ${CI_DEBUG}
+          UPLOAD_BADGE: true
+          APP_USERNAME: ${APP_USERNAME}
+          APP_PASSWORD: ${APP_PASSWORD}
 ```
