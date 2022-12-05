@@ -4,9 +4,6 @@
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "deploy-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js deploy --log --profile localstack --stage dev",
-    "invoke-local": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke --log --profile localstack --stage dev --function ",
-    "invoke-local-stepf": "docker-compose exec -u node -w /app offline /serverless/node_modules/serverless/bin/serverless.js invoke stepf --log --profile localstack --stage dev --name ",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
@@ -27,7 +24,6 @@
     "jest": "^27.5.1",
     "prettier": "2.7.1",
     "serverless-esbuild": "^1.33.0",
-    "serverless-localstack": "^1.0.1",
     "serverless-step-functions": "^3.11.1",
     "ts-jest": "^27.1.0",
     "ts-loader": "^9.4.2",
@@ -35,9 +31,9 @@
     "typescript": "^4.8.4",
     "asl-validator": "^3.0.8"
   },
-  "engines" : { 
-    "npm" : ">=7.0.0",
-    "node" : "~16.11.0"
+  "engines": {
+    "npm": ">=7.0.0",
+    "node": "~16.11.0"
   },
   "author": "Aligent Consulting",
   "license": "MIT"
