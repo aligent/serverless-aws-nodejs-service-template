@@ -6,10 +6,10 @@ interface ParameterValues {
     [key: string]: string;
 }
 
-export const getParemetersFromSsm = async (
+export async function getParemetersFromSsm<T extends string>(
     path: string, // Path of SSM paramters
     parameterNames: string[] // Name within the specified path
-) => {
+) {
     const paramsWithPath = parameterNames.map((name) => path + name);
 
     const params: AWS.SSM.GetParametersRequest = {
@@ -33,8 +33,8 @@ export const getParemetersFromSsm = async (
         )[0].Value as string;
     }
 
-    return parameterSet;
-};
+    return parameterSet as Record<T, string>;
+}
 
 export const sendParameterToSsm = async (
     parameterName: string,
