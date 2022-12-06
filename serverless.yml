@@ -9,7 +9,8 @@ package:
 custom:
   esbuild:
     bundle: true
-    minify: true
+    minify: ${strToBool(${env:MINIFY, 'true'})}
+    sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}
     target: node16
 
 plugins:

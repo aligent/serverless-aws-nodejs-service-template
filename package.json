@@ -4,6 +4,8 @@
   "description": "Serverless ESBuild example using Typescript",
   "main": "handler.js",
   "scripts": {
+    "debug-test": "node --inspect=0.0.0.0 ./node_modules/.bin/jest --runInBand",
+    "debug-invoke-local": "MINIFY=false SOURCEMAP=true node --inspect=0.0.0.0 ./node_modules/.bin/serverless invoke local",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."

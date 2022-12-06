@@ -1,0 +1,168 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "functionName",
+            "type": "promptString",
+            "default": "hello",
+            "description": "I am invoking local function: "
+        },
+        {
+            "id": "specName",
+            "type": "promptString",
+            "default": "name-of-spec",
+            "description": "I am debugging test case: "
+        },
+        {
+            "id": "payloadData",
+            "type": "promptString",
+            "default": "'{\"foo\":\"bar\"}'",
+            "description": "Please use this payload data: "
+        },
+        {
+            // This must be inside our workspace folder as we only mount bind $pwd:/app
+            // NOTE: Do not add / at the beginning of the input
+            "id": "dataFile",
+            "type": "promptString",
+            "default": "debug/dev.invoke.json",
+            "description": "Please use the data from this file: "
+        }
+    ],
+    "tasks": [
+        // Run a Jest test with debug enabled
+        {
+            "type": "docker-run",
+            "label": "sls-docker: debug-test",
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "beaker"
+            },
+            "dockerRun": {
+                "image": "aligent/serverless:debug",
+                "containerName": "debug-test",
+                "remove": true,
+                "portsPublishAll": false,
+                "ports": [
+                    {
+                        "containerPort": 9229,
+                        "hostPort": 9229
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run debug-test -- -t \"${input:specName}\""
+            },
+            "dependsOn": [
+                "sls-docker: build-serverless-debug"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            }
+        },
+        // Invoke local lambda function with debug enabled
+        // Note: First run will always fails because the IDE needs to bind with source map which is not available yet
+        {
+            "type": "docker-run",
+            "label": "sls-docker: debug-invoke-local",
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "debug-alt"
+            },
+            "dockerRun": {
+                "image": "aligent/serverless:debug",
+                "containerName": "debug-invoke-local",
+                "remove": true,
+                "portsPublishAll": false,
+                "ports": [
+                    {
+                        "containerPort": 9229,
+                        "hostPort": 9229
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run debug-invoke-local -- -f ${input:functionName} -d ${input:payloadData}"
+            },
+            "dependsOn": [
+                "sls-docker: build-serverless-debug"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            }
+        },
+        // Build aligent/serverless:debug image if it does not exist
+        // This is hidden because it will be run automatically when needed.
+        {
+            "type": "shell",
+            "label": "sls-docker: build-serverless-debug",
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "package"
+            },
+            "hide": true,
+            "command": [
+                "[[ -n \"$(docker images -q aligent/serverless:debug)\" ]]",
+                "||",
+                "docker build . -t aligent/serverless:debug"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            }
+        },
+    ]
+}
