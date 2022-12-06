@@ -3,6 +3,7 @@
 import AWS from 'aws-sdk';
 
 const DynamoDB = new AWS.DynamoDB();
+const BATCH_SIZE = 25;
 
 export const scanItems = (
     TableName: string,
@@ -48,7 +49,7 @@ export const emptyDynamoTable = async (TableName: string) => {
 
     for (const existingEntry of existingDynamoEntries.Items) {
         const params: AWS.DynamoDB.DeleteItemInput = {
-            TableName: process.env.productTable,
+            TableName,
             Key: { productId: existingEntry.productId },
         };
 
@@ -56,20 +57,81 @@ export const emptyDynamoTable = async (TableName: string) => {
     }
 };
 
-export const bulkItemUpload = async (
-    items: AWS.DynamoDB.PutItemInputAttributeMap[],
-    TableName: string
+export const putDynamoItem = (
+    TableName: string,
+    Item: AWS.DynamoDB.PutItemInputAttributeMap
 ) => {
-    for (const item of items) {
-        const params: AWS.DynamoDB.PutItemInput = {
-            TableName,
-            Item: item,
-        };
+    const params: AWS.DynamoDB.PutItemInput = {
+        TableName,
+        Item,
+    };
 
-        console.log(
-            `Putting item into dynamo using params: ${JSON.stringify(params)}`
-        );
+    console.log(
+        `Putting item in dynamo using params: ${JSON.stringify(params)}`
+    );
 
-        await DynamoDB.putItem(params).promise();
+    return DynamoDB.putItem(params).promise();
+};
+
+export const updateDynamoItem = (
+    TableName: string,
+    Key: AWS.DynamoDB.Key,
+    updates: AWS.DynamoDB.AttributeMap
+) => {
+    const updateExpression = Object.keys(updates)
+        .map((attribtue) => `${attribtue} = :${attribtue}`)
+        .join(', ');
+
+    const expressionAttributeValues: Record<string, unknown> = Object.keys(
+        updates
+    ).reduce(
+        (values: { [key: string]: AWS.DynamoDB.AttributeValue }, attribute) => {
+            values[`:${attribute}` as keyof typeof values] = updates[attribute];
+            return values;
+        },
+        {}
+    );
+
+    const params: AWS.DynamoDB.UpdateItemInput = {
+        TableName,
+        Key,
+        UpdateExpression: `set ${updateExpression}`,
+        ExpressionAttributeValues: expressionAttributeValues,
+    };
+
+    console.log(
+        `Updating item in dynamo using params: ${JSON.stringify(params)}`
+    );
+
+    return DynamoDB.updateItem(params).promise();
+};
+
+export const batchWriteItems = async (
+    tableName: string,
+    items: AWS.DynamoDB.ItemList,
+    index = 0
+): Promise<boolean> => {
+    const batch = items.slice(index, BATCH_SIZE);
+
+    const params: AWS.DynamoDB.BatchWriteItemInput = {
+        RequestItems: {
+            [tableName]: batch.map((item) => ({
+                PutRequest: {
+                    Item: item,
+                },
+            })),
+        },
+    };
+
+    console.log(
+        `Batch write into dynamo using params: ${JSON.stringify(params)}`
+    );
+
+    await DynamoDB.batchWriteItem(params).promise();
+
+    if (index + BATCH_SIZE < items.length) {
+        batchWriteItems(tableName, items, index + BATCH_SIZE);
     }
+
+    return true;
 };

@@ -41,6 +41,9 @@ provider:
         - 'dynamodb:Scan'
         - 'dynamodb:PutItem'
         - 'dynamodb:GetItem'
+        - 'dynamodb:DeleteItem'
+        - 'dynamodb:UpdateItem'
+        - 'dynamodb:BatchWriteItem'
       Resource:
         - Fn::Join:
             [
