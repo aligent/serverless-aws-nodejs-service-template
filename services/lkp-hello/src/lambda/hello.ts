@@ -4,6 +4,7 @@ import {
     emptyDynamoTable,
     getItem,
     putDynamoItem,
+    queryItems,
     scanItems,
     updateDynamoItem,
 } from '../../../../lib/dynamodb';
@@ -11,6 +12,8 @@ import {
 const PRODUCT_TABLE = process.env.productTable;
 const HELLO_ITEM = { productId: { S: 'hello' } };
 const WORLD_ITEM = { productId: { S: 'world' } };
+const DISCOUNT_TABLE_NAME = process.env.discountTableName;
+const ERP_ID_INDEX = process.env.discountErpIdIndex;
 
 export const handler: AWSLambda.Handler = async () => {
     console.log('Hello, I am testing the shared dynamo table');
@@ -18,6 +21,17 @@ export const handler: AWSLambda.Handler = async () => {
     if (!PRODUCT_TABLE) {
         throw 'No table name available';
     }
+
+    const queryParams = {
+        TableName: DISCOUNT_TABLE_NAME,
+        IndexName: ERP_ID_INDEX,
+        ExpressionAttributeValues: {
+            ':erpId': { S: `123` },
+        },
+        KeyConditionExpression: 'erpId = :erpId',
+    };
+
+    await queryItems(queryParams);
 
     await scanItems(PRODUCT_TABLE);
 

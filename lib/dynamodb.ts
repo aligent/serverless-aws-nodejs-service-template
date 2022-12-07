@@ -5,6 +5,11 @@ import AWS from 'aws-sdk';
 const DynamoDB = new AWS.DynamoDB();
 const BATCH_SIZE = 25;
 
+/* Scan Items input:
+TableName - Name of the table
+Limit - How many items you want to fetch in the scan
+ExclusiveStartKey - When using a limit this will be the id of the 'last' item in the previous call
+*/
 export const scanItems = (
     TableName: string,
     Limit?: number,
@@ -23,6 +28,10 @@ export const scanItems = (
     return DynamoDB.scan(params).promise();
 };
 
+/* Get Item input:
+TableName - Name of the table
+Key - The primary key of the item you are trying to receive
+*/
 export const getItem = (Key: AWS.DynamoDB.Key, TableName: string) => {
     const params: AWS.DynamoDB.GetItemInput = {
         TableName,
@@ -36,6 +45,23 @@ export const getItem = (Key: AWS.DynamoDB.Key, TableName: string) => {
     return DynamoDB.getItem(params).promise();
 };
 
+/* Get Item input:
+TableName - Name of the table
+Key - The primary key of the item you are trying to receive
+*/
+export const queryItems = (params: AWS.DynamoDB.QueryInput) => {
+    console.log(
+        `Querying items from dynamo using params: ${JSON.stringify(params)}`
+    );
+
+    return DynamoDB.query(params).promise();
+};
+
+/* Empty Table
+This should not regularly be used. It may be required to refresh a table in staging though
+Input:
+TableName - Name of the table
+*/
 export const emptyDynamoTable = async (TableName: string) => {
     const params: AWS.DynamoDB.ScanInput = {
         TableName,
@@ -57,6 +83,19 @@ export const emptyDynamoTable = async (TableName: string) => {
     }
 };
 
+/* Put Item 
+Note - This will replace an existing entry if one exists. Unless sending
+full item do not use this for updating
+Input:
+TableName - Name of the table
+Item - Dynamo Structured attribute map.
+e.g.
+{ 
+    productId: { S: 'hello' },
+    price: { N: 19.95 },
+    available: { BOOL: true }
+}
+*/
 export const putDynamoItem = (
     TableName: string,
     Item: AWS.DynamoDB.PutItemInputAttributeMap
@@ -73,6 +112,20 @@ export const putDynamoItem = (
     return DynamoDB.putItem(params).promise();
 };
 
+/* Update Item 
+Note - This will update the attributes you pass in. If there were already other
+attributes against the item they will persist
+Input:
+TableName - Name of the table
+Key - The primary key of the item you are trying to update
+updates - Attribute Map of what you are trying to add to the item
+e.g.
+{ 
+    salePrice: { N: 15.95 },
+    colour: { S: 'Purple' },
+    size: { S: '12' }
+}
+*/
 export const updateDynamoItem = (
     TableName: string,
     Key: AWS.DynamoDB.Key,
@@ -106,6 +159,13 @@ export const updateDynamoItem = (
     return DynamoDB.updateItem(params).promise();
 };
 
+/* Batch Write Items
+Bulk writes items to dynamo db in batches of 25 items.
+Input:
+TableName - Name of the table
+Items - Array of items to be sent to dynamo - see putItem for details item structure
+index - Do not pass a value in for this. Its used for batching
+*/
 export const batchWriteItems = async (
     tableName: string,
     items: AWS.DynamoDB.ItemList,
@@ -130,7 +190,7 @@ export const batchWriteItems = async (
     await DynamoDB.batchWriteItem(params).promise();
 
     if (index + BATCH_SIZE < items.length) {
-        batchWriteItems(tableName, items, index + BATCH_SIZE);
+        await batchWriteItems(tableName, items, index + BATCH_SIZE);
     }
 
     return true;

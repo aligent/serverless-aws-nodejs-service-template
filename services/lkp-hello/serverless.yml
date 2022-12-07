@@ -23,6 +23,10 @@ custom:
   dynamoTables:
     productsTableName: ${param:productsTableName}
     productsTableArn: ${param:productsTableArn}
+    discountErpIdIndex: '${self:service}-${self:provider.stage}-discount-table-gsi'
+    discountTableName: '${self:service}-${self:provider.stage}-discount-table'
+    discountTableNameArn:
+      Fn::GetAtt: ['DiscountTable', 'Arn']
   default:
     provider: ${file(../../serverless.common.yml):provider}
     plugins: ${file(../../serverless.common.yml):plugins}
@@ -44,7 +48,18 @@ provider:
         - 'dynamodb:DeleteItem'
         - 'dynamodb:UpdateItem'
         - 'dynamodb:BatchWriteItem'
+        - 'dynamodb:Query'
       Resource:
+        - Fn::Join:
+            [
+              '/',
+              [
+                '${self:custom.dynamoTables.discountTableNameArn}',
+                'index',
+                '*',
+              ],
+            ]
+        - ${self:custom.dynamoTables.discountTableNameArn}
         - Fn::Join:
             [
               '/',
@@ -57,6 +72,8 @@ functions:
     handler: src/lambda/hello.handler
     environment:
       productTable: ${self:custom.dynamoTables.productsTableName}
+      discountTableName: ${self:custom.dynamoTables.discountTableName}
+      discountErpIdIndex: ${self:custom.dynamoTables.discountErpIdIndex}
 
 stepFunctions:
   validate: true
@@ -77,8 +94,30 @@ stepFunctions:
           Stop:
             Type: Pass
             End: true
-#resources:
-#  Resources:
+resources:
+  Resources:
+    DiscountTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.dynamoTables.discountTableName}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: erpId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: erpId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:custom.dynamoTables.discountErpIdIndex}
+            KeySchema:
+              - AttributeName: erpId
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
 # S3BucketConfig:
 #   Type: AWS::S3::Bucket
 #   Properties:
