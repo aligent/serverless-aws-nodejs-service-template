@@ -44,7 +44,7 @@ stepFunctions:
   validate: true
   stateMachines:
     helloWorld:
-      name: ${self:service}-helloWorld
+      name: ${self:service}-${self:provider.stage}-helloWorld
       definition:
         StartAt: Hello
         States:
