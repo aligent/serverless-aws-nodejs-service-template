@@ -34,7 +34,7 @@ Then install dependencies:
 
 `cd my-project`
 
-`node-run npm install`.
+`node-run npm ci`.
 
 ### Local NPM
 
@@ -46,7 +46,7 @@ Then install dependencies:
 
 `cd my-project`
 
-`node-run npm install`.
+`node-run npm ci`.
 
 ## Development Environment
 
