@@ -23,7 +23,7 @@
     "eslint-config-prettier": "^8.5.0",
     "jest": "^27.5.1",
     "prettier": "2.8.1",
-    "serverless-esbuild": "^1.33.0",
+    "serverless-esbuild": "^1.35.3",
     "serverless-step-functions": "^3.11.1",
     "ts-jest": "^27.1.0",
     "ts-loader": "^9.4.2",
