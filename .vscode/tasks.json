@@ -40,7 +40,7 @@
                 "id": "beaker"
             },
             "dockerRun": {
-                "image": "aligent/serverless:debug",
+                "image": "aligent/serverless:latest",
                 "containerName": "debug-test",
                 "remove": true,
                 "portsPublishAll": false,
@@ -70,9 +70,6 @@
                 ],
                 "command": "npm run debug-test -- -t \"${input:specName}\""
             },
-            "dependsOn": [
-                "sls-docker: build-serverless-debug"
-            ],
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -94,7 +91,7 @@
                 "id": "debug-alt"
             },
             "dockerRun": {
-                "image": "aligent/serverless:debug",
+                "image": "aligent/serverless:latest",
                 "containerName": "debug-invoke-local",
                 "remove": true,
                 "portsPublishAll": false,
@@ -124,9 +121,6 @@
                 ],
                 "command": "npm run debug-invoke-local -- -f ${input:functionName} -d ${input:payloadData}"
             },
-            "dependsOn": [
-                "sls-docker: build-serverless-debug"
-            ],
             "problemMatcher": [],
             "presentation": {
                 "echo": true,
@@ -137,32 +131,6 @@
                 "clear": true,
                 "close": true
             }
-        },
-        // Build aligent/serverless:debug image if it does not exist
-        // This is hidden because it will be run automatically when needed.
-        {
-            "type": "shell",
-            "label": "sls-docker: build-serverless-debug",
-            "icon": {
-                "color": "terminal.ansiGreen",
-                "id": "package"
-            },
-            "hide": true,
-            "command": [
-                "[[ -n \"$(docker images -q aligent/serverless:debug)\" ]]",
-                "||",
-                "docker build . -t aligent/serverless:debug"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true,
-                "close": true
-            }
-        },
+        }
     ]
 }
