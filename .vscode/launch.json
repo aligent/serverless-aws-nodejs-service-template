@@ -20,7 +20,7 @@
             "preLaunchTask": "sls-docker: debug-test"
         },
         {
-            "name": "Invoke Local Debug",
+            "name": "Debug Invoke Local Json Path",
             "type": "node",
             "request": "attach",
             "address": "localhost",
@@ -32,7 +32,22 @@
                 "${workspaceFolder}/.esbuild/**/*.js"
             ],
             "internalConsoleOptions": "neverOpen",
-            "preLaunchTask": "sls-docker: debug-invoke-local"
+            "preLaunchTask": "sls-docker: debug-invoke-local-path"
+        },
+        {
+            "name": "Debug Invoke Local String Data",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "port": 9229,
+            "sourceMaps": true,
+            "localRoot": "${workspaceFolder}",
+            "remoteRoot": "/app",
+            "outFiles": [
+                "${workspaceFolder}/.esbuild/**/*.js"
+            ],
+            "internalConsoleOptions": "neverOpen",
+            "preLaunchTask": "sls-docker: debug-invoke-local-data"
         }
     ]
 }

@@ -7,7 +7,7 @@
             "id": "functionName",
             "type": "promptString",
             "default": "hello",
-            "description": "I am invoking local function: "
+            "description": "Enter the function logical name as shown in `serverless.yml`: "
         },
         {
             "id": "specName",
@@ -26,7 +26,7 @@
             // NOTE: Do not add / at the beginning of the input
             "id": "dataFile",
             "type": "promptString",
-            "default": "debug/dev.invoke.json",
+            "default": "debug-local-invoke.json",
             "description": "Please use the data from this file: "
         }
     ],
@@ -41,8 +41,7 @@
             },
             "dockerRun": {
                 "image": "aligent/serverless:latest",
-                "containerName": "debug-test",
-                "remove": true,
+                "containerName": "vsdebug-test",
                 "portsPublishAll": false,
                 "ports": [
                     {
@@ -79,21 +78,23 @@
                 "showReuseMessage": true,
                 "clear": true,
                 "close": true
-            }
+            },
+            "dependsOn": [
+                "sls-docker: remove-old-containers"
+            ]
         },
-        // Invoke local lambda function with debug enabled
+        // Invoke local lambda function with debug enabled with string data
         // Note: First run will always fails because the IDE needs to bind with source map which is not available yet
         {
             "type": "docker-run",
-            "label": "sls-docker: debug-invoke-local",
+            "label": "sls-docker: debug-invoke-local-data",
             "icon": {
                 "color": "terminal.ansiYellow",
                 "id": "debug-alt"
             },
             "dockerRun": {
                 "image": "aligent/serverless:latest",
-                "containerName": "debug-invoke-local",
-                "remove": true,
+                "containerName": "vsdebug-invoke-local",
                 "portsPublishAll": false,
                 "ports": [
                     {
@@ -126,6 +127,118 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            },
+            "dependsOn": [
+                "sls-docker: remove-old-containers"
+            ]
+        },
+        // Invoke local lambda function with debug enabled with data file
+        {
+            "type": "docker-run",
+            "label": "sls-docker: debug-invoke-local-path",
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "debug-alt"
+            },
+            "dockerRun": {
+                "image": "aligent/serverless:latest",
+                "containerName": "vsdebug-invoke-local",
+                "portsPublishAll": false,
+                "ports": [
+                    {
+                        "containerPort": 9229,
+                        "hostPort": 9229
+                    }
+                ],
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run debug-invoke-local -- -f ${input:functionName} -p ${input:dataFile}"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            },
+            "dependsOn": [
+                "sls-docker: remove-old-containers"
+            ]
+        },
+        // Remove old containters
+        {
+            "type": "shell",
+            "label": "sls-docker: remove-old-containers",
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "package"
+            },
+            "hide": true,
+            "command": [
+                "[[ -z \"$(docker container ls -qa --filter name=vsdebug-)\" ]]",
+                "&&",
+                "echo Nothing to remove",
+                "||",
+                "docker container rm $(docker container ls -qa --filter name=vsdebug-)"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            },
+            "dependsOn": [
+                "sls-docker: stop-old-containers"
+            ]
+        },
+        // Stop old containters if any of them are still running
+        {
+            "type": "shell",
+            "label": "sls-docker: stop-old-containers",
+            "icon": {
+                "color": "terminal.ansiGreen",
+                "id": "package"
+            },
+            "hide": true,
+            "command": [
+                "[[ -z \"$(docker container ls -q --filter name=vsdebug- --filter status=running)\" ]]",
+                "&&",
+                "echo Nothing is running",
+                "||",
+                "docker container stop $(docker container ls -q --filter name=vsdebug- --filter status=running)",
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true,
