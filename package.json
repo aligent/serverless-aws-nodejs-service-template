@@ -6,6 +6,7 @@
   "scripts": {
     "debug-test": "node --inspect=0.0.0.0 ./node_modules/.bin/jest --runInBand",
     "debug-invoke-local": "MINIFY=false SOURCEMAP=true node --inspect=0.0.0.0 ./node_modules/.bin/serverless invoke local",
+    "debug-package": "MINIFY=false SOURCEMAP=true KEEP_OUTPUT=true node ./node_modules/.bin/serverless package",
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."

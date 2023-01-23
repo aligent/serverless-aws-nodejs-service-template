@@ -133,7 +133,7 @@
                 "close": true
             },
             "dependsOn": [
-                "sls-docker: remove-old-containers"
+                "sls-docker: debug-package"
             ]
         },
         // Invoke local lambda function with debug enabled with data file
@@ -185,6 +185,52 @@
                 "close": true
             },
             "dependsOn": [
+                "sls-docker: debug-package"
+            ]
+        },
+        // Package for debugging
+        {
+            "type": "docker-run",
+            "label": "sls-docker: debug-package",
+            "icon": {
+                "color": "terminal.ansiYellow",
+                "id": "debug-alt"
+            },
+            "dockerRun": {
+                "image": "aligent/serverless:latest",
+                "containerName": "vsdebug-package",
+                "portsPublishAll": false,
+                "volumes": [
+                    {
+                        "localPath": "${userHome}/.aws",
+                        "containerPath": "/home/node/.aws"
+                    },
+                    {
+                        "localPath": "${userHome}/.azure",
+                        "containerPath": "/home/node/.azure"
+                    },
+                    {
+                        "localPath": "${userHome}/.npm",
+                        "containerPath": "/home/node/.npm"
+                    },
+                    {
+                        "localPath": "${workspaceFolder}",
+                        "containerPath": "/app"
+                    }
+                ],
+                "command": "npm run debug-package"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true,
+                "close": true
+            },
+            "dependsOn": [
                 "sls-docker: remove-old-containers"
             ]
         },
@@ -206,9 +252,9 @@
             ],
             "problemMatcher": [],
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "always",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true,
@@ -236,9 +282,9 @@
             ],
             "problemMatcher": [],
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "always",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
                 "clear": true,

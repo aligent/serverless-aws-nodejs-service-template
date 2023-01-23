@@ -11,6 +11,7 @@ custom:
     bundle: true
     minify: ${strToBool(${env:MINIFY, 'true'})}
     sourcemap: ${strToBool(${env:SOURCEMAP, 'false'})}
+    keepOutputDirectory: ${strToBool(${env:KEEP_OUTPUT, 'false'})}
     target: node16
 
 plugins:
