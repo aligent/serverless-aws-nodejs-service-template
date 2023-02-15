@@ -23,16 +23,14 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  # iamRoleStatements:
-  # - Effect: "Allow"
-  #   Action:
-  #     - "s3:*"
-  #   Resource:
-  #     - Fn::Join:
-  #       - ''
-  #       - - 'arn:aws:s3:::'
-  #         - Ref: S3BucketConfig
-  #         - '/*'
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: "Allow"
+  #         Action:
+  #           - "s3:*"
+  #         Resource:
+  #           - Fn::Sub: ${S3BucketConfig.Arn}/*
 
 functions:
   hello:
@@ -70,7 +68,7 @@ resources:
   #   S3BucketConfig:
   #     Type: AWS::S3::Bucket
   #     Properties:
-  #       BucketName: ${self:custom.s3.configBucket}
+  #       BucketName: ${self:service}-${self:provider.stage}-bucket-config
   #     DeletionPolicy: Delete
 
   #   DBUsers:
