@@ -66,23 +66,23 @@ stepFunctions:
             End: true
 resources:
   Description: Example service created using the Aligent Nodejs Service Template
-#  Resources:
-# S3BucketConfig:
-#   Type: AWS::S3::Bucket
-#   Properties:
-#     BucketName: ${self:custom.s3.configBucket}
-#   DeletionPolicy: Delete
+  # Resources:
+  #   S3BucketConfig:
+  #     Type: AWS::S3::Bucket
+  #     Properties:
+  #       BucketName: ${self:custom.s3.configBucket}
+  #     DeletionPolicy: Delete
 
-# DBUsers:
-#   Type: AWS::DynamoDB::Table
-#   Properties:
-#     TableName: usersTable
-#     AttributeDefinitions:
-#       - AttributeName: email
-#         AttributeType: S
-#     KeySchema:
-#       - AttributeName: email
-#         KeyType: HASH
-#     ProvisionedThroughput:
-#       ReadCapacityUnits: 1
-#       WriteCapacityUnits: 1
+  #   DBUsers:
+  #     Type: AWS::DynamoDB::Table
+  #     Properties:
+  #       TableName: usersTable
+  #       AttributeDefinitions:
+  #         - AttributeName: email
+  #           AttributeType: S
+  #       KeySchema:
+  #         - AttributeName: email
+  #           KeyType: HASH
+  #       ProvisionedThroughput:
+  #         ReadCapacityUnits: 1
+  #         WriteCapacityUnits: 1
