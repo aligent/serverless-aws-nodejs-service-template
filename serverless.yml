@@ -64,7 +64,8 @@ stepFunctions:
           Stop:
             Type: Pass
             End: true
-#resources:
+resources:
+  Description: Example service created using the Aligent Nodejs Service Template
 #  Resources:
 # S3BucketConfig:
 #   Type: AWS::S3::Bucket
