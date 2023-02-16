@@ -7,7 +7,6 @@ AWS Template for creating microservices
 This template includes:
 
 - The setup from the base aws typescript template
-- AWS local lib for working online/offline
 - Bitbucket pipelines for deploying production and staging
 - Dockerised local development so you don't have to install the serverless client
 
