@@ -23,16 +23,14 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
-  # iamRoleStatements:
-  # - Effect: "Allow"
-  #   Action:
-  #     - "s3:*"
-  #   Resource:
-  #     - Fn::Join:
-  #       - ''
-  #       - - 'arn:aws:s3:::'
-  #         - Ref: S3BucketConfig
-  #         - '/*'
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: "Allow"
+  #         Action:
+  #           - "s3:*"
+  #         Resource:
+  #           - Fn::Sub: ${S3BucketConfig.Arn}/*
 
 functions:
   hello:
@@ -64,24 +62,25 @@ stepFunctions:
           Stop:
             Type: Pass
             End: true
-#resources:
-#  Resources:
-# S3BucketConfig:
-#   Type: AWS::S3::Bucket
-#   Properties:
-#     BucketName: ${self:custom.s3.configBucket}
-#   DeletionPolicy: Delete
+resources:
+  Description: Example service created using the Aligent Nodejs Service Template
+  # Resources:
+  #   S3BucketConfig:
+  #     Type: AWS::S3::Bucket
+  #     Properties:
+  #       BucketName: ${self:service}-${self:provider.stage}-bucket-config
+  #     DeletionPolicy: Delete
 
-# DBUsers:
-#   Type: AWS::DynamoDB::Table
-#   Properties:
-#     TableName: usersTable
-#     AttributeDefinitions:
-#       - AttributeName: email
-#         AttributeType: S
-#     KeySchema:
-#       - AttributeName: email
-#         KeyType: HASH
-#     ProvisionedThroughput:
-#       ReadCapacityUnits: 1
-#       WriteCapacityUnits: 1
+  #   DBUsers:
+  #     Type: AWS::DynamoDB::Table
+  #     Properties:
+  #       TableName: usersTable
+  #       AttributeDefinitions:
+  #         - AttributeName: email
+  #           AttributeType: S
+  #       KeySchema:
+  #         - AttributeName: email
+  #           KeyType: HASH
+  #       ProvisionedThroughput:
+  #         ReadCapacityUnits: 1
+  #         WriteCapacityUnits: 1
