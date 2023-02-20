@@ -13,12 +13,14 @@
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
+    "@tsconfig/node18-strictest": "^1.0.0",
     "@types/aws-lambda": "^8.10.109",
     "@types/jest": "^27.4.1",
     "@types/node": "~16.18.11",
     "@types/serverless": "^3.12.9",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
+    "asl-validator": "^3.0.8",
     "eslint": "^8.34.0",
     "eslint-config-prettier": "^8.6.0",
     "jest": "^27.5.1",
@@ -28,12 +30,11 @@
     "ts-jest": "^27.1.0",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "typescript": "^4.9.4",
-    "asl-validator": "^3.0.8"
+    "typescript": "^4.9.4"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": "~16.11.0"
+    "npm": ">=8.12.1",
+    "node": "~18.4.0"
   },
   "author": "Aligent Consulting",
   "license": "MIT"

@@ -1,18 +1,23 @@
 {
+    "extends": "@tsconfig/node18-strictest/tsconfig.json",
     "compilerOptions": {
-        "lib": ["ES2020"],
+        "strict": false,
+        "exactOptionalPropertyTypes": false,
+        "noPropertyAccessFromIndexSignature": false,
         "noImplicitAny": true,
+        "noImplicitReturns": false,
         "removeComments": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
         "sourceMap": true,
-        "target": "ES2020",
         "outDir": "lib",
-        "typeRoots": ["./types", "./node_modules/@types"]
+        "typeRoots": [
+            "./types",
+            "./node_modules/@types"
+        ]
     },
-    "include": ["./src/**/*.ts", "./tests/**/*.ts"],
+    "include": [
+        "./src/**/*.ts",
+        "./tests/**/*.ts"
+    ],
     "exclude": [
         "node_modules/**/*",
         ".serverless/**/*",
