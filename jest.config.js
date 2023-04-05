@@ -1,10 +1,12 @@
 module.exports = {
-    preset: 'ts-jest',
     testEnvironment: 'node',
-    globals: {
-        'ts-jest': {
-            isolatedModules: true,
-        },
+    transform: {
+        '^.+\\.m?[tj]sx?$': [
+            'ts-jest',
+            {
+                isolatedModules: true,
+            },
+        ],
     },
     coverageThreshold: {
         global: {
