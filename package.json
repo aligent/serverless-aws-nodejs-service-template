@@ -2,7 +2,6 @@
   "name": "base",
   "version": "1.0.0",
   "description": "Serverless ESBuild example using Typescript",
-  "main": "handler.js",
   "scripts": {
     "test": "jest --coverage",
     "lint": "eslint . --ext .ts",
