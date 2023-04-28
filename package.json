@@ -8,10 +8,10 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@aligent/serverless-conventions": "latest",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
+    "@aligent/serverless-conventions": "^0.4.0",
     "@types/aws-lambda": "^8.10.114",
     "@types/jest": "^27.4.1",
     "@types/node": "~16.18.24",
