@@ -10,7 +10,6 @@ custom:
   esbuild:
     bundle: true
     minify: true
-    target: node18
 
 plugins:
   - serverless-esbuild
