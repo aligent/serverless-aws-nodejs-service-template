@@ -8,10 +8,10 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@aligent/serverless-conventions": "latest",
     "source-map-support": "^0.5.21"
   },
   "devDependencies": {
+    "@aligent/serverless-conventions": "^0.4.0",
     "@types/aws-lambda": "^8.10.114",
     "@types/jest": "^27.4.1",
     "@types/node": "~16.18.24",
@@ -23,6 +23,7 @@
     "eslint-config-prettier": "^8.8.0",
     "jest": "^27.5.1",
     "prettier": "2.8.8",
+    "serverless": "^3.30.1",
     "serverless-esbuild": "^1.43.1",
     "serverless-step-functions": "^3.13.1",
     "ts-jest": "^27.1.0",
