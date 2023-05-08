@@ -1,4 +1,4 @@
-image: aligent/serverless
+image: aligent/serverless:latest-node18
 
 definitions:
   services:
