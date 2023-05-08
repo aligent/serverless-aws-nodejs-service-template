@@ -10,7 +10,8 @@ custom:
   esbuild:
     bundle: true
     minify: true
-    target: node16
+    exclude:
+      - '@aws-sdk'
 
 plugins:
   - serverless-esbuild
@@ -19,7 +20,7 @@ plugins:
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
