@@ -32,8 +32,8 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": "~18.16.0"
+    "npm": ">=9.0.0",
+    "node": "^18.16.0"
   },
   "author": "Aligent Consulting",
   "license": "MIT"
