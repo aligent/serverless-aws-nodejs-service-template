@@ -4,14 +4,20 @@
         "noImplicitAny": true,
         "removeComments": true,
         "sourceMap": true,
-        "noImplicitReturns":false,
+        "noImplicitReturns": true,
         "exactOptionalPropertyTypes": false,
         "noPropertyAccessFromIndexSignature": false,
         "outDir": "lib",
-        "typeRoots": ["./types", "./node_modules/@types"],
+        "typeRoots": [
+            "./types",
+            "./node_modules/@types"
+        ],
         "ignoreDeprecations": "5.0"
     },
-    "include": ["./src/**/*.ts", "./tests/**/*.ts"],
+    "include": [
+        "./src/**/*.ts",
+        "./tests/**/*.ts"
+    ],
     "exclude": [
         "node_modules/**/*",
         ".serverless/**/*",
