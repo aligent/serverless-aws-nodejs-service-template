@@ -23,6 +23,7 @@ definitions:
               UPLOAD_BADGE: 'true'
               APP_USERNAME: ${APP_USERNAME}
               APP_PASSWORD: ${APP_PASSWORD}
+              STAGE: ${STAGE}
 pipelines:
   pull-requests:
     '**':
