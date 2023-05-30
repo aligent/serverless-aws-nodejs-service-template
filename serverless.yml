@@ -3,7 +3,7 @@ service: example-name # To be replaced
 configValidationMode: error
 
 package:
-  include:
+  patterns:
     - src/
 
 custom:
