@@ -10,13 +10,14 @@ custom:
   esbuild:
     bundle: true
     minify: true
+    sourcemap: true
     exclude:
       - '@aws-sdk'
 
 plugins:
+  - '@aligent/serverless-conventions'
   - serverless-esbuild
   - serverless-step-functions
-  - '@aligent/serverless-conventions'
 
 provider:
   name: aws
@@ -24,6 +25,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
+  environment:
+    NODE_OPTIONS: --enable-source-maps
   # iam:
   #   role:
   #     statements:

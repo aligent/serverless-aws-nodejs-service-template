@@ -7,9 +7,6 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
-  "dependencies": {
-    "source-map-support": "^0.5.21"
-  },
   "devDependencies": {
     "@aligent/serverless-conventions": "^0.4.0",
     "@tsconfig/node18-strictest": "^1.0.0",
