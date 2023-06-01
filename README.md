@@ -130,3 +130,9 @@ To set this pipeline up you need to add all of the variables below to either the
           APP_USERNAME: ${APP_USERNAME}
           APP_PASSWORD: ${APP_PASSWORD}
 ```
+
+## Context Diagram
+
+The context diagram should be a high level overview of the systems and the way they interact.
+
+![Sample Context Diagram](img/sample-context-diagram.png)
