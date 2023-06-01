@@ -135,4 +135,4 @@ To set this pipeline up you need to add all of the variables below to either the
 
 The context diagram should be a high level overview of the systems and the way they interact.
 
-![Sample Context Diagram](img/sample-context-diagram.png)
+![Sample Context Diagram](docs/sample-context-diagram.png)
