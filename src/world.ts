@@ -1,10 +1,17 @@
-// AWSLambda.Handler is provides very generic typing
+// Import a type module defined in `./types/{module-name}/index.d.ts`
+import type { World } from 'greetings';
+
+// You can deconstruct modules to import a specific type
+// AWSLambda.Handler provides generic typing
 // for handler functions. Specific argument and output
 // types can be supplied using generic arguments
-// e.g. AWSLambda.Handler<string, object>, and/or using
+// e.g. AWSLambda.Handler<string, object>, or you can use
 // event-specific handler types e.g. AWSLambda.S3Handler
-export const handler: AWSLambda.Handler = async (event, context) => {
-    console.log('World');
+import type { Handler } from 'aws-lambda/handler';
+
+export const handler: Handler = async (event, context) => {
+    const message: World = 'World';
+    console.log(message);
     // Cloudwatch logs display objects more cleanly if
     // they are sent as JSON strings
     console.log('Lambda event: ', JSON.stringify(event));
