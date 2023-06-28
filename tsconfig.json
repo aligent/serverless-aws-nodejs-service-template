@@ -9,12 +9,12 @@
         "noPropertyAccessFromIndexSignature": false,
         "outDir": "lib",
         "typeRoots": [
-            "./types",
             "./node_modules/@types"
         ],
         "ignoreDeprecations": "5.0"
     },
     "include": [
+        "./types/**/*.ts",
         "./src/**/*.ts",
         "./tests/**/*.ts"
     ],
@@ -24,6 +24,5 @@
         ".build/**/*",
         "_warmup/**/*",
         ".vscode/**/*",
-        "types"
     ]
 }
