@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node18-strictest/tsconfig.json",
+    "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node18/tsconfig"],
     "compilerOptions": {
         "noImplicitAny": true,
         "removeComments": true,
@@ -11,7 +11,8 @@
         "typeRoots": [
             "./node_modules/@types"
         ],
-        "ignoreDeprecations": "5.0"
+        "module": "ESNext",
+        "moduleResolution": "bundler"
     },
     "include": [
         "./types/**/*.ts",
