@@ -9,6 +9,7 @@ import type { World } from 'greetings';
 // event-specific handler types e.g. AWSLambda.S3Handler
 import type { Handler } from 'aws-lambda/handler';
 
+/* istanbul ignore next -- @preserve */
 export const handler: Handler = async (event, context) => {
     const message: World = 'World';
     console.log(message);
