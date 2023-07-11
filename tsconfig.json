@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/node18-strictest/tsconfig.json",
+    "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/node18/tsconfig"],
     "compilerOptions": {
         "noImplicitAny": true,
         "removeComments": true,
@@ -8,21 +8,17 @@
         "exactOptionalPropertyTypes": false,
         "noPropertyAccessFromIndexSignature": false,
         "outDir": "lib",
-        "typeRoots": [
-            "./node_modules/@types"
-        ],
-        "ignoreDeprecations": "5.0"
+        "types": ["vitest/globals"],
+        "typeRoots": ["./node_modules", "./node_modules/@types"],
+        "module": "ESNext",
+        "moduleResolution": "bundler"
     },
-    "include": [
-        "./types/**/*.ts",
-        "./src/**/*.ts",
-        "./tests/**/*.ts"
-    ],
+    "include": ["./types/**/*.ts", "./src/**/*.ts", "./tests/**/*.ts"],
     "exclude": [
         "node_modules/**/*",
         ".serverless/**/*",
         ".build/**/*",
         "_warmup/**/*",
-        ".vscode/**/*",
+        ".vscode/**/*"
     ]
 }
