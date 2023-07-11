@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Serverless ESBuild example using Typescript",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "check-types": "tsc --noEmit"

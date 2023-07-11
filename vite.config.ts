@@ -5,7 +5,7 @@ const viteConfigs = defineConfig({
     test: {
         globals: true,
         coverage: {
-            provider: 'c8',
+            provider: 'v8',
             reporter: ['text', 'html'],
             exclude: ['node_modules/'],
             all: true,
