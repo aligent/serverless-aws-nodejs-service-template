@@ -8,22 +8,16 @@
         "exactOptionalPropertyTypes": false,
         "noPropertyAccessFromIndexSignature": false,
         "outDir": "lib",
-        "typeRoots": [
-            "./node_modules/@types"
-        ],
+        "typeRoots": ["./node_modules/@types"],
         "module": "ESNext",
         "moduleResolution": "bundler"
     },
-    "include": [
-        "./types/**/*.ts",
-        "./src/**/*.ts",
-        "./tests/**/*.ts"
-    ],
+    "include": ["./types/**/*.ts", "./src/**/*.ts", "./tests/**/*.ts"],
     "exclude": [
         "node_modules/**/*",
         ".serverless/**/*",
         ".build/**/*",
         "_warmup/**/*",
-        ".vscode/**/*",
+        ".vscode/**/*"
     ]
 }
