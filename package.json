@@ -4,9 +4,9 @@
   "description": "Serverless ESBuild example using Typescript",
   "scripts": {
     "test": "vitest run --coverage",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint --color . --ext .ts",
     "format": "prettier --write .",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --pretty --noEmit"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "^0.4.0",
