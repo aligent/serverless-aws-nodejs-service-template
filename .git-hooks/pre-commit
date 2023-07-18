@@ -25,10 +25,7 @@ for cmd in "${commands[@]}"; do
 done
 
 # Report overall success or failure
-if [ ${#failures[@]} == 0 ]; then
-  echo -e "\n✅${GREEN} Successfully committed changes ${NO_COLOUR}"
-  exit
-else
+if [ ${#failures[@]} -ne 0 ]; then
   echo -e "\n🚩${RED} Couldn't commit changes dues to the following errors: ${NO_COLOUR}"
 
   for report in "${failures[@]}"; do
