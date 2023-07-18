@@ -10,6 +10,12 @@ This template includes:
 - Bitbucket pipelines for deploying production and staging
 - Dockerised local development so you don't have to install the serverless client
 
+## Context Diagram
+
+The context diagram should be a high level overview of the systems and the way they interact.
+
+![Sample Context Diagram](docs/sample-context-diagram.png)
+
 # Usage
 
 ## Setup
@@ -130,9 +136,3 @@ To set this pipeline up you need to add all of the variables below to either the
           APP_USERNAME: ${APP_USERNAME}
           APP_PASSWORD: ${APP_PASSWORD}
 ```
-
-## Context Diagram
-
-The context diagram should be a high level overview of the systems and the way they interact.
-
-![Sample Context Diagram](docs/sample-context-diagram.png)
