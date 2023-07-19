@@ -1,0 +1,36 @@
+#!/bin/bash
+# Script adapted from https://github.com/kaczor6418/git-hooks-example/blob/master/git-hooks/pre-commit
+# Define colours for nicer CLI output
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+NO_COLOUR="\033[0m"
+
+echo -e "${GREEN} Executing git hook $0 $@ ${NO_COLOUR}"
+
+commands=("npm run lint" "npm run format" "npm run check-types" "npm run test")
+failures=()
+
+# Loop over commands, execute and push failure message if we see one
+for cmd in "${commands[@]}"; do
+  $cmd
+  exit_code=$?
+
+  if [ "$exit_code" -eq 1 ]; then
+    failures+=("✖ Command ${RED}'${cmd}'${NO_COLOUR} failed with exit code ${exit_code} - see CLI output for errors")
+  elif [ "$exit_code" -eq 127 ]; then
+    failures+=("✖ Command ${RED}'${cmd}'${NO_COLOUR} failed with exit code ${exit_code} - check that the script exists in package.json")
+  elif [ "$exit_code" -ne 0 ]; then
+    failures+=("✖ Command ${RED}'${cmd}'${NO_COLOUR} failed with unexpected exit code ${exit_code}")
+  fi
+done
+
+# Report overall success or failure
+if [ ${#failures[@]} -ne 0 ]; then
+  echo -e "\n🚩${RED} Couldn't commit changes dues to the following errors: ${NO_COLOUR}"
+
+  for report in "${failures[@]}"; do
+    echo -e $report;
+  done
+
+  exit 1
+fi
