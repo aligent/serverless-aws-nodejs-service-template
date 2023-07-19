@@ -9,7 +9,7 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "check-types": "tsc --pretty --noEmit",
-    "prepare": "git config core.hooksPath '.git-hooks'"
+    "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "^0.4.0",
