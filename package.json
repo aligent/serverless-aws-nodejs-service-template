@@ -12,7 +12,7 @@
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
   "devDependencies": {
-    "@aligent/serverless-conventions": "^0.4.0",
+    "@aligent/serverless-conventions": "^0.4.1",
     "@tsconfig/node18": "^18.2.0",
     "@tsconfig/strictest": "^2.0.1",
     "@types/aws-lambda": "^8.10.119",
