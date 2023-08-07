@@ -24,7 +24,7 @@
     "asl-validator": "^3.8.0",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
-    "prettier": "3.0.0",
+    "prettier": "3.0.1",
     "serverless": "^3.33.0",
     "serverless-esbuild": "^1.46.0",
     "serverless-step-functions": "^3.14.0",
