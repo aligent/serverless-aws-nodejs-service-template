@@ -29,7 +29,7 @@
     "serverless-esbuild": "^1.46.0",
     "serverless-step-functions": "^3.14.0",
     "typescript": "^5.1.6",
-    "vitest": "^0.33.0"
+    "vitest": "^0.34.3"
   },
   "engines": {
     "npm": ">=9.0.0",
