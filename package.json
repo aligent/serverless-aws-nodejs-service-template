@@ -18,7 +18,7 @@
     "@types/aws-lambda": "^8.10.119",
     "@types/node": "^18.16.19",
     "@types/serverless": "^3.12.13",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-istanbul": "^0.33.0",
     "asl-validator": "^3.8.0",
