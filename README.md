@@ -112,7 +112,7 @@ Invoke individual lambdas json file
 
 **Replace _profileName_ with your AWS profile and _staging_ with another stage, if desired**
 
-Refer to the [https://www.serverless.com/framework/docs/providers/aws/cli-reference](Serverless CLI Reference for AWS) for further details.
+Refer to the [Serverless CLI Reference for AWS](https://www.serverless.com/framework/docs/providers/aws/cli-reference) for further details.
 
 ## Bitbucket pipelines
 
