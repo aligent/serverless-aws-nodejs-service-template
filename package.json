@@ -27,7 +27,7 @@
     "prettier": "3.0.2",
     "serverless": "^3.34.0",
     "serverless-esbuild": "^1.46.0",
-    "serverless-step-functions": "^3.14.0",
+    "serverless-step-functions": "^3.16.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.5"
   },
