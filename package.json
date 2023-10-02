@@ -16,7 +16,7 @@
     "@tsconfig/node18": "^18.2.0",
     "@tsconfig/strictest": "^2.0.1",
     "@types/aws-lambda": "^8.10.119",
-    "@types/node": "^18.16.19",
+    "@types/node": "^20.8.2",
     "@types/serverless": "^3.12.14",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
