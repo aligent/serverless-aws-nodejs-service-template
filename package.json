@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "^0.4.1",
-    "@tsconfig/node18": "^18.2.0",
+    "@tsconfig/node18": "^18.2.2",
     "@tsconfig/strictest": "^2.0.2",
     "@types/aws-lambda": "^8.10.119",
     "@types/node": "^18.16.19",
