@@ -26,7 +26,7 @@
     "eslint-config-prettier": "^9.0.0",
     "prettier": "3.0.2",
     "serverless": "^3.35.2",
-    "serverless-esbuild": "^1.48.4",
+    "serverless-esbuild": "^1.48.5",
     "serverless-step-functions": "^3.17.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
