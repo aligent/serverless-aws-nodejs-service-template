@@ -38,6 +38,8 @@ definitions:
               DEBUG: ${CI_DEBUG}
               ACTION: 'remove'
               STAGE: ${TMP_STAGE}
+        artifacts:
+          download: false
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
