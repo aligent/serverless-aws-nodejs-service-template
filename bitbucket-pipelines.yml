@@ -5,16 +5,41 @@ definitions:
     docker:
       memory: 3072
   steps:
-    - step: &test
-        name: Test
+    - step: &install
+        name: ⚙️ Install
         script:
-          - FORCE_COLOR=true
           - npm ci
+        artifact:
+          - node_modules/**
+    - step: &lint
+        name: 🧹 Lint
+        script:
           - npm run lint
-          - npm run check-types
+    - step: &test
+        name: 🧪 Test
+        script:
           - npm run test
+    - step: &deploy-temp-stack
+        name: 🏗️ Test Deployment
+        script:
+          - TMP_STAGE=$({ head -c3 /dev/urandom | tr -dc 'a-z'; echo; } | grep -vE 'prd|stg')
+          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              STAGE: ${TMP_STAGE}
+          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              ACTION: 'remove'
+              STAGE: ${TMP_STAGE}
     - step: &push-serverless
-        name: 'Deploy service'
+        name: 🚀 Deploy Service
         script:
           - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
             variables:
@@ -29,7 +54,14 @@ definitions:
 pipelines:
   pull-requests:
     '**':
-      - step: *test
+      - step: *install
+      - parallel:
+          steps:
+            - step: *test
+            - step: *lint
+            - step:
+                <<: *deploy-temp-stack
+                deployment: ${BITBUCKET_PR_DESTINATION_BRANCH} # TODO: default to staging
   branches:
     production:
       - step:
