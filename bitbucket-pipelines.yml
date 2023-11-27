@@ -9,7 +9,7 @@ definitions:
         name: ⚙️ Install
         script:
           - npm ci
-        artifact:
+        artifacts:
           - node_modules/**
     - step: &lint
         name: 🧹 Lint
