@@ -61,7 +61,7 @@ pipelines:
             - step: *lint
             - step:
                 <<: *deploy-temp-stack
-                deployment: ${BITBUCKET_PR_DESTINATION_BRANCH} # TODO: default to staging
+                deployment: Staging # TODO: change depending on target branch
   branches:
     production:
       - step:
