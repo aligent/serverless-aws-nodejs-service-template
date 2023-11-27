@@ -22,7 +22,8 @@ definitions:
     - step: &deploy-temp-stack
         name: 🏗️ Test Deployment
         script:
-          - TMP_STAGE=$({ head -c3 /dev/urandom | tr -dc 'a-z'; echo; } | grep -vE 'prd|stg')
+          - TMP_STAGE=$(cat /dev/urandom | tr -dc 'a-z' | head -c3 | grep -vE 'prd|stg')
+          - echo "Deploy temporary service to stage: $TMP_STAGE"
           - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
