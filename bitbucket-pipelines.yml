@@ -37,7 +37,7 @@ definitions:
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
               DEBUG: ${CI_DEBUG}
-              ACTION: 'remove'
+              CMD: 'remove'
               STAGE: ${TMP_STAGE}
         artifacts:
           download: false
@@ -64,7 +64,7 @@ pipelines:
             - step: *lint
             - step:
                 <<: *deploy-temp-stack
-                deployment: Staging # TODO: change depending on target branch
+                deployment: Staging
   branches:
     production:
       - step:
