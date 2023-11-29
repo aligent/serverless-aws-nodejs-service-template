@@ -62,9 +62,7 @@ pipelines:
           steps:
             - step: *test
             - step: *lint
-            - step:
-                <<: *deploy-temp-stack
-                deployment: Staging
+            - step: *deploy-temp-stack
   branches:
     production:
       - step:
