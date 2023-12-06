@@ -1,4 +1,0 @@
-# Ignore artifacts:
-.esbuild
-.serverless
-package-lock.json
