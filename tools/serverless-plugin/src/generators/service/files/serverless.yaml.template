@@ -1,0 +1,63 @@
+service: <%= brand %>-<%= name %>
+
+configValidationMode: error
+
+package:
+  patterns:
+    - src/
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    exclude:
+      - '@aws-sdk'
+
+plugins:
+  - '@aligent/serverless-conventions'
+  - serverless-esbuild
+  - serverless-step-functions
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'ap-southeast-2'}
+  memorySize: 192 #mb (default for all)
+  environment:
+    NODE_OPTIONS: --enable-source-maps
+
+functions:
+  hello:
+    handler: src/lambda/hello.handler
+  world:
+    handler: src/lambda/world.handler
+
+stepFunctions:
+  validate: true
+  stateMachines:
+    helloWorld:
+      name: ${self:service}-${self:provider.stage}-helloWorld
+      definition:
+        StartAt: Hello
+        States:
+          Hello:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [hello, Arn]
+            Next: World
+          World:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [world, Arn]
+            Next: Passthru
+          Passthru:
+            Type: Pass
+            Next: Stop
+          Stop:
+            Type: Pass
+            End: true
+
+resources:
+  Description: Service template generated using Nx

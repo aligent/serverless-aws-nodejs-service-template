@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "ServiceGenerator",
+    "title": "Nx Generator for bootstrapping Serverless Framework services",
+    "type": "object",
+    "properties": {
+        "brand": {
+            "type": "string",
+            "description": "Brand name (config this in {workspaceRoot}/nx.json)"
+        },
+        "name": {
+            "type": "string",
+            "description": "Service name",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            },
+            "x-prompt": "What would you like to call the service?"
+        }
+    },
+    "required": ["brand", "name"]
+}
