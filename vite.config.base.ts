@@ -22,7 +22,6 @@ export const viteBaseConfig = defineConfig({
         globals: true,
         environment: 'node',
         coverage: {
-            provider: 'istanbul',
             reporter: ['text', 'html'],
             exclude: ['node_modules/'],
             all: true,

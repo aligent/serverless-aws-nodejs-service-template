@@ -5,7 +5,7 @@
     },
     "generators": {
         "@aligent/serverless-plugin:service": {
-            "brand": "brand-name-used-as-service-prefix"
+            "brand": "brand-name"
         },
         "@nx/js:library": {
             "projectNameAndRootFormat": "derived",
@@ -17,7 +17,7 @@
         "build": {
             "dependsOn": ["^build"],
             "inputs": ["production", "^production"],
-            "outputs": ["{workspaceRoot}/.serverless"],
+            "outputs": ["{projectRoot}/.serverless"],
             "cache": true
         },
         "lint": {
@@ -28,15 +28,8 @@
             ],
             "cache": true
         },
-        "test": {
-            "inputs": [
-                "default",
-                "^production",
-                "{workspaceRoot}/jest.preset.js"
-            ],
-            "cache": true
-        },
-        "e2e": {
+        "@nx/vite:test": {
+            "inputs": ["default", "^production"],
             "cache": true
         }
     },
