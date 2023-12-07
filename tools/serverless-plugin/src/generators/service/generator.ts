@@ -45,7 +45,7 @@ export async function serviceGenerator(
             },
             test: {
                 executor: '@nx/vite:test',
-                outputs: [`coverage/services/${options.name}`],
+                outputs: [`{workspaceRoot}/coverage/services/${options.name}`],
                 options: {
                     passWithNoTests: true,
                     reportsDirectory: `../../coverage/services/${options.name}`,

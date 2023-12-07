@@ -29,7 +29,7 @@
         },
         "test": {
             "executor": "@nx/vite:test",
-            "outputs": ["coverage/tools/serverless-plugin"],
+            "outputs": ["{workspaceRoot}/coverage/tools/serverless-plugin"],
             "options": {
                 "passWithNoTests": true,
                 "reportsDirectory": "../../coverage/tools/serverless-plugin"
