@@ -66,7 +66,7 @@ Below are some example of general Nx. commands. For more information, check out 
 
 ## Under development
 
-- [ ] Deployment pipeline -> nodeJS container + pnpm
+- [-] Deployment pipeline -> nodeJS container + pnpm
 - [x] Typescript compilation to check types (`tsc --noEmit`)
 - [x] Root client configuration (e.g. service name prefix)
 - [-] Base vite configuration -> this works for service generator.
