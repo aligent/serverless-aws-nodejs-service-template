@@ -1,4 +1,4 @@
-name: Test serverless package
+name: Test NX package
 
 on:
   push:
@@ -16,15 +16,14 @@ jobs:
       matrix:
         node-version: [18.16]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
       - run: npm ci
-      - run: npm run lint
-      - run: npm run test
-      - name: serverless package
-        uses: serverless/github-action@master
-        with:
-          args: package
+      - run: npx nx g library test-lib --unitTestRunner=none
+      - run: npx nx g service test-app
+      - run: npx nx affected -t lint, test --parallel=2 --base=master
+      - run: npx nx run-many -t build
