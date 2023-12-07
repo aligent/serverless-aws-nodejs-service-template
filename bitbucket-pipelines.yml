@@ -1,0 +1,35 @@
+image: aligent/nx-serverless-deploy-pipe:18-alpine
+
+definitions:
+  services:
+    docker:
+      memory: 3072
+  steps:
+    - step: &test
+        name: Test
+        script:
+          - FORCE_COLOR=true
+          - npm ci
+          - npm run lint:all
+          - npm run format
+          - npm run test:all
+    - step: &push-serverless
+        name: 'Deploy service'
+        script:
+          - /pipe/entrypoint.sh
+
+pipelines:
+  pull-requests:
+    '**':
+      - step: *test
+  branches:
+    production:
+      - step:
+          <<: *push-serverless
+          name: 'Deploy Production'
+          deployment: Production
+    staging:
+      - step:
+          <<: *push-serverless
+          name: 'Deploy Staging'
+          deployment: Staging
