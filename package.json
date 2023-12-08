@@ -3,13 +3,13 @@
   "version": "2.0.0",
   "description": "Aligent AWS microservices template using Typescript and Serverless Framework",
   "scripts": {
-    "test": "nx affected:test --coverage",
+    "test": "nx affected -t test --coverage",
     "test:all": "nx run-many -t test --coverage",
-    "lint": "nx affected:lint",
+    "lint": "nx affected -t lint",
     "lint:all": "nx run-many -t lint",
     "format": "nx format:check",
     "format:write": "nx format:write",
-    "check-types": "nx affected:check-types",
+    "check-types": "nx affected -t check-types",
     "check-types:all": "nx run-many -t check-types",
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
