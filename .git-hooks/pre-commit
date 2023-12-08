@@ -1,5 +1,17 @@
 #!/bin/bash
 # Script adapted from https://github.com/kaczor6418/git-hooks-example/blob/master/git-hooks/pre-commit
+
+# Support using VSCode to commit
+# This loads nvm.sh and sets the correct PATH before running hook
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# This take the current active node version you want to verify the hook
+export NVM_DIR="$HOME/.nvm"
+a=$(nvm current)
+
+export PATH="$NVM_DIR/versions/node/$a/bin:$PATH"
+
 # Define colours for nicer CLI output
 RED="\033[1;31m"
 GREEN="\033[1;32m"
