@@ -1,4 +1,4 @@
-image: aligent/nx-serverless-deploy-pipe:18-alpine
+image: node:18
 
 definitions:
   services:
@@ -10,13 +10,23 @@ definitions:
         script:
           - FORCE_COLOR=true
           - npm ci
-          - npm run lint:all
+          - npm run lint
           - npm run format
-          - npm run test:all
+          - npm run check-types
+          - npm run test
     - step: &push-serverless
         name: 'Deploy service'
         script:
-          - /pipe/entrypoint.sh
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:18-alpine
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              STAGE: ${STAGE}
+              DEBUG: ${CI_DEBUG}
+              UPLOAD_BADGE: 'true'
+              APP_USERNAME: ${APP_USERNAME}
+              APP_PASSWORD: ${APP_PASSWORD}
 
 pipelines:
   pull-requests:
