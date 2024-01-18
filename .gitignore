@@ -1,17 +1,45 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# environment
 *.env
 
-# package directories
-node_modules
-jspm_packages
-
-# Serverless directories
+# compiled output
+dist
+tmp
+/out-tsc
 .serverless
-
-# ESBuild directories
 .build
 
-# VSCode directory
-.vscode
+# dependencies
+node_modules
 
-# Jest coverage output
-coverage
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+.nx
+
+# System Files
+.DS_Store
+Thumbs.db
+

@@ -1,13 +1,4 @@
-import { simpleObject } from './__data__/example-data';
-import { vi } from 'vitest';
-
-beforeAll(() => {
-    vi.stubEnv('YOUR_ENV_VAR', 'environment-variable');
-});
-
-afterAll(() => {
-    vi.unstubAllEnvs();
-});
+import { simpleObject, YOUR_ENV_VAR } from './__data__/example-data';
 
 describe('Passing tests', () => {
     test('Passing test', () => {
@@ -27,6 +18,6 @@ describe('Simple object tests', () => {
 
 describe('Env config tests', () => {
     test('Env config is set correctly', () => {
-        expect(process.env.YOUR_ENV_VAR).toEqual('environment-variable');
+        expect(YOUR_ENV_VAR).toEqual('environment-variable');
     });
 });

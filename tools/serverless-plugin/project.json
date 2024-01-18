@@ -1,0 +1,40 @@
+{
+    "name": "@aligent/serverless-plugin",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "tools/serverless-plugin/src",
+    "projectType": "application",
+    "targets": {
+        "build": {
+            "executor": "@nx/esbuild:esbuild",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/tools/serverless-plugin",
+                "main": "tools/serverless-plugin/src/index.ts",
+                "tsConfig": "tools/serverless-plugin/tsconfig.lib.json",
+                "assets": ["tools/serverless-plugin/*.md"],
+                "generatePackageJson": true
+            }
+        },
+        "lint": {
+            "executor": "@nx/linter:eslint",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "lintFilePatterns": [
+                    "tools/serverless-plugin/**/*.ts",
+                    "tools/serverless-plugin/generators.json",
+                    "tools/serverless-plugin/package.json"
+                ],
+                "maxWarnings": 0
+            }
+        },
+        "test": {
+            "executor": "@nx/vite:test",
+            "outputs": ["{options.reportsDirectory}"],
+            "options": {
+                "passWithNoTests": true,
+                "reportsDirectory": "../../coverage/tools/serverless-plugin"
+            }
+        }
+    },
+    "tags": []
+}

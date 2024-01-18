@@ -1,5 +1,4 @@
-// Import a type module defined in `./types/{module-name}/index.d.ts`
-import type { World } from 'greetings';
+/* v8 ignore start */
 
 // You can deconstruct modules to import a specific type
 // AWSLambda.Handler provides generic typing
@@ -9,9 +8,8 @@ import type { World } from 'greetings';
 // event-specific handler types e.g. AWSLambda.S3Handler
 import type { Handler } from 'aws-lambda/handler';
 
-/* istanbul ignore next -- @preserve */
 export const handler: Handler = async (event, context) => {
-    const message: World = 'World';
+    const message = 'Hello';
     console.log(message);
     // Cloudwatch logs display objects more cleanly if
     // they are sent as JSON strings
