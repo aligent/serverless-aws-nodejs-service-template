@@ -29,7 +29,7 @@
     "@swc/helpers": "^0.5.3",
     "@tsconfig/node18": "^18.2.2",
     "@tsconfig/strictest": "^2.0.2",
-    "@types/aws-lambda": "^8.10.130",
+    "@types/aws-lambda": "^8.10.131",
     "@types/node": "20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
