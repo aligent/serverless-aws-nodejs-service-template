@@ -37,7 +37,7 @@
     "@vitest/ui": "~0.32.4",
     "dotenv": "^16.3.1",
     "esbuild": "^0.19.8",
-    "eslint": "~8.15.0",
+    "eslint": "~8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "^2.29.0",
     "nx": "17.1.3",
