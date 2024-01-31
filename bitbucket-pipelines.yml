@@ -1,4 +1,4 @@
-image: aligent/serverless:latest-node18
+image: node:18
 
 definitions:
   services:
@@ -15,6 +15,8 @@ definitions:
         name: 🧹 Lint
         script:
           - npm run lint
+          - npm run format
+          - npm run check-types
     - step: &test
         name: 🧪 Test
         script:
@@ -44,16 +46,17 @@ definitions:
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
-          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:18-alpine
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
+              STAGE: ${STAGE}
               DEBUG: ${CI_DEBUG}
               UPLOAD_BADGE: 'true'
               APP_USERNAME: ${APP_USERNAME}
               APP_PASSWORD: ${APP_PASSWORD}
-              STAGE: ${STAGE}
+
 pipelines:
   pull-requests:
     '**':

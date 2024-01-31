@@ -1,0 +1,9 @@
+{
+    "generators": {
+        "service": {
+            "factory": "./src/generators/service/generator",
+            "schema": "./src/generators/service/schema.json",
+            "description": "service generator"
+        }
+    }
+}
