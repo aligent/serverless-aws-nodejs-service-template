@@ -5,17 +5,47 @@ definitions:
     docker:
       memory: 3072
   steps:
-    - step: &test
-        name: Test
+    - step: &install
+        name: ⚙️ Install
         script:
-          - FORCE_COLOR=true
           - npm ci
+        artifacts:
+          - node_modules/**
+    - step: &lint
+        name: 🧹 Lint
+        script:
           - npm run lint
           - npm run format
           - npm run check-types
+    - step: &test
+        name: 🧪 Test
+        script:
           - npm run test
+    - step: &deploy-temp-stack
+        name: 🏗️ Test Deployment
+        script:
+          # Generate a random three letter stage name that isn't prd or stg
+          - TMP_STAGE=$(cat /dev/urandom | tr -dc 'a-z' | head -c3 | grep -vE 'prd|stg')
+          - echo "Deploy temporary service to stage:\ $TMP_STAGE"
+          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              STAGE: ${TMP_STAGE}
+          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              CFN_ROLE: ${CFN_ROLE}
+              DEBUG: ${CI_DEBUG}
+              CMD: 'remove'
+              STAGE: ${TMP_STAGE}
+        artifacts:
+          download: false
     - step: &push-serverless
-        name: 'Deploy service'
+        name: 🚀 Deploy Service
         script:
           - pipe: docker://aligent/nx-serverless-deploy-pipe:18-alpine
             variables:
@@ -31,7 +61,12 @@ definitions:
 pipelines:
   pull-requests:
     '**':
-      - step: *test
+      - step: *install
+      - parallel:
+          steps:
+            - step: *test
+            - step: *lint
+            - step: *deploy-temp-stack
   branches:
     production:
       - step:
