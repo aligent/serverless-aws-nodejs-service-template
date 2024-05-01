@@ -27,14 +27,14 @@ definitions:
           # Generate a random three letter stage name that isn't prd or stg
           - TMP_STAGE=$(cat /dev/urandom | tr -dc 'a-z' | head -c3 | grep -vE 'prd|stg')
           - echo "Deploy temporary service to stage:\ $TMP_STAGE"
-          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:18-alpine
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
               DEBUG: ${CI_DEBUG}
               STAGE: ${TMP_STAGE}
-          - pipe: docker://aligent/serverless-deploy-pipe:latest-node18
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:18-alpine
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
