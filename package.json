@@ -27,7 +27,7 @@
     "@swc/cli": "~0.3.12",
     "@swc/core": "~1.5.5",
     "@swc/helpers": "^0.5.3",
-    "@tsconfig/node18": "^18.2.2",
+    "@tsconfig/node20": "^20.1.4",
     "@tsconfig/strictest": "^2.0.2",
     "@types/aws-lambda": "^8.10.131",
     "@types/node": "20.11.5",
@@ -54,7 +54,7 @@
   },
   "engines": {
     "npm": ">=9.0.0",
-    "node": "^18.16.0"
+    "node": "^20.13.0"
   },
   "author": "Aligent Consulting",
   "license": "MIT"
