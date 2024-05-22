@@ -18,7 +18,8 @@
                             }
                         ]
                     }
-                ]
+                ],
+                "array-callback-return": "error"
             }
         },
         {
