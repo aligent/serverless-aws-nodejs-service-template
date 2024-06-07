@@ -20,6 +20,9 @@
             "outputs": ["{projectRoot}/.serverless"],
             "cache": true
         },
+        "check-types": {
+            "cache": true
+        },
         "lint": {
             "inputs": [
                 "default",

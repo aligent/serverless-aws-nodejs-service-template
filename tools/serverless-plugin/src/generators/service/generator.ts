@@ -35,6 +35,14 @@ export async function serviceGenerator(
             remove: {
                 ...buildRunCommandConfig(projectRoot, 'sls remove'),
             },
+            'check-types': {
+                'executor': 'nx:run-commands',
+                'options': {
+                    'cwd': '{projectRoot}',
+                    'color': true,
+                    'command': 'tsc --noEmit --pretty'
+                }
+            },
             lint: {
                 executor: '@nx/linter:eslint',
                 outputs: ['{options.outputFile}'],
