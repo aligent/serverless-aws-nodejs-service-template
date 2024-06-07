@@ -53,7 +53,6 @@ Shared library will need to have the `check-types` command added manually to ens
         "color": true,
         "command": "tsc --noEmit --pretty"
     },
-    "cache": true
 }
 ```
 

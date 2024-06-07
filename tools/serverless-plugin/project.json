@@ -21,8 +21,7 @@
                 "cwd": "{projectRoot}",
                 "color": true,
                 "command": "tsc --noEmit --pretty"
-            },
-            "cache": true
+            }
         },
         "lint": {
             "executor": "@nx/linter:eslint",
