@@ -7,7 +7,7 @@ import {
 import * as path from 'path';
 import { serviceGeneratorSchema } from './schema';
 
-const buildRunCommandConfig = (dir: string, command: string) => ({
+const buildRunCommandConfig = (command: string, dir = '{projectRoot}') => ({
     executor: 'nx:run-commands',
     options: {
         cwd: dir,
@@ -16,32 +16,39 @@ const buildRunCommandConfig = (dir: string, command: string) => ({
     },
 });
 
+const getTemplateFilesLocation = (
+    type: serviceGeneratorSchema['type'] = 'general'
+) => {
+    if (type === 'notification') {
+        return path.join(__dirname, 'notification-files');
+    }
+
+    return path.join(__dirname, 'general-files');
+};
+
 export async function serviceGenerator(
     tree: Tree,
     options: serviceGeneratorSchema
 ) {
-    const projectRoot = `services/${options.name}`;
-    addProjectConfiguration(tree, options.name, {
+    const { name, type } = options;
+    const projectRoot = `services/${name}`;
+
+    addProjectConfiguration(tree, name, {
         root: projectRoot,
         projectType: 'application',
         sourceRoot: `${projectRoot}/src`,
         targets: {
             build: {
-                ...buildRunCommandConfig(projectRoot, 'sls package'),
+                ...buildRunCommandConfig('sls package'),
             },
             deploy: {
-                ...buildRunCommandConfig(projectRoot, 'sls deploy'),
+                ...buildRunCommandConfig('sls deploy'),
             },
             remove: {
-                ...buildRunCommandConfig(projectRoot, 'sls remove'),
+                ...buildRunCommandConfig('sls remove'),
             },
             'check-types': {
-                'executor': 'nx:run-commands',
-                'options': {
-                    'cwd': '{projectRoot}',
-                    'color': true,
-                    'command': 'tsc --noEmit --pretty'
-                }
+                ...buildRunCommandConfig('tsc --noEmit --pretty'),
             },
             lint: {
                 executor: '@nx/linter:eslint',
@@ -60,8 +67,12 @@ export async function serviceGenerator(
                 },
             },
         },
+        tags: ['service', type, name],
     });
-    generateFiles(tree, path.join(__dirname, 'files'), projectRoot, options);
+
+    const templateFilesLocation = getTemplateFilesLocation(type);
+
+    generateFiles(tree, templateFilesLocation, projectRoot, options);
     await formatFiles(tree);
 }
 

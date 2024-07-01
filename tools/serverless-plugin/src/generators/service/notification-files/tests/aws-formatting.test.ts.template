@@ -1,0 +1,130 @@
+import {
+    extractNameFromExecutionArn,
+    extractNameFromResourceName,
+    generateChatbotNextSteps,
+} from '../src/utils/aws-formatting';
+import { NotifyError } from '../types/notify-error';
+
+describe('extractNameFromExecutionArn', () => {
+    it('should extract the name from a valid execution ARN', () => {
+        const arn =
+            'arn:aws:states:ap-southeast-2:123456789012:execution:my-state-machine:my-execution-name';
+        const expectedName = 'my-state-machine';
+
+        const result = extractNameFromExecutionArn(arn);
+
+        expect(result).toEqual(expectedName);
+    });
+
+    it('should throw an error for an invalid execution ARN', () => {
+        const arn = 'invalid-arn';
+        const result = () => extractNameFromExecutionArn(arn);
+
+        expect(result).toThrowError('Invalid execution ARN');
+    });
+
+    it('should throw an error if the ARN does not have enough parts', () => {
+        const arn = 'arn:aws:states:ap-southeast-2:123456789012';
+        const result = () => extractNameFromExecutionArn(arn);
+
+        expect(result).toThrowError('Invalid execution ARN');
+    });
+
+    it('should handle ARNs with different formats', () => {
+        const arn =
+            'arn:aws:lambda:ap-southeast-2:123456789012:function:my-lambda-name';
+        const expectedName = 'my-lambda-name';
+
+        const result = extractNameFromExecutionArn(arn);
+
+        expect(result).toEqual(expectedName);
+    });
+});
+
+describe('extractNameFromResourceName', () => {
+    it('should extract the name from a valid resource name', () => {
+        const resourceName = 'my-resource-name';
+        const expectedName = 'name';
+
+        const result = extractNameFromResourceName(resourceName);
+
+        expect(result).toBe(expectedName);
+    });
+
+    it('should return an empty string for an empty input', () => {
+        const resourceName = '';
+        const expectedName = '';
+
+        const result = extractNameFromResourceName(resourceName);
+
+        expect(result).toBe(expectedName);
+    });
+
+    it('should return the entire string if there are no hyphens', () => {
+        const resourceName = 'resourceName';
+        const expectedName = 'resourceName';
+
+        const result = extractNameFromResourceName(resourceName);
+
+        expect(result).toBe(expectedName);
+    });
+
+    it('should handle resource names with leading and trailing hyphens', () => {
+        const resourceName = '-leading-and-trailing-';
+        const expectedName = '';
+
+        const result = extractNameFromResourceName(resourceName);
+
+        expect(result).toBe(expectedName);
+    });
+});
+
+describe('generateChatbotNextSteps', () => {
+    it('should generate a CloudWatch Log Groups URL if source is aws.lambda but logGroupName is missing', () => {
+        const input: NotifyError.NextStepsInput = {
+            source: 'aws.lambda',
+            region: 'ap-southeast-2',
+            executionArn: 'my-execution-arn',
+            logGroupName: undefined,
+        };
+
+        const expected = [
+            'Check the <https://ap-southeast-2.console.aws.amazon.com/cloudwatch/home?region=ap-southeast-2#logsV2:log-groups|*CloudWatch Logs*> for more details.',
+        ];
+
+        const result = generateChatbotNextSteps(input);
+        expect(result).toEqual(expected);
+    });
+
+    it('should generate a CloudWatch Logs URL if source is aws.lambda', () => {
+        const input: NotifyError.NextStepsInput = {
+            source: 'aws.lambda',
+            region: 'ap-southeast-2',
+            executionArn: 'my-execution-arn',
+            logGroupName: 'aws/lambda/my-log-group',
+        };
+
+        const expected = [
+            'Check the <https://ap-southeast-2.console.aws.amazon.com/cloudwatch/home?region=ap-southeast-2#logsV2:log-groups/log-group/aws$252Flambda$252Fmy-log-group|*CloudWatch Logs*> for more details.',
+        ];
+
+        const result = generateChatbotNextSteps(input);
+        expect(result).toEqual(expected);
+    });
+
+    it('should generate a Step Functions URL if source is aws.states', () => {
+        const input: NotifyError.NextStepsInput = {
+            source: 'aws.states',
+            region: 'ap-southeast-2',
+            executionArn: 'my-execution-arn',
+            logGroupName: undefined,
+        };
+
+        const expected = [
+            'Check the <https://ap-southeast-2.console.aws.amazon.com/states/home?region=ap-southeast-2#/v2/executions/details/my-execution-arn|*Step Functions execution*> for more details.',
+        ];
+
+        const result = generateChatbotNextSteps(input);
+        expect(result).toEqual(expected);
+    });
+});
