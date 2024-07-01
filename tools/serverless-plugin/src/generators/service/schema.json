@@ -16,7 +16,16 @@
                 "index": 0
             },
             "x-prompt": "What would you like to call the service?"
+        },
+        "type": {
+            "type": "string",
+            "description": "Service type",
+            "default": "general",
+            "$default": {
+                "$source": "argv",
+                "index": 1
+            }
         }
     },
-    "required": ["brand", "name"]
+    "required": [ "brand", "name" ]
 }
