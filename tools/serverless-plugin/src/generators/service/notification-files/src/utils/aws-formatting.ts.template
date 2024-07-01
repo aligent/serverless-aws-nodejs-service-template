@@ -22,7 +22,7 @@ export function extractNameFromExecutionArn(arn: string) {
 /**
  * Extracts the name from a resource name string.
  * It assumes our resource name is in the correct format
- * Eg: tt-int-shippit-order-dev-createShippitOrder
+ * Eg: brand-int-service-name-stage-resourceName
  *
  * @param {string} resourceName - The resource name string.
  * @returns {string} The extracted name from the resource name.
