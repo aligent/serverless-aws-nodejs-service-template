@@ -23,7 +23,7 @@ export const viteBaseConfig = defineConfig({
         environment: 'node',
         coverage: {
             reporter: ['text', 'html'],
-            exclude: ['node_modules/'],
+            exclude: ['node_modules/', '**/types'],
             all: true,
             branches: 80,
             functions: 80,
