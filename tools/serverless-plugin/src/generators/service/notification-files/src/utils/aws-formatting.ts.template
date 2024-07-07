@@ -1,0 +1,83 @@
+import { NotifyError } from '../../types/notify-error';
+
+/**
+ * Extracts the name from an AWS Step Functions execution ARN
+ * It assumes that the arn is always in the correct format
+ *
+ * @param {string} arn - The AWS Step Functions execution ARN.
+ * @returns {string} The extracted name from the execution ARN.
+ * @throws {Error} If the provided ARN is invalid or does not contain a name.
+ */
+export function extractNameFromExecutionArn(arn: string) {
+    const parts = arn.split(':');
+    const name = parts[6];
+
+    if (!name) {
+        throw new Error('Invalid execution ARN');
+    }
+
+    return name;
+}
+
+/**
+ * Extracts the name from a resource name string.
+ * It assumes our resource name is in the correct format
+ * Eg: brand-int-service-name-stage-resourceName
+ *
+ * @param {string} resourceName - The resource name string.
+ * @returns {string} The extracted name from the resource name.
+ */
+export function extractNameFromResourceName(resourceName: string) {
+    return resourceName.split('-').pop() as string;
+}
+
+function generateCloudWatchUrl(region: string, logGroupName?: string) {
+    const logGroupsUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups`;
+
+    if (!logGroupName) {
+        return logGroupsUrl;
+    }
+
+    const encodedLogGroupName = encodeURIComponent(
+        encodeURIComponent(logGroupName)
+    ).replace(/%/g, '$');
+
+    return `${logGroupsUrl}/log-group/${encodedLogGroupName}`;
+}
+
+function generateStepFunctionUrl(region: string, executionArn: string) {
+    return `https://${region}.console.aws.amazon.com/states/home?region=${region}#/v2/executions/details/${executionArn}`;
+}
+
+/**
+ * Generates a list of AWS Chatbot custom message nextSteps.
+ * For more information, please check https://docs.aws.amazon.com/chatbot/latest/adminguide/custom-notifs.html#event-schema
+ *
+ * @param {NotifyError.NextStepsInput} input - The input object containing the source, region, executionArn, and logGroupName.
+ * @returns {string[]} An array of strings representing the next steps.
+ * @throws {Error} If the required parameters are missing for the specified source.
+ */
+export function generateChatbotNextSteps(input: NotifyError.NextStepsInput) {
+    const { source, region, executionArn, logGroupName } = input;
+    const steps: string[] = [];
+
+    if (source === 'aws.lambda') {
+        steps.push(
+            `Check the <${generateCloudWatchUrl(
+                region,
+                logGroupName
+            )}|*CloudWatch Logs*> for more details.`
+        );
+    }
+
+    if (source === 'aws.states') {
+        steps.push(
+            `Check the <${generateStepFunctionUrl(
+                region,
+                executionArn
+            )}|*Step Functions execution*> for more details.`
+        );
+    }
+
+    return steps;
+}

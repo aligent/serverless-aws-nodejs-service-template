@@ -1,0 +1,49 @@
+/* v8 ignore start */
+import type { Handler } from 'aws-lambda/handler';
+import type { NotifyError } from '../../types/notify-error';
+import {
+    extractNameFromExecutionArn,
+    extractNameFromResourceName,
+    generateChatbotNextSteps,
+} from '../utils/aws-formatting';
+import { AmazonSNS } from '../utils/aws-sns';
+
+const snsClient = new AmazonSNS(process.env['SNS_TOPIC_ARN'] as string);
+
+export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
+    console.log('Lambda event: ', JSON.stringify(event));
+    try {
+        const { source, region, detail } = event;
+        const { executionArn, logGroupName, cause } = detail;
+
+        const resourceName = extractNameFromExecutionArn(executionArn);
+        const name = extractNameFromResourceName(resourceName);
+
+        const { errorType, errorMessage } = JSON.parse(
+            cause
+        ) as NotifyError.Cause;
+
+        const nextSteps = generateChatbotNextSteps({
+            source,
+            region,
+            logGroupName,
+            executionArn,
+        });
+
+        const message: NotifyError.Message = {
+            version: '1.0',
+            source: 'custom',
+            content: {
+                textType: 'client-markdown',
+                title: `${event.detail.status}: ${name}`,
+                description: `${name} service encountered an error: [${errorType}] ${errorMessage}`,
+                nextSteps,
+            },
+        };
+
+        await snsClient.publish(event['detail-type'], JSON.stringify(message));
+    } catch (error) {
+        console.error(JSON.stringify(error));
+        throw error;
+    }
+};

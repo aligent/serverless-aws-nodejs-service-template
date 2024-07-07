@@ -13,6 +13,9 @@
     "check-types:all": "nx run-many -t check-types",
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.606.0"
+  },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
     "@nx/devkit": "^17.1.3",
