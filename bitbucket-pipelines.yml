@@ -43,12 +43,24 @@ pipelines:
           steps:
             - step: *test
             - step: *lint
+
   branches:
     production:
-      - step:
-          <<: *push-serverless
+      - stage:
+          name: 'Awaiting Production Deploy'
+          steps:
+            - step:
+                name: 'Awaiting Production Deploy'
+                script:
+                  - echo "Awaiting manual trigger of production deploy"
+      - stage:
           name: 'Deploy Production'
           deployment: Production
+          trigger: manual
+          steps:
+            - step:
+                <<: *push-serverless
+
     staging:
       - step:
           <<: *push-serverless
