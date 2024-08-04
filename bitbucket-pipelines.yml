@@ -21,29 +21,6 @@ definitions:
         name: 🧪 Test
         script:
           - npm run test
-    - step: &deploy-temp-stack
-        name: 🏗️ Test Deployment
-        script:
-          # Generate a random three letter stage name that isn't prd or stg
-          - TMP_STAGE=$(cat /dev/urandom | tr -dc 'a-z' | head -c3 | grep -vE 'prd|stg')
-          - echo "Deploy temporary service to stage:\ $TMP_STAGE"
-          - pipe: docker://aligent/nx-serverless-deploy-pipe:20-alpine
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              CFN_ROLE: ${CFN_ROLE}
-              DEBUG: ${CI_DEBUG}
-              STAGE: ${TMP_STAGE}
-          - pipe: docker://aligent/nx-serverless-deploy-pipe:20-alpine
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              CFN_ROLE: ${CFN_ROLE}
-              DEBUG: ${CI_DEBUG}
-              CMD: 'remove'
-              STAGE: ${TMP_STAGE}
-        artifacts:
-          download: false
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
@@ -66,13 +43,24 @@ pipelines:
           steps:
             - step: *test
             - step: *lint
-            - step: *deploy-temp-stack
+
   branches:
     production:
-      - step:
-          <<: *push-serverless
+      - stage:
+          name: 'Awaiting Production Deploy'
+          steps:
+            - step:
+                name: 'Awaiting Production Deploy'
+                script:
+                  - echo "Awaiting manual trigger of production deploy"
+      - stage:
           name: 'Deploy Production'
           deployment: Production
+          trigger: manual
+          steps:
+            - step:
+                <<: *push-serverless
+
     staging:
       - step:
           <<: *push-serverless
