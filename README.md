@@ -8,11 +8,11 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 ### Setup
 
-2. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
+1. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
 
-3. Update brand name to `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
+2. Update brand name to `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
 
-4. Install dependencies: `npm ci`
+3. Install dependencies: `npm ci`
 
 ### Working with services
 
@@ -84,6 +84,8 @@ Below are some example of general Nx. commands. For more information, check out 
   `npx nx affected -t <list-of-executors-separated-by-space-or-comma>`
 
 ## Notes:
+
+- The `tsconfig.base.json` file extends `@tsconfig/node20` and `@tsconfig/strictest` packages. Please note that there are settings which is not shown in that file but still applied. For more information on those settings, visit https://github.com/tsconfig/bases.
 
 - This template is package manager agnostic. To use other package manager, install them by enabling [corepack](https://pnpm.io/installation#using-corepack).
 
