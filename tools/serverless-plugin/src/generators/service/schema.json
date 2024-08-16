@@ -27,5 +27,5 @@
             }
         }
     },
-    "required": [ "brand", "name" ]
+    "required": ["brand", "name"]
 }
