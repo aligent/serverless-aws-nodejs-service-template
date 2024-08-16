@@ -43,7 +43,7 @@
     "eslint": "~8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "^2.29.1",
-    "nx": "17.3.0",
+    "nx": "19.6.0",
     "prettier": "^2.8.8",
     "serverless": "^3.38.0",
     "serverless-esbuild": "^1.50.1",
