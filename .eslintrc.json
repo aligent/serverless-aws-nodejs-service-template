@@ -39,6 +39,13 @@
                         "bundledDependencies": false,
                         "packageDir": "./"
                     }
+                ],
+                "@typescript-eslint/no-unused-vars": [
+                    "error",
+                    {
+                        "argsIgnorePattern": "^_",
+                        "ignoreRestSiblings": true
+                    }
                 ]
             }
         },
