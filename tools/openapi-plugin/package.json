@@ -1,0 +1,15 @@
+{
+  "name": "@aligent/openapi-plugin",
+  "version": "0.0.1",
+  "dependencies": {
+    "@nx/devkit": "^19.8.3",
+    "tslib": "^2.3.0",
+    "vitest": "2.0.0"
+  },
+  "peerDependencies": {
+    "openapi-typescript": "7.4.1"
+  },
+  "type": "module",
+  "main": "./src/index.js",
+  "generators": "./generators.json"
+}
