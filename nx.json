@@ -10,6 +10,14 @@
             "unitTestRunner": "vitest"
         }
     },
+    "plugins": [
+        {
+            "plugin": "@nx/vite/plugin",
+            "options": {
+              "testTargetName": "test"
+            }
+        }
+    ],
     "targetDefaults": {
         "build": {
             "dependsOn": ["^build"],
@@ -17,7 +25,7 @@
             "outputs": ["{projectRoot}/.serverless"],
             "cache": true
         },
-        "check-types": {
+        "typecheck": {
             "cache": true
         },
         "lint": {
@@ -30,7 +38,11 @@
         },
         "test": {
             "inputs": ["default", "^production"],
-            "cache": true
+            "cache": true,
+            "options": {
+                "passWithNoTests": true,
+                "watch": false
+            }
         },
         "build-storybook": {
             "cache": true

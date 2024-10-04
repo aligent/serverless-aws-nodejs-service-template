@@ -9,8 +9,8 @@
     "lint:all": "nx run-many -t lint",
     "format": "prettier . --check",
     "format:write": "prettier . --write",
-    "check-types": "nx affected -t check-types",
-    "check-types:all": "nx run-many -t check-types",
+    "check-types": "nx affected -t typecheck",
+    "check-types:all": "nx run-many -t typecheck",
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
   "dependencies": {

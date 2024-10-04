@@ -18,6 +18,7 @@ export const viteBaseConfig = defineConfig({
     //  ],
     // },
 
+    cacheDir: '../../node_modules/.vite',
     test: {
         globals: true,
         environment: 'node',
@@ -31,9 +32,6 @@ export const viteBaseConfig = defineConfig({
                 lines: 80,
                 statements: 80,
             },
-        },
-        cache: {
-            dir: '../../node_modules/.vitest',
         },
         include: [
             'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',

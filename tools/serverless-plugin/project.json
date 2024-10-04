@@ -15,16 +15,8 @@
                 "generatePackageJson": true
             }
         },
-        "check-types": {
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "{projectRoot}",
-                "color": true,
-                "command": "tsc --noEmit --pretty"
-            }
-        },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -33,14 +25,6 @@
                     "tools/serverless-plugin/package.json"
                 ],
                 "maxWarnings": 0
-            }
-        },
-        "test": {
-            "executor": "@nx/vite:test",
-            "outputs": ["{options.reportsDirectory}"],
-            "options": {
-                "passWithNoTests": true,
-                "reportsDirectory": "../../coverage/tools/serverless-plugin"
             }
         }
     },
