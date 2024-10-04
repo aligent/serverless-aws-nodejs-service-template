@@ -25,10 +25,12 @@ export const viteBaseConfig = defineConfig({
             reporter: ['text', 'html'],
             exclude: ['node_modules/', '**/types'],
             all: true,
-            branches: 80,
-            functions: 80,
-            lines: 80,
-            statements: 80,
+            thresholds: {
+                branches: 80,
+                functions: 80,
+                lines: 80,
+                statements: 80,
+            },
         },
         cache: {
             dir: '../../node_modules/.vitest',

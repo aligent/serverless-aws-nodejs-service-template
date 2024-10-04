@@ -1,6 +1,6 @@
+import { Tree, generateFiles, joinPathFragments } from '@nx/devkit';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { ClientGeneratorSchema } from './schema.js';
-import { Tree, generateFiles, joinPathFragments } from '@nx/devkit';
 
 export async function clientGenerator(
     tree: Tree,
@@ -14,7 +14,7 @@ export async function clientGenerator(
     const contents = astToString(ast);
 
     tree.write(`clients/${name}/types/index.d.ts`, contents);
-    await generateFiles(
+    generateFiles(
         tree,
         joinPathFragments(__dirname, './files'),
         `/clients/${name}`,
