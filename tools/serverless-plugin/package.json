@@ -2,5 +2,9 @@
   "name": "@aligent/serverless-plugin",
   "version": "0.0.1",
   "type": "commonjs",
-  "generators": "./generators.json"
+  "generators": "./generators.json",
+  "dependencies": {
+    "@nx/devkit": "19.8.3",
+    "vitest": "2.0.0"
+  }
 }
