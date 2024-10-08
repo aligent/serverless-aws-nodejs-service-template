@@ -1,0 +1,16 @@
+import { paths } from '../types';
+import createClient from 'openapi-fetch';
+
+type ExampleResponse =
+    paths['/customers']['get']['responses']['200']['content']['application/json'];
+
+const client = createClient<paths>({
+    baseUrl: '',
+    signal: AbortSignal.timeout(10000),
+});
+
+const response = client.GET('/customers', {
+    params: {
+        query: {},
+    },
+});
