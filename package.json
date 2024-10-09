@@ -14,8 +14,7 @@
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
   "dependencies": {
-    "@aws-sdk/client-sns": "^3.606.0",
-    "pnpm": "^9.12.1"
+    "@aws-sdk/client-sns": "^3.606.0"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
