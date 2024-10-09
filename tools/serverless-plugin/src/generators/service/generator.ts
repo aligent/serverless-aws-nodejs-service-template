@@ -47,23 +47,12 @@ export async function serviceGenerator(
             remove: {
                 ...buildRunCommandConfig('sls remove'),
             },
-            'check-types': {
-                ...buildRunCommandConfig('tsc --noEmit --pretty'),
-            },
             lint: {
-                executor: '@nx/linter:eslint',
+                executor: '@nx/eslint:lint',
                 outputs: ['{options.outputFile}'],
                 options: {
                     lintFilePatterns: [projectRoot + '/**/*.ts'],
                     maxWarnings: 0,
-                },
-            },
-            test: {
-                executor: '@nx/vite:test',
-                outputs: ['{options.reportsDirectory}'],
-                options: {
-                    passWithNoTests: true,
-                    reportsDirectory: `../../coverage/${projectRoot}`,
                 },
             },
         },

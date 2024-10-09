@@ -11,3 +11,4 @@ pnpm-lock.yaml
 package-lock.json
 
 /.nx/cache
+/.nx/workspace-data
