@@ -7,7 +7,6 @@ definitions:
   steps:
     - step: &install
         name: ⚙️ Install
-        # TODO: Switch all of this to pnpm
         script:
           - pnpm install --frozen-lockfile
         artifacts:
