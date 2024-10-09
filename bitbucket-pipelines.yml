@@ -8,19 +8,19 @@ definitions:
     - step: &install
         name: ⚙️ Install
         script:
-          - npm ci
+          - pnpm install --frozen-lockfile
         artifacts:
           - node_modules/**
     - step: &lint
         name: 🧹 Lint
         script:
-          - npm run lint
-          - npm run format
-          - npm run check-types
+          - pnpm run lint
+          - pnpm run format
+          - pnpm run check-types
     - step: &test
         name: 🧪 Test
         script:
-          - npm run test
+          - pnpm run test
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
@@ -29,6 +29,7 @@ definitions:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
+              SERVICES_PATH: ${SERVICES_PATH} || './services'
               STAGE: ${STAGE}
               DEBUG: ${CI_DEBUG}
               UPLOAD_BADGE: 'true'

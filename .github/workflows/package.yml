@@ -17,12 +17,13 @@ jobs:
         node-version: [20.13]
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: npx nx g library test-lib --unitTestRunner=none
       - run: npx nx g service test-app
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
