@@ -30,7 +30,8 @@ definitions:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
-              # TODO: Pass CMD and SERVICES_PATH for the new pipeline
+              CMD: 'deploy'
+              SERVICES_PATH: ${SERVICES_PATH} || './services'
               STAGE: ${STAGE}
               DEBUG: ${CI_DEBUG}
               UPLOAD_BADGE: 'true'
