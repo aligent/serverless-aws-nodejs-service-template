@@ -30,7 +30,6 @@ definitions:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
               CFN_ROLE: ${CFN_ROLE}
-              CMD: 'deploy'
               SERVICES_PATH: ${SERVICES_PATH} || './services'
               STAGE: ${STAGE}
               DEBUG: ${CI_DEBUG}
