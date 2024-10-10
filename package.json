@@ -2,7 +2,6 @@
   "name": "@aligent/serverless-aws-nodejs-service-template",
   "version": "2.0.0",
   "description": "Aligent AWS microservices template using Typescript and Serverless Framework",
-  "packageManager": "pnpm@9.12.1",
   "scripts": {
     "test": "nx affected -t test --coverage",
     "test:all": "nx run-many -t test --coverage",
@@ -57,8 +56,8 @@
     "vitest": "~0.34.6"
   },
   "engines": {
-    "npm": ">=9.0.0",
-    "node": "^20.13.0"
+    "pnpm": ">=9",
+    "node": ">=20"
   },
   "author": "Aligent Consulting",
   "license": "MIT"
