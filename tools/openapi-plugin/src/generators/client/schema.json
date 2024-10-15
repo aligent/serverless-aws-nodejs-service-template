@@ -1,12 +1,11 @@
 {
     "$schema": "https://json-schema.org/schema",
     "$id": "Client",
-    "title": "",
     "type": "object",
     "properties": {
         "name": {
             "type": "string",
-            "description": "",
+            "description": "Name of the api client.",
             "$default": {
                 "$source": "argv",
                 "index": 0
@@ -15,12 +14,20 @@
         },
         "schemaPath": {
             "type": "string",
-            "description": "",
+            "description": "Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.",
             "$default": {
                 "$source": "argv",
                 "index": 1
             },
-            "x-prompt": "File path for the openapi schema (yaml or json): "
+            "x-prompt": "Schema path (URL to schema if using --remote): "
+        },
+        "remote": {
+            "type": "boolean",
+            "description": "Specify whether you would like to fetch remotely."
+        },
+        "configPath": {
+            "type": "string",
+            "description": "path to the redocly config file responsible for auth. For more information: https://openapi-ts.dev/cli#auth."
         }
     },
     "required": ["name", "schemaPath"]

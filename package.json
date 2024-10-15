@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.606.0",
+    "@redocly/openapi-core": "^1.25.5",
     "@storybook/addon-interactions": "^8.2.8",
     "storybook": "^8.2.8"
   },
