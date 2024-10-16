@@ -9,6 +9,7 @@ export async function clientGenerator(
 ) {
     const { name, schemaPath, remote, configPath } = options;
 
+    // Parse schema into type definition
     let contents;
     if (remote) {
         console.log('Getting remote schema...');
@@ -19,9 +20,12 @@ export async function clientGenerator(
         );
         contents = await getLocalSchema(tree.root, schemaPath);
     }
-
     tree.write(`clients/${name}/types/index.d.ts`, contents);
-    generateFiles(
+
+    await copySchema(tree, name, schemaPath, remote);
+
+    // Complete generation
+    await generateFiles(
         tree,
         joinPathFragments(__dirname, './files'),
         `/clients/${name}`,
@@ -37,6 +41,7 @@ export async function clientGenerator(
  */
 async function getRemoteSchema(url: string, configPath?: string) {
     const parsed = new URL(url);
+
     if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
         throw new Error(`${parsed} is an invalid remote url.`);
     }
@@ -67,6 +72,27 @@ async function getLocalSchema(rootDir: string, schemaPath: string) {
         throw new Error(
             `Failed to generate local file at path ${rootDir}/${schemaPath} (did you mean to pass --remote?)` +
                 e
+        );
+    }
+}
+
+async function copySchema(
+    tree: Tree,
+    name: string,
+    schemaPath: string,
+    remote?: boolean
+) {
+    let schemaBuffer;
+    if (remote) {
+        const response = await fetch(schemaPath);
+        schemaBuffer = Buffer.from(await response.arrayBuffer());
+    } else {
+        schemaBuffer = tree.read(schemaPath);
+    }
+    if (schemaBuffer) {
+        tree.write(
+            `clients/${name}/schema` + schemaPath.slice(-5), // Use last 5 characters to determine file type
+            schemaBuffer
         );
     }
 }
