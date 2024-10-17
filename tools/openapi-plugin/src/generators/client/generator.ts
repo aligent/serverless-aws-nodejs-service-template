@@ -1,4 +1,9 @@
-import { Tree, generateFiles, joinPathFragments } from '@nx/devkit';
+import {
+    Tree,
+    addProjectConfiguration,
+    generateFiles,
+    joinPathFragments,
+} from '@nx/devkit';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
@@ -8,6 +13,7 @@ export async function clientGenerator(
     options: ClientGeneratorSchema
 ) {
     const { name, schemaPath, remote, configPath } = options;
+    const projectRoot = `clients/${name}`;
 
     // Parse schema into type definition
     let contents;
@@ -20,9 +26,19 @@ export async function clientGenerator(
         );
         contents = await getLocalSchema(tree.root, schemaPath);
     }
-    tree.write(`clients/${name}/types/index.d.ts`, contents);
+    tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
     await copySchema(tree, name, schemaPath, remote);
+
+    addProjectConfiguration(tree, name, {
+        root: projectRoot,
+        projectType: 'library',
+        sourceRoot: `${projectRoot}/src`,
+        targets: {
+            // TODO: (MI-94) Add a target here to regenerate a client again. That build target should call openapi-typescript again and overwrite type files
+        },
+        tags: ['client', name],
+    });
 
     // Complete generation
     await generateFiles(
