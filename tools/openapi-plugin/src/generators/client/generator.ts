@@ -1,6 +1,7 @@
 import {
     Tree,
     addProjectConfiguration,
+    formatFiles,
     generateFiles,
     joinPathFragments,
 } from '@nx/devkit';
@@ -44,9 +45,10 @@ export async function clientGenerator(
     await generateFiles(
         tree,
         joinPathFragments(__dirname, './files'),
-        `/clients/${name}`,
+        projectRoot,
         options
     );
+    await formatFiles(tree);
 }
 
 /**
@@ -87,7 +89,7 @@ async function getLocalSchema(rootDir: string, schemaPath: string) {
     } catch (e) {
         throw new Error(
             `Failed to generate local file at path ${rootDir}/${schemaPath} (did you mean to pass --remote?)` +
-                e
+            e
         );
     }
 }
