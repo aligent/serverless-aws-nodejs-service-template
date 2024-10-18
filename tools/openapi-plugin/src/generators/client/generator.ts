@@ -1,18 +1,20 @@
 import {
     Tree,
     addProjectConfiguration,
+    formatFiles,
     generateFiles,
     joinPathFragments,
 } from '@nx/devkit';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
+import { addTsConfigPath } from '@nx/js';
 
 export async function clientGenerator(
     tree: Tree,
     options: ClientGeneratorSchema
 ) {
-    const { name, schemaPath, remote, configPath } = options;
+    const { brand, name, schemaPath, remote, configPath } = options;
     const projectRoot = `clients/${name}`;
 
     // Parse schema into type definition
@@ -47,6 +49,13 @@ export async function clientGenerator(
         `/clients/${name}`,
         options
     );
+
+    // Add the project to the tsconfig paths so it can be imported by namespace
+    addTsConfigPath(tree, `@${brand}/${name}`, [
+        joinPathFragments(projectRoot, './src', 'index.ts'),
+    ]);
+
+    await formatFiles(tree);
 }
 
 /**

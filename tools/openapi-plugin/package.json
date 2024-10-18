@@ -5,6 +5,7 @@
   "dependencies": {
     "openapi-typescript": "^7.4.1",
     "@nx/devkit": "19.8.3",
+    "@nx/js": "19.8.3",
     "vitest": "2.0.0",
     "tslib": "^2.6.2",
     "@redocly/openapi-core": "^1.25.5"

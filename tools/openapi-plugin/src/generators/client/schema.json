@@ -3,6 +3,10 @@
     "$id": "Client",
     "type": "object",
     "properties": {
+        "brand": {
+            "type": "string",
+            "description": "Brand name (config this in {workspaceRoot}/nx.json)"
+        },
         "name": {
             "type": "string",
             "description": "Name of the api client.",
