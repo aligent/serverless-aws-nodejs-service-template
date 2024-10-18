@@ -7,6 +7,7 @@ import {
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
+import { convertIntegerTypes } from './helpers/integer-transform';
 
 export async function clientGenerator(
     tree: Tree,
@@ -40,6 +41,8 @@ export async function clientGenerator(
         tags: ['client', name],
     });
 
+    convertIntegerTypes(projectRoot, tree);
+
     // Complete generation
     await generateFiles(
         tree,
@@ -65,10 +68,13 @@ async function getRemoteSchema(url: string, configPath?: string) {
     if (configPath) {
         const config = await loadConfig({ configPath });
         console.log('Loaded Config: ', config);
-        const ast = await openapiTS(new URL(url), { redocly: config });
+        const ast = await openapiTS(new URL(url), {
+            redocly: config,
+            pathParamsAsTypes: true,
+        });
         return astToString(ast);
     } else {
-        const ast = await openapiTS(new URL(url));
+        const ast = await openapiTS(new URL(url), { pathParamsAsTypes: true });
         return astToString(ast);
     }
 }
