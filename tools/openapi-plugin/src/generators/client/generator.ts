@@ -14,7 +14,14 @@ export async function clientGenerator(
     tree: Tree,
     options: ClientGeneratorSchema
 ) {
-    const { brand, name, schemaPath, remote, configPath } = options;
+    const {
+        name,
+        schemaPath,
+        remote,
+        configPath,
+        importPath = `@clients/${name}`,
+    } = options;
+
     const projectRoot = `clients/${name}`;
 
     // Parse schema into type definition
@@ -51,7 +58,7 @@ export async function clientGenerator(
     );
 
     // Add the project to the tsconfig paths so it can be imported by namespace
-    addTsConfigPath(tree, `@${brand}/${name}`, [
+    addTsConfigPath(tree, importPath, [
         joinPathFragments(projectRoot, './src', 'index.ts'),
     ]);
 
