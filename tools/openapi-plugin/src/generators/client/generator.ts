@@ -8,6 +8,7 @@ import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
 import { convertIntegerTypes } from './helpers/integer-transform';
+import { spawn } from 'child_process';
 
 export async function clientGenerator(
     tree: Tree,
@@ -27,6 +28,9 @@ export async function clientGenerator(
         );
         contents = await getLocalSchema(tree.root, schemaPath);
     }
+
+    await validate(schemaPath);
+
     tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
     await copySchema(tree, name, schemaPath, remote);
@@ -70,11 +74,10 @@ async function getRemoteSchema(url: string, configPath?: string) {
         console.log('Loaded Config: ', config);
         const ast = await openapiTS(new URL(url), {
             redocly: config,
-            pathParamsAsTypes: true,
         });
         return astToString(ast);
     } else {
-        const ast = await openapiTS(new URL(url), { pathParamsAsTypes: true });
+        const ast = await openapiTS(new URL(url));
         return astToString(ast);
     }
 }
@@ -117,6 +120,29 @@ async function copySchema(
             schemaBuffer
         );
     }
+}
+
+async function validate(schemaPath: string) {
+    return new Promise((resolve, reject) => {
+        const child = spawn('npx', [
+            'nx',
+            'run',
+            '@aligent/openapi-plugin:validate',
+            schemaPath,
+        ]);
+
+        child.stderr.on('data', (data) => {
+            console.error('Error: \n' + data.toString());
+        });
+
+        child.on('close', (code) => {
+            if (code === 0) {
+                resolve(`Validation completed with code ${code}`);
+            } else {
+                reject(new Error(`Validation failed with code ${code}`));
+            }
+        });
+    });
 }
 
 export default clientGenerator;
