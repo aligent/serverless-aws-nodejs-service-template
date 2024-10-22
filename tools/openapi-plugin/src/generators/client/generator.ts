@@ -1,8 +1,10 @@
 import {
     Tree,
     addProjectConfiguration,
+    formatFiles,
     generateFiles,
     joinPathFragments,
+    updateJson,
 } from '@nx/devkit';
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
@@ -12,7 +14,14 @@ export async function clientGenerator(
     tree: Tree,
     options: ClientGeneratorSchema
 ) {
-    const { name, schemaPath, remote, configPath } = options;
+    const {
+        name,
+        schemaPath,
+        remote,
+        configPath,
+        importPath = `@clients/${name}`,
+    } = options;
+
     const projectRoot = `clients/${name}`;
 
     // Parse schema into type definition
@@ -47,6 +56,13 @@ export async function clientGenerator(
         `/clients/${name}`,
         options
     );
+
+    // Add the project to the tsconfig paths so it can be imported by namespace
+    addTsConfigPath(tree, importPath, [
+        joinPathFragments(projectRoot, './src', 'index.ts'),
+    ]);
+
+    await formatFiles(tree);
 }
 
 /**
@@ -111,6 +127,41 @@ async function copySchema(
             schemaBuffer
         );
     }
+}
+
+// These utility functions are only exported by @nx/js, not @nx/devkit
+// They're simple so we recreate them here instead of adding @nx/js as a dependency
+// Source: https://github.com/nrwl/nx/blob/master/packages/js/src/utils/typescript/ts-config.ts
+export function getRootTsConfigPathInTree(tree: Tree): string {
+    for (const path of ['tsconfig.base.json', 'tsconfig.json']) {
+        if (tree.exists(path)) {
+            return path;
+        }
+    }
+
+    return 'tsconfig.base.json';
+}
+
+function addTsConfigPath(
+    tree: Tree,
+    importPath: string,
+    lookupPaths: string[]
+) {
+    updateJson(tree, getRootTsConfigPathInTree(tree), (json) => {
+        json.compilerOptions ??= {};
+        const c = json.compilerOptions;
+        c.paths ??= {};
+
+        if (c.paths[importPath]) {
+            throw new Error(
+                `You already have a library using the import path "${importPath}". Make sure to specify a unique one.`
+            );
+        }
+
+        c.paths[importPath] = lookupPaths;
+
+        return json;
+    });
 }
 
 export default clientGenerator;
