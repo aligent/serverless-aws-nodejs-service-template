@@ -33,6 +33,7 @@
         },
         "test": {
             "inputs": ["default", "^production"],
+            "outputs": ["{projectRoot}/coverage"],
             "cache": true
         }
     },
