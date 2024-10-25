@@ -51,7 +51,7 @@ export async function serviceGenerator(
                 ...buildRunCommandConfig('tsc --noEmit --pretty'),
             },
             lint: {
-                executor: '@nx/linter:eslint',
+                executor: '@nx/eslint:lint',
                 outputs: ['{options.outputFile}'],
                 options: {
                     lintFilePatterns: [projectRoot + '/**/*.ts'],
