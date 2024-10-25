@@ -21,6 +21,7 @@ export const viteBaseConfig = defineConfig({
     test: {
         globals: true,
         environment: 'node',
+        passWithNoTests: true,
         coverage: {
             reporter: ['text', 'html'],
             exclude: ['node_modules/', '**/types'],

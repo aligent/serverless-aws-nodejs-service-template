@@ -55,7 +55,9 @@ This service accepts events in the following format (similar to CloudWatch Event
   "source": "aws.lambda",
   "time": "2024-06-24T04:42:33.884Z",
   "region": "ap-southeast-2",
-  "resources": ["arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:tt-int-shippit-order-dev-lambdaName"],
+  "resources": [
+    "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:tt-int-shippit-order-dev-lambdaName"
+  ],
   "detail": {
     "executionArn": "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:tt-int-shippit-order-dev-lambdaName",
     "logGroupName": "/aws/lambda/tt-int-shippit-order-dev-lambdaName",

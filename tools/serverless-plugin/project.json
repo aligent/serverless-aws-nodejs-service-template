@@ -38,9 +38,7 @@
         "test": {
             "executor": "@nx/vite:test",
             "outputs": ["{projectRoot}/coverage"],
-            "options": {
-                "passWithNoTests": true
-            }
+            "options": {}
         }
     },
     "tags": []

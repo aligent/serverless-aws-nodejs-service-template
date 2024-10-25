@@ -1,9 +1,4 @@
-import {
-    addProjectConfiguration,
-    formatFiles,
-    generateFiles,
-    Tree,
-} from '@nx/devkit';
+import { addProjectConfiguration, formatFiles, generateFiles, Tree } from '@nx/devkit';
 import * as path from 'path';
 import { serviceGeneratorSchema } from './schema';
 
@@ -16,9 +11,7 @@ const buildRunCommandConfig = (command: string, dir = '{projectRoot}') => ({
     },
 });
 
-const getTemplateFilesLocation = (
-    type: serviceGeneratorSchema['type'] = 'general'
-) => {
+const getTemplateFilesLocation = (type: serviceGeneratorSchema['type'] = 'general') => {
     if (type === 'notification') {
         return path.join(__dirname, 'notification-files');
     }
@@ -26,10 +19,7 @@ const getTemplateFilesLocation = (
     return path.join(__dirname, 'general-files');
 };
 
-export async function serviceGenerator(
-    tree: Tree,
-    options: serviceGeneratorSchema
-) {
+export async function serviceGenerator(tree: Tree, options: serviceGeneratorSchema) {
     const { name, type } = options;
     const projectRoot = `services/${name}`;
 
@@ -60,11 +50,8 @@ export async function serviceGenerator(
             },
             test: {
                 executor: '@nx/vite:test',
-                outputs: ['{options.reportsDirectory}'],
-                options: {
-                    passWithNoTests: true,
-                    reportsDirectory: `../../coverage/${projectRoot}`,
-                },
+                outputs: ['{projectRoot}/coverage'],
+                options: {},
             },
         },
         tags: ['service', type, name],
