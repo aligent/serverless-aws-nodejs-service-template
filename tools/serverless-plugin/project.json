@@ -24,7 +24,7 @@
             }
         },
         "lint": {
-            "executor": "@nx/linter:eslint",
+            "executor": "@nx/eslint:lint",
             "outputs": ["{options.outputFile}"],
             "options": {
                 "lintFilePatterns": [
@@ -37,10 +37,8 @@
         },
         "test": {
             "executor": "@nx/vite:test",
-            "outputs": ["{options.reportsDirectory}"],
             "options": {
-                "passWithNoTests": true,
-                "reportsDirectory": "../../coverage/tools/serverless-plugin"
+                "passWithNoTests": true
             }
         }
     },
