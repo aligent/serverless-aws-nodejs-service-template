@@ -35,10 +35,6 @@
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
             "cache": true
-        },
-        "@nx/vite:test": {
-            "inputs": ["default", "^production"],
-            "cache": true
         }
     },
     "namedInputs": {
