@@ -1,8 +1,6 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "affected": {
-        "defaultBase": "origin/staging"
-    },
+    "defaultBase": "origin/staging",
     "generators": {
         "@aligent/serverless-plugin:service": {
             "brand": "brand-name"
