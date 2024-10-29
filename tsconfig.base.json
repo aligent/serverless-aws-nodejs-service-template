@@ -1,5 +1,5 @@
 {
-    "extends": ["@tsconfig/node20/tsconfig", "@tsconfig/strictest/tsconfig"],
+    "extends": "@aligent/ts-code-standards/tsconfigs/base.json",
     "compileOnSave": false,
     "compilerOptions": {
         "rootDir": ".",
@@ -12,6 +12,5 @@
             ]
         },
         "types": ["node", "vitest", "vitest/globals"]
-    },
-    "exclude": ["node_modules", "tmp"]
+    }
 }
