@@ -124,20 +124,17 @@ async function copySchema(
 
 async function validate(schemaPath: string) {
     return new Promise((resolve, reject) => {
-        const child = spawn('npx', [
-            'nx',
-            'run',
-            '@aligent/openapi-plugin:validate',
-            schemaPath,
-        ]);
-
-        child.stderr.on('data', (data) => {
-            console.error('Error: \n' + data.toString());
-        });
+        const child = spawn(
+            'npx',
+            ['nx', 'run', '@aligent/openapi-plugin:validate', schemaPath],
+            {
+                stdio: ['pipe', 'inherit', 'inherit'],
+            }
+        );
 
         child.on('close', (code) => {
             if (code === 0) {
-                resolve(`Validation completed with code ${code}`);
+                resolve(`Validation completed`);
             } else {
                 reject(new Error(`Validation failed with code ${code}`));
             }

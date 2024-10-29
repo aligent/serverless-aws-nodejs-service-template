@@ -4,7 +4,6 @@
         "outDir": "../../dist/out-tsc",
         "composite": true,
         "declaration": true,
-        "module": "Node16",
         "types": ["node"]
     },
     "include": ["src/**/*.ts"],
