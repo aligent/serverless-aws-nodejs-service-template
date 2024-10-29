@@ -30,9 +30,6 @@ export async function clientGenerator(
     }
 
     await validate(schemaPath);
-
-    tree.write(`${projectRoot}/types/index.d.ts`, contents);
-
     await copySchema(tree, name, schemaPath, remote);
 
     addProjectConfiguration(tree, name, {
@@ -45,7 +42,7 @@ export async function clientGenerator(
         tags: ['client', name],
     });
 
-    convertIntegerTypes(projectRoot, tree);
+    convertIntegerTypes(`${projectRoot}/types/index.d.ts`, tree, contents);
 
     // Complete generation
     await generateFiles(
@@ -124,13 +121,9 @@ async function copySchema(
 
 async function validate(schemaPath: string) {
     return new Promise((resolve, reject) => {
-        const child = spawn(
-            'npx',
-            ['nx', 'run', '@aligent/openapi-plugin:validate', schemaPath],
-            {
-                stdio: ['pipe', 'inherit', 'inherit'],
-            }
-        );
+        const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
+            stdio: ['pipe', 'inherit', 'inherit'],
+        });
 
         child.on('close', (code) => {
             if (code === 0) {
