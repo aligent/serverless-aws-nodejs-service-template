@@ -31,7 +31,7 @@ export const eslintBaseConfig = [
                     optionalDependencies: false,
                     peerDependencies: false,
                     bundledDependencies: false,
-                    packageDir: './',
+                    packageDir: ['.', '../..'],
                 },
             ],
         },
