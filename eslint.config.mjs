@@ -6,7 +6,7 @@ import nxEslintPlugin from '@nx/eslint-plugin';
 export const eslintBaseConfig = [
     ...eslintConfigs.core,
     {
-        files: ['**/*.ts', '**/*.tsx'],
+        files: ['**/*.ts'],
         plugins: {
             '@nx': nxEslintPlugin,
             import: eslintPluginImport,
@@ -38,7 +38,6 @@ export const eslintBaseConfig = [
     },
     {
         files: ['**/*.json'],
-        rules: {},
         languageOptions: { parser: jsonParser },
     },
 ];

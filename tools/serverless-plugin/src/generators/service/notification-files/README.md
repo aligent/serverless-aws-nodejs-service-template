@@ -56,15 +56,15 @@ This service accepts events in the following format (similar to CloudWatch Event
   "time": "2024-06-24T04:42:33.884Z",
   "region": "ap-southeast-2",
   "resources": [
-    "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:tt-int-shippit-order-dev-lambdaName"
+    "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:client-int-service-name-stg-lambdaName"
   ],
   "detail": {
-    "executionArn": "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:tt-int-shippit-order-dev-lambdaName",
-    "logGroupName": "/aws/lambda/tt-int-shippit-order-dev-lambdaName",
-    "name": "tt-int-shippit-order-dev-lambdaName",
+    "executionArn": "arn:aws:lambda:ap-southeast-2:XXXXXXXXXX:function:client-int-service-name-stg-lambdaName",
+    "logGroupName": "/aws/lambda/client-int-service-name-stg-lambdaName",
+    "name": "client-int-service-name-stg-lambdaName",
     "status": "FAILED",
     "error": "SyntaxError",
-    "cause": "{\"errorType\":\"SyntaxError\",\"errorMessage\":\"Unexpected token u in JSON at position 0\",\"trace\":\"SyntaxError: Unexpected token u in JSON at position 0\\n    at JSON.parse (<anonymous>)\\n    at Runtime.V1 (/src/lambda/create-shippit-order.ts:39:34)\\n    at Runtime.handleOnceNonStreaming (file:///var/runtime/index.mjs:1173:29)\"}"
+    "cause": "{\"errorType\":\"SyntaxError\",\"errorMessage\":\"Unexpected token u in JSON at position 0\",\"trace\":\"SyntaxError: Unexpected token u in JSON at position 0\\n    at JSON.parse (<anonymous>)\\n    at Runtime.V1 (/src/lambda/create-order.ts:39:34)\\n    at Runtime.handleOnceNonStreaming (file:///var/runtime/index.mjs:1173:29)\"}"
   }
 }
 ```

@@ -7,9 +7,7 @@
         "exactOptionalPropertyTypes": false,
         "noUncheckedSideEffectImports": true,
         "paths": {
-            "@aligent/serverless-plugin": [
-                "tools/serverless-plugin/src/index.ts"
-            ]
+            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"]
         },
         "types": ["node", "vitest", "vitest/globals"]
     }

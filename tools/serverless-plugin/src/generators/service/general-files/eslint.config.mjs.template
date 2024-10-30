@@ -1,0 +1,3 @@
+import { eslintBaseConfig } from '../../eslint.config.mjs';
+
+export default [...eslintBaseConfig, { ignores: ['!./**/*.ts'] }];

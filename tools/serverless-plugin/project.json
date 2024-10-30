@@ -29,7 +29,7 @@
             "options": {
                 "cwd": "{projectRoot}",
                 "color": true,
-                "command": "eslint ."
+                "command": "eslint . --max-warnings 0"
             }
         },
         "test": {

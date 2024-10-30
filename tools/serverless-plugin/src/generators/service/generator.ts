@@ -41,12 +41,7 @@ export async function serviceGenerator(tree: Tree, options: serviceGeneratorSche
                 ...buildRunCommandConfig('tsc --noEmit --pretty'),
             },
             lint: {
-                executor: '@nx/eslint:lint',
-                outputs: ['{options.outputFile}'],
-                options: {
-                    lintFilePatterns: [projectRoot + '/**/*.ts'],
-                    maxWarnings: 0,
-                },
+                ...buildRunCommandConfig('eslint . --max-warnings 0'),
             },
             test: {
                 executor: '@nx/vite:test',

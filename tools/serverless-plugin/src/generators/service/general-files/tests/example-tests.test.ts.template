@@ -1,4 +1,4 @@
-import { simpleObject, YOUR_ENV_VAR } from './__data__/example-data';
+import { YOUR_ENV_VAR, simpleObject } from './__data__/example-data';
 
 describe('Passing tests', () => {
     test('Passing test', () => {
