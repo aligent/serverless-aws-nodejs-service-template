@@ -9,6 +9,8 @@ import {
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
+import { convertIntegerTypes } from './helpers/integer-transform';
+import { spawn } from 'child_process';
 
 export async function clientGenerator(
     tree: Tree,
@@ -35,8 +37,8 @@ export async function clientGenerator(
         );
         contents = await getLocalSchema(tree.root, schemaPath);
     }
-    tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
+    await validate(schemaPath);
     await copySchema(tree, name, schemaPath, remote);
 
     addProjectConfiguration(tree, name, {
@@ -48,6 +50,10 @@ export async function clientGenerator(
         },
         tags: ['client', name],
     });
+
+    contents = convertIntegerTypes(contents);
+
+    tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
     // Complete generation
     await generateFiles(
@@ -81,7 +87,9 @@ async function getRemoteSchema(url: string, configPath?: string) {
     if (configPath) {
         const config = await loadConfig({ configPath });
         console.log('Loaded Config: ', config);
-        const ast = await openapiTS(new URL(url), { redocly: config });
+        const ast = await openapiTS(new URL(url), {
+            redocly: config,
+        });
         return astToString(ast);
     } else {
         const ast = await openapiTS(new URL(url));
@@ -129,9 +137,27 @@ async function copySchema(
     }
 }
 
-// These utility functions are only exported by @nx/js, not @nx/devkit
-// They're simple so we recreate them here instead of adding @nx/js as a dependency
-// Source: https://github.com/nrwl/nx/blob/master/packages/js/src/utils/typescript/ts-config.ts
+async function validate(schemaPath: string) {
+    return new Promise((resolve, reject) => {
+        const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
+            stdio: ['pipe', 'inherit', 'inherit'],
+        });
+
+        child.on('close', (code) => {
+            if (code === 0) {
+                resolve(`Validation completed`);
+            } else {
+                reject(new Error(`Validation failed with code ${code}`));
+            }
+        });
+    });
+}
+
+/**
+ * These utility functions are only exported by '@nx/js', not '@nx/devkit'
+ * They're simple so we recreate them here instead of adding '@nx/js' as a dependency
+ * Source: {@link https://github.com/nrwl/nx/blob/master/packages/js/src/utils/typescript/ts-config.ts}
+ */
 export function getRootTsConfigPathInTree(tree: Tree): string {
     for (const path of ['tsconfig.base.json', 'tsconfig.json']) {
         if (tree.exists(path)) {
