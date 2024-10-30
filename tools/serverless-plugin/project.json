@@ -25,15 +25,11 @@
             }
         },
         "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": ["{options.outputFile}"],
+            "executor": "nx:run-commands",
             "options": {
-                "lintFilePatterns": [
-                    "tools/serverless-plugin/**/*.ts",
-                    "tools/serverless-plugin/generators.json",
-                    "tools/serverless-plugin/package.json"
-                ],
-                "maxWarnings": 0
+                "cwd": "{projectRoot}",
+                "color": true,
+                "command": "eslint ."
             }
         },
         "test": {

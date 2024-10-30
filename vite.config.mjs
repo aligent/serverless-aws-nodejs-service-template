@@ -24,7 +24,7 @@ export const viteBaseConfig = defineConfig({
         passWithNoTests: true,
         coverage: {
             reporter: ['text', 'html'],
-            exclude: ['node_modules/', '**/types'],
+            exclude: ['node_modules/', '**/types', '*.mjs'],
             all: true,
             thresholds: {
                 branches: 80,
@@ -32,9 +32,6 @@ export const viteBaseConfig = defineConfig({
                 lines: 80,
                 statements: 80,
             },
-        },
-        cache: {
-            dir: '../../node_modules/.vitest',
         },
         include: [
             'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',

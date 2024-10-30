@@ -1,5 +1,5 @@
-import { addProjectConfiguration, formatFiles, generateFiles, Tree } from '@nx/devkit';
-import * as path from 'path';
+import { Tree, addProjectConfiguration, formatFiles, generateFiles } from '@nx/devkit';
+import path from 'path';
 import { serviceGeneratorSchema } from './schema';
 
 const buildRunCommandConfig = (command: string, dir = '{projectRoot}') => ({
