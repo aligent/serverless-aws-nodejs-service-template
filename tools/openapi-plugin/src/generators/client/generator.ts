@@ -42,7 +42,9 @@ export async function clientGenerator(
         tags: ['client', name],
     });
 
-    convertIntegerTypes(`${projectRoot}/types/index.d.ts`, tree, contents);
+    contents = convertIntegerTypes(contents);
+
+    tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
     // Complete generation
     await generateFiles(
