@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+      - name: Authenticate with Aligent private NPM registry
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.ALIGENT_NPM_TOKEN }}" > ~/.npmrc
       - run: npm ci
       - run: npx nx g library test-lib --unitTestRunner=none
       - run: npx nx g service test-app
