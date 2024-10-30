@@ -117,11 +117,8 @@ The NPM packages in `devDependencies` in this repository has a complicated relat
   ```
 
 - `@nx/esbuild` lists `esbuild` as peerDependency. Double check the required version of `esbuild` in `package.json` of this [package](https://www.npmjs.com/package/@nx/esbuild?activeTab=code) before upgrading.
-- `eslint` is a peerDependency of the following packages. Double check the required version of `eslint` in `package.json` of these packages before upgrading.
-  - [@nx/eslint](https://www.npmjs.com/package/@nx/eslint?activeTab=code)
-  - [@typescript-eslint/eslint-plugin](https://www.npmjs.com/package/@typescript-eslint/eslint-plugin?activeTab=code)
-  - [@typescript-eslint/parser](https://www.npmjs.com/package/@typescript-eslint/parser?activeTab=code)
-  - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier?activeTab=code)
+- `eslint` and `prettier` are a peerDependencies of the following packages. Double check the required versions in `package.json` of these packages before upgrading.
+  - [@aligent/ts-code-standard](https://bitbucket.org/aligent/ts-code-standards/src/main/package.json)
   - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import?activeTab=code)
 - `@nx/vite` lists `vite` and `vitest` as peerDependencies. Double check the required version of `vite` and `vitest` in `package.json` of this [package](https://www.npmjs.com/package/@nx/vite?activeTab=code) before upgrading.
   - `vitest`, `@vitest/coverage-v8` and `@vitest/ui` should be at the same version.
