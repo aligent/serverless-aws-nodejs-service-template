@@ -4,6 +4,9 @@
         "defaultBase": "origin/staging"
     },
     "generators": {
+        "@aligent/openapi-plugin:client": {
+            "brand": "brand-name"
+        },
         "@aligent/serverless-plugin:service": {
             "brand": "brand-name"
         },
