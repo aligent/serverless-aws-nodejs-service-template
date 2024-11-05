@@ -33,6 +33,13 @@
                 ],
                 "maxWarnings": 0
             }
+        },
+        "validate": {
+            "executor": "nx:run-commands",
+            "outputs": ["{options.outputFile}"],
+            "options": {
+                "command": "npx @redocly/cli lint"
+            }
         }
     }
 }

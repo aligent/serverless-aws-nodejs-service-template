@@ -2,6 +2,9 @@
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
     "defaultBase": "main",
     "generators": {
+        "@aligent/openapi-plugin:client": {
+            "brand": "brand-name"
+        },
         "@aligent/serverless-plugin:service": {
             "brand": "brand-name"
         },

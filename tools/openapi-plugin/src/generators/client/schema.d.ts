@@ -3,4 +3,5 @@ export interface ClientGeneratorSchema {
     schemaPath: string;
     remote?: boolean;
     configPath?: string;
+    importPath?: string;
 }

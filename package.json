@@ -14,10 +14,7 @@
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true"
   },
   "dependencies": {
-    "@aws-sdk/client-sns": "^3.606.0",
-    "@redocly/openapi-core": "^1.25.5",
-    "@storybook/addon-interactions": "^8.2.8",
-    "storybook": "^8.2.8"
+    "@aws-sdk/client-sns": "^3.606.0"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
@@ -31,6 +28,9 @@
     "@nx/vite": "19.8.3",
     "@nx/web": "19.8.3",
     "@nx/workspace": "19.8.3",
+    "@redocly/cli": "^1.25.7",
+    "@redocly/openapi-core": "^1.25.5",
+    "@storybook/addon-interactions": "^8.2.8",
     "@swc-node/register": "1.9.2",
     "@swc/cli": "0.3.14",
     "@swc/core": "1.5.7",
@@ -49,11 +49,13 @@
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "^2.29.1",
     "nx": "19.8.3",
+    "openapi-fetch": "^0.12.2",
     "openapi-typescript": "^7.4.1",
     "prettier": "^2.8.8",
     "serverless": "^3.38.0",
     "serverless-esbuild": "^1.50.1",
     "serverless-step-functions": "^3.21.0",
+    "storybook": "^8.2.8",
     "tslib": "^2.6.2",
     "tsx": "^4.17.0",
     "typescript": "5.5.4",
