@@ -15,27 +15,6 @@
                 "assets": ["tools/serverless-plugin/*.md"],
                 "generatePackageJson": true
             }
-        },
-        "check-types": {
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "{projectRoot}",
-                "color": true,
-                "command": "tsc --noEmit --pretty"
-            }
-        },
-        "lint": {
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "{projectRoot}",
-                "color": true,
-                "command": "eslint . --max-warnings 0"
-            }
-        },
-        "test": {
-            "executor": "@nx/vite:test",
-            "outputs": ["{projectRoot}/coverage"],
-            "options": {}
         }
     }
 }

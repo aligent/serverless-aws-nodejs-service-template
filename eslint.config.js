@@ -1,10 +1,13 @@
-import { eslintConfigs } from '@aligent/ts-code-standards';
-import eslintPluginImport from 'eslint-plugin-import';
-import jsonParser from 'jsonc-eslint-parser';
-import nxEslintPlugin from '@nx/eslint-plugin';
+const { eslintConfigs } = require('@aligent/ts-code-standards');
+const eslintPluginImport = require('eslint-plugin-import');
+const jsonParser = require('jsonc-eslint-parser');
+const nxEslintPlugin = require('@nx/eslint-plugin');
 
-export const eslintBaseConfig = [
+const eslintBaseConfig = [
     ...eslintConfigs.core,
+    {
+        ignores: ['**/*.js'],
+    },
     {
         files: ['**/*.ts'],
         plugins: {
@@ -41,3 +44,5 @@ export const eslintBaseConfig = [
         languageOptions: { parser: jsonParser },
     },
 ];
+
+module.exports = eslintBaseConfig;

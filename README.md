@@ -6,17 +6,13 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 ## Development
 
-### Setup 
+### Setup
 
 1. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
 
 2. Update brand name in `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
 
-3. Set up your package manager to use Aligent's private NPM registry:
-  - Go to `https://npm.corp.aligent.consulting` and log in.
-  - Click the Gear icon to get instructions for configuring your package manager.
-
-4. Install dependencies: `npm ci`
+3. Install dependencies: `npm ci`
 
 ### Working with services
 

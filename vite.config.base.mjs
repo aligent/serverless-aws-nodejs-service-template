@@ -1,13 +1,9 @@
 /// <reference types="vitest" />
 import { defineConfig } from 'vite';
-import viteTsConfigPaths from 'vite-tsconfig-paths';
+import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export const viteBaseConfig = defineConfig({
-    plugins: [
-        viteTsConfigPaths({
-            root: '../../',
-        }),
-    ],
+    plugins: [nxViteTsPaths()],
 
     // Uncomment this if you are using workers.
     // worker: {
@@ -20,12 +16,13 @@ export const viteBaseConfig = defineConfig({
 
     test: {
         globals: true,
+        watch: false,
         environment: 'node',
         passWithNoTests: true,
+        reporters: ['default'],
         coverage: {
-            reporter: ['text', 'html'],
+            provider: 'v8',
             exclude: ['node_modules/', '**/types', '*.mjs'],
-            all: true,
             thresholds: {
                 branches: 80,
                 functions: 80,
