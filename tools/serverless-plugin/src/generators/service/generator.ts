@@ -37,17 +37,6 @@ export async function serviceGenerator(tree: Tree, options: serviceGeneratorSche
             remove: {
                 ...buildRunCommandConfig('sls remove'),
             },
-            'check-types': {
-                ...buildRunCommandConfig('tsc --noEmit --pretty'),
-            },
-            lint: {
-                ...buildRunCommandConfig('eslint . --max-warnings 0'),
-            },
-            test: {
-                executor: '@nx/vite:test',
-                outputs: ['{projectRoot}/coverage'],
-                options: {},
-            },
         },
         tags: ['service', type, name],
     });

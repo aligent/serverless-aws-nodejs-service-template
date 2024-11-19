@@ -1,3 +1,3 @@
-import { eslintBaseConfig } from '../../eslint.config.mjs';
+const eslintBaseConfig = require('../../eslint.config.js');
 
-export default [...eslintBaseConfig, { ignores: ['!./**/*.ts'] }];
+module.exports = [...eslintBaseConfig];

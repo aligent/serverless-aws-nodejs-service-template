@@ -1,5 +1,5 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import { viteBaseConfig } from '../../vite.config.mjs';
+import { viteBaseConfig } from '../../vite.config.base.mjs';
 
 export default mergeConfig(
     viteBaseConfig,
@@ -8,7 +8,6 @@ export default mergeConfig(
         test: {
             env: {
                 NODE_ENV: 'test',
-                YOUR_ENV_VAR: 'environment-variable',
             },
             unstubEnvs: true,
         },
