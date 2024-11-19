@@ -50,7 +50,7 @@
     "eslint-plugin-import": "^2.29.1",
     "nx": "19.8.3",
     "openapi-fetch": "^0.12.2",
-    "openapi-typescript": "^7.4.1",
+    "openapi-typescript": "^7.4.2",
     "prettier": "^2.8.8",
     "serverless": "^3.38.0",
     "serverless-esbuild": "^1.50.1",

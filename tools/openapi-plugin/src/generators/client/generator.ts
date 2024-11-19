@@ -59,7 +59,7 @@ export async function clientGenerator(
     await generateFiles(
         tree,
         joinPathFragments(__dirname, './files'),
-        `/clients/${name}`,
+        projectRoot,
         options
     );
 
@@ -111,7 +111,7 @@ async function getLocalSchema(rootDir: string, schemaPath: string) {
     } catch (e) {
         throw new Error(
             `Failed to generate local file at path ${rootDir}/${schemaPath} (did you mean to pass --remote?)` +
-                e
+            e
         );
     }
 }

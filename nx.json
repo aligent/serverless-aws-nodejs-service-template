@@ -1,8 +1,6 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "affected": {
-        "defaultBase": "origin/staging"
-    },
+    "defaultBase": "main",
     "generators": {
         "@aligent/openapi-plugin:client": {
             "brand": "brand-name"
@@ -18,9 +16,16 @@
     },
     "targetDefaults": {
         "build": {
-            "dependsOn": ["^build"],
-            "inputs": ["production", "^production"],
-            "outputs": ["{projectRoot}/.serverless"],
+            "dependsOn": [
+                "^build"
+            ],
+            "inputs": [
+                "production",
+                "^production"
+            ],
+            "outputs": [
+                "{projectRoot}/.serverless"
+            ],
             "cache": true
         },
         "check-types": {
@@ -35,12 +40,18 @@
             "cache": true
         },
         "test": {
-            "inputs": ["default", "^production"],
+            "inputs": [
+                "default",
+                "^production"
+            ],
             "cache": true
         }
     },
     "namedInputs": {
-        "default": ["{projectRoot}/**/*", "sharedGlobals"],
+        "default": [
+            "{projectRoot}/**/*",
+            "sharedGlobals"
+        ],
         "production": [
             "default",
             "!{projectRoot}/.eslintrc.json",
@@ -54,5 +65,13 @@
     "workspaceLayout": {
         "appsDir": "services",
         "libsDir": "libs"
-    }
+    },
+    "plugins": [
+        {
+            "plugin": "@nx/eslint/plugin",
+            "options": {
+                "targetName": "eslint:lint"
+            }
+        }
+    ]
 }
