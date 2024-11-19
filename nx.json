@@ -6,8 +6,8 @@
             "brand": "brand-name"
         },
         "@nx/js:library": {
-            "projectNameAndRootFormat": "derived",
             "bundler": "none",
+            "linter": "eslint",
             "unitTestRunner": "vitest"
         }
     },

@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
-      - run: npx nx g library test-lib --unitTestRunner=none
+      - run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
       - run: npx nx g service test-app
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
       - uses: nrwl/nx-set-shas@v4
