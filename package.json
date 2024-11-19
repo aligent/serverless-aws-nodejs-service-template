@@ -21,7 +21,7 @@
     "@aligent/ts-code-standards": "^1.4.1",
     "@nx/devkit": "20.0.6",
     "@nx/esbuild": "20.0.6",
-    "@nx/eslint": "^20.0.6",
+    "@nx/eslint": "20.0.6",
     "@nx/eslint-plugin": "20.0.6",
     "@nx/js": "20.0.6",
     "@nx/plugin": "20.0.6",
