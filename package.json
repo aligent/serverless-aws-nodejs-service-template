@@ -50,7 +50,7 @@
     "serverless-step-functions": "^3.21.0",
     "tslib": "^2.6.2",
     "tsx": "^4.17.0",
-    "typescript": "~5.3.3",
+    "typescript": "~5.5.4",
     "vite": "~4.5.3",
     "vite-tsconfig-paths": "~4.3.2",
     "vitest": "~0.34.6"
