@@ -31,15 +31,20 @@ node_modules
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+**/coverage
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
-.nx
 
 # System Files
 .DS_Store
 Thumbs.db
+
+# Nx cache
+.nx/cache
+.nx/workspace-data
+
+vite.config.*.timestamp*
 

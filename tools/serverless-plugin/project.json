@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "tools/serverless-plugin/src",
     "projectType": "application",
+    "tags": ["tools", "serverless", "plugin"],
     "targets": {
         "build": {
             "executor": "@nx/esbuild:esbuild",
@@ -14,35 +15,6 @@
                 "assets": ["tools/serverless-plugin/*.md"],
                 "generatePackageJson": true
             }
-        },
-        "check-types": {
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "{projectRoot}",
-                "color": true,
-                "command": "tsc --noEmit --pretty"
-            }
-        },
-        "lint": {
-            "executor": "@nx/linter:eslint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "tools/serverless-plugin/**/*.ts",
-                    "tools/serverless-plugin/generators.json",
-                    "tools/serverless-plugin/package.json"
-                ],
-                "maxWarnings": 0
-            }
-        },
-        "test": {
-            "executor": "@nx/vite:test",
-            "outputs": ["{options.reportsDirectory}"],
-            "options": {
-                "passWithNoTests": true,
-                "reportsDirectory": "../../coverage/tools/serverless-plugin"
-            }
         }
-    },
-    "tags": []
+    }
 }

@@ -1,10 +1,5 @@
-import {
-    addProjectConfiguration,
-    formatFiles,
-    generateFiles,
-    Tree,
-} from '@nx/devkit';
-import * as path from 'path';
+import { Tree, addProjectConfiguration, formatFiles, generateFiles } from '@nx/devkit';
+import path from 'path';
 import { serviceGeneratorSchema } from './schema';
 
 const buildRunCommandConfig = (command: string, dir = '{projectRoot}') => ({
@@ -16,9 +11,7 @@ const buildRunCommandConfig = (command: string, dir = '{projectRoot}') => ({
     },
 });
 
-const getTemplateFilesLocation = (
-    type: serviceGeneratorSchema['type'] = 'general'
-) => {
+const getTemplateFilesLocation = (type: serviceGeneratorSchema['type'] = 'general') => {
     if (type === 'notification') {
         return path.join(__dirname, 'notification-files');
     }
@@ -26,10 +19,7 @@ const getTemplateFilesLocation = (
     return path.join(__dirname, 'general-files');
 };
 
-export async function serviceGenerator(
-    tree: Tree,
-    options: serviceGeneratorSchema
-) {
+export async function serviceGenerator(tree: Tree, options: serviceGeneratorSchema) {
     const { name, type } = options;
     const projectRoot = `services/${name}`;
 
@@ -46,25 +36,6 @@ export async function serviceGenerator(
             },
             remove: {
                 ...buildRunCommandConfig('sls remove'),
-            },
-            'check-types': {
-                ...buildRunCommandConfig('tsc --noEmit --pretty'),
-            },
-            lint: {
-                executor: '@nx/linter:eslint',
-                outputs: ['{options.outputFile}'],
-                options: {
-                    lintFilePatterns: [projectRoot + '/**/*.ts'],
-                    maxWarnings: 0,
-                },
-            },
-            test: {
-                executor: '@nx/vite:test',
-                outputs: ['{options.reportsDirectory}'],
-                options: {
-                    passWithNoTests: true,
-                    reportsDirectory: `../../coverage/${projectRoot}`,
-                },
             },
         },
         tags: ['service', type, name],

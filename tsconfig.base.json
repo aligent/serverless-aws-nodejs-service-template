@@ -1,22 +1,14 @@
 {
-    "extends": ["@tsconfig/node20/tsconfig", "@tsconfig/strictest/tsconfig"],
+    "extends": "@aligent/ts-code-standards/tsconfigs-base",
     "compileOnSave": false,
     "compilerOptions": {
         "rootDir": ".",
-        "sourceMap": true,
-        "declaration": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "importHelpers": true,
-        "lib": ["es2022", "dom"],
-        "skipDefaultLibCheck": true,
         "baseUrl": ".",
+        "exactOptionalPropertyTypes": false,
+        "noUncheckedSideEffectImports": true,
         "paths": {
-            "@aligent/serverless-plugin": [
-                "tools/serverless-plugin/src/index.ts"
-            ]
+            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"]
         },
         "types": ["node", "vitest", "vitest/globals"]
-    },
-    "exclude": ["node_modules", "tmp"]
+    }
 }
