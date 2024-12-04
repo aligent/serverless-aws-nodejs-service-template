@@ -1,6 +1,6 @@
-/// <reference types="vitest" />
-import { defineConfig } from 'vite';
+/// <reference types="vitest/config" />
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+import { defineConfig } from 'vite';
 
 export const viteBaseConfig = defineConfig({
     plugins: [nxViteTsPaths()],
