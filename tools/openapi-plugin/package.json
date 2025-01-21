@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "type": "commonjs",
   "dependencies": {
-    "openapi-typescript": "^7.4.1",
+    "openapi-typescript": "^7.4.3",
     "@nx/devkit": "19.8.3",
-    "vitest": "2.0.0",
+    "@redocly/openapi-core": "^1.25.5",
     "tslib": "^2.6.2",
-    "@redocly/openapi-core": "^1.25.5"
+    "vitest": "2.0.0"
   },
   "generators": "./generators.json"
 }

@@ -1,4 +1,5 @@
 import {
+    TargetConfiguration,
     Tree,
     addProjectConfiguration,
     formatFiles,
@@ -9,7 +10,6 @@ import {
 import openapiTS, { astToString } from 'openapi-typescript';
 import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
-import { convertIntegerTypes } from './helpers/integer-transform';
 import { spawn } from 'child_process';
 
 export async function clientGenerator(
@@ -41,17 +41,23 @@ export async function clientGenerator(
     await validate(schemaPath);
     await copySchema(tree, name, schemaPath, remote);
 
+    const targetConfig: TargetConfiguration = {
+        executor: 'nx:run-commands',
+        options: {
+            command: `ts-node helpers/generate-openapi-types.ts -- ${JSON.stringify(tree)} ${options}`
+        }
+    }
+
     addProjectConfiguration(tree, name, {
         root: projectRoot,
         projectType: 'library',
         sourceRoot: `${projectRoot}/src`,
         targets: {
             // TODO: (MI-94) Add a target here to regenerate a client again. That build target should call openapi-typescript again and overwrite type files
+            'regenerate': targetConfig
         },
         tags: ['client', name],
     });
-
-    contents = convertIntegerTypes(contents);
 
     tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
