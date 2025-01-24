@@ -1,160 +1,98 @@
 import {
-  TargetConfiguration,
-  Tree,
-  addProjectConfiguration,
-  formatFiles,
-  generateFiles,
-  joinPathFragments,
-  updateJson,
+    Tree,
+    addProjectConfiguration,
+    formatFiles,
+    generateFiles,
+    joinPathFragments,
+    updateJson,
 } from '@nx/devkit';
 // import openapiTS, { astToString } from 'openapi-typescript';
-import { generateOpenApiTypes } from './helpers/generate-openapi-types';
+import { generateOpenApiTypes } from '../../helpers/generate-openapi-types';
 // import { loadConfig } from '@redocly/openapi-core';
 import { ClientGeneratorSchema } from './schema';
+import { prompt } from 'enquirer';
 // import { spawn } from 'child_process';
 
 export async function clientGenerator(
-  tree: Tree,
-  options: ClientGeneratorSchema
+    tree: Tree,
+    options: ClientGeneratorSchema
 ) {
-  const {
-    name,
-    schemaPath,
-    remote,
-    importPath = `@clients/${name}`,
-    configPath,
-  } = options;
+    const {
+        name,
+        schemaPath,
+        remote,
+        importPath = `@clients/${name}`,
+        configPath,
+    } = options;
 
-  // Parse schema into type definition
-  const contents = await generateOpenApiTypes(
-    tree,
-    name,
-    schemaPath,
-    remote,
-    configPath
-  );
+    const projectRoot = `clients/${name}`;
 
-  const targetConfig: TargetConfiguration = {
-    executor: 'nx:run-commands',
-    options: {
-      command: `ts-node helpers/generate-openapi-types.ts -- ${JSON.stringify(
-        tree
-      )} ${options}`,
-    },
-  };
+    let existingProject = false;
 
-  const projectRoot = `clients/${name}`;
+    // Add to project config. If project already exists then ask to overwrite existing types/schema
+    try {
+        addProjectConfiguration(tree, name, {
+            root: projectRoot,
+            projectType: 'library',
+            sourceRoot: `${projectRoot}/src`,
+            tags: ['client', name],
+        });
+    } catch (error) {
+        if (isExistingProject(error as Error)) {
+            existingProject = true;
+            const response = await confirmOverwrite(name);
+            if (!response.overwrite) {
+                console.log('Cancelling...');
+                return;
+            }
+        } else {
+            throw error;
+        }
+    }
 
-  addProjectConfiguration(tree, name, {
-    root: projectRoot,
-    projectType: 'library',
-    sourceRoot: `${projectRoot}/src`,
-    targets: {
-      // TODO: (MI-94) Add a target here to regenerate a client again. That build target should call openapi-typescript again and overwrite type files
-      regenerate: targetConfig,
-    },
-    tags: ['client', name],
-  });
+    // Generate types from schema
+    const contents = await generateOpenApiTypes(
+        tree,
+        name,
+        schemaPath,
+        remote,
+        configPath
+    );
 
-  tree.write(`${projectRoot}/types/index.d.ts`, contents);
+    tree.write(`${projectRoot}/types/index.d.ts`, contents);
 
-  // Complete generation
-  generateFiles(
-    tree,
-    joinPathFragments(__dirname, './files'),
-    projectRoot,
-    options
-  );
+    // Generate new files if the project is new
+    if (!existingProject) {
+        console.log('Generating supplementary files...');
 
-  // Add the project to the tsconfig paths so it can be imported by namespace
-  addTsConfigPath(tree, importPath, [
-    joinPathFragments(projectRoot, './src', 'index.ts'),
-  ]);
+        // Generate other files
+        generateFiles(
+            tree,
+            joinPathFragments(__dirname, './files'),
+            projectRoot,
+            options
+        );
 
-  await formatFiles(tree);
+        // Add the project to the tsconfig paths so it can be imported by namespace
+        addTsConfigPath(tree, importPath, [
+            joinPathFragments(projectRoot, './src', 'index.ts'),
+        ]);
+    }
+
+    await formatFiles(tree);
 }
 
-// /**
-//  * Gets the remote schema from an endpoint url. Uses configured authorization or passed in via the user
-//  * @param url Remote url to fetch the schema from
-//  * @param configPath The path to a local 'redocly' config file. This will be passed into the requests, mainly to specify auth details if required.
-//  * @returns a string representation of the remote schema
-//  */
-// async function getRemoteSchema(url: string, configPath?: string) {
-//   const parsed = new URL(url);
+function isExistingProject(error: Error): boolean {
+    return error.message.includes('already exists');
+}
 
-//   if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-//     throw new Error(`${parsed} is an invalid remote url.`);
-//   }
-
-//   if (configPath) {
-//     const config = await loadConfig({ configPath });
-//     console.log('Loaded Config: ', config);
-//     const ast = await openapiTS(new URL(url), {
-//       redocly: config,
-//     });
-//     return astToString(ast);
-//   } else {
-//     const ast = await openapiTS(new URL(url));
-//     return astToString(ast);
-//   }
-// }
-
-// /**
-//  * Grabs schema data from local directory. The schemaPath is evaluated relative to the root of the template project,
-//  * not the root of the generator.
-//  * @param rootDir Root directory of the project tree
-//  * @param schemaPath Path of the schema relative to the root of the entire project.
-//  * @returns a string representation of the schema contents.
-//  */
-// async function getLocalSchema(rootDir: string, schemaPath: string) {
-//   try {
-//     const ast = await openapiTS(`file:///${rootDir}/${schemaPath}`);
-//     return astToString(ast);
-//   } catch (e) {
-//     throw new Error(
-//       `Failed to generate local file at path ${rootDir}/${schemaPath} (did you mean to pass --remote?)` +
-//         e
-//     );
-//   }
-// }
-
-// async function copySchema(
-//   tree: Tree,
-//   name: string,
-//   schemaPath: string,
-//   remote?: boolean
-// ) {
-//   let schemaBuffer;
-//   if (remote) {
-//     const response = await fetch(schemaPath);
-//     schemaBuffer = Buffer.from(await response.arrayBuffer());
-//   } else {
-//     schemaBuffer = tree.read(schemaPath);
-//   }
-//   if (schemaBuffer) {
-//     tree.write(
-//       `clients/${name}/schema` + schemaPath.slice(-5), // Use last 5 characters to determine file type
-//       schemaBuffer
-//     );
-//   }
-// }
-
-// async function validate(schemaPath: string) {
-//   return new Promise((resolve, reject) => {
-//     const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
-//       stdio: ['pipe', 'inherit', 'inherit'],
-//     });
-
-//     child.on('close', (code) => {
-//       if (code === 0) {
-//         resolve(`Validation completed`);
-//       } else {
-//         reject(new Error(`Validation failed with code ${code}`));
-//       }
-//     });
-//   });
-// }
+async function confirmOverwrite(name: string): Promise<{ overwrite: boolean }> {
+    return await prompt({
+        type: 'confirm',
+        name: 'overwrite',
+        message: `Project ${name} already exists. Do you want to overwrite it?`,
+    });
+}
 
 /**
  * These utility functions are only exported by '@nx/js', not '@nx/devkit'
@@ -162,35 +100,35 @@ export async function clientGenerator(
  * Source: {@link https://github.com/nrwl/nx/blob/master/packages/js/src/utils/typescript/ts-config.ts}
  */
 export function getRootTsConfigPathInTree(tree: Tree): string {
-  for (const path of ['tsconfig.base.json', 'tsconfig.json']) {
-    if (tree.exists(path)) {
-      return path;
+    for (const path of ['tsconfig.base.json', 'tsconfig.json']) {
+        if (tree.exists(path)) {
+            return path;
+        }
     }
-  }
 
-  return 'tsconfig.base.json';
+    return 'tsconfig.base.json';
 }
 
 function addTsConfigPath(
-  tree: Tree,
-  importPath: string,
-  lookupPaths: string[]
+    tree: Tree,
+    importPath: string,
+    lookupPaths: string[]
 ) {
-  updateJson(tree, getRootTsConfigPathInTree(tree), (json) => {
-    json.compilerOptions ??= {};
-    const c = json.compilerOptions;
-    c.paths ??= {};
+    updateJson(tree, getRootTsConfigPathInTree(tree), (json) => {
+        json.compilerOptions ??= {};
+        const c = json.compilerOptions;
+        c.paths ??= {};
 
-    if (c.paths[importPath]) {
-      throw new Error(
-        `You already have a library using the import path "${importPath}". Make sure to specify a unique one.`
-      );
-    }
+        if (c.paths[importPath]) {
+            throw new Error(
+                `You already have a library using the import path "${importPath}". Make sure to specify a unique one.`
+            );
+        }
 
-    c.paths[importPath] = lookupPaths;
+        c.paths[importPath] = lookupPaths;
 
-    return json;
-  });
+        return json;
+    });
 }
 
 export default clientGenerator;

@@ -16,6 +16,7 @@
             "@aligent/serverless-plugin": [
                 "tools/serverless-plugin/src/index.ts"
             ],
+            "@clients/test": ["clients/test/src/index.ts"]
         },
         "types": ["node", "vitest", "vitest/globals"]
     },

@@ -4,6 +4,7 @@
   "type": "commonjs",
   "dependencies": {
     "openapi-typescript": "^7.4.3",
+    "enquirer": "^2.3.6",
     "@nx/devkit": "19.8.3",
     "@redocly/openapi-core": "^1.25.5",
     "tslib": "^2.6.2",
