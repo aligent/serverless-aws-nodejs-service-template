@@ -95,33 +95,46 @@ Below are some example of general Nx. commands. For more information, check out 
 
 The NPM packages in `devDependencies` in this repository has a complicated relationship with each other. Therefore, upgrading them should be handled with care.
 
-- All the `@nx` packages must be pinned at the same version with `nx` package to avoid conflict.
+1. Remove `node_modules` folder if it exist.
+2. Remove `package-lock.json` file.
+3. Up date packages version number follow the instruction below:
 
-  ```json
-    "@nx/devkit": "17.3.0",
-    "@nx/esbuild": "17.3.0",
-    "@nx/eslint": "17.3.0",
-    "@nx/eslint-plugin": "17.3.0",
-    "@nx/js": "17.3.0",
-    "@nx/plugin": "17.3.0",
-    "@nx/vite": "17.3.0",
-    "@nx/workspace": "17.3.0",
-    "nx": "17.3.0"
-  ```
+   - All the `@nx` packages must be pinned at the same version with `nx` package to avoid conflict.
 
-- All the packages that are in the same scope should be at the same version. For example:
+     ```json
+       "@nx/devkit": "17.3.0",
+       "@nx/esbuild": "17.3.0",
+       "@nx/eslint": "17.3.0",
+       "@nx/eslint-plugin": "17.3.0",
+       "@nx/js": "17.3.0",
+       "@nx/plugin": "17.3.0",
+       "@nx/vite": "17.3.0",
+       "@nx/workspace": "17.3.0",
+       "nx": "17.3.0"
+     ```
 
-  ```json
-    "@typescript-eslint/eslint-plugin": "^6.13.2",
-    "@typescript-eslint/parser": "^6.13.2",
-  ```
+   - All the packages that are in the same scope should be at the same version. For example:
 
-- `@nx/esbuild` lists `esbuild` as peerDependency. Double check the required version of `esbuild` in `package.json` of this [package](https://www.npmjs.com/package/@nx/esbuild?activeTab=code) before upgrading.
-- `eslint` and `prettier` are a peerDependencies of the following packages. Double check the required versions in `package.json` of these packages before upgrading.
-  - [@aligent/ts-code-standard](https://bitbucket.org/aligent/ts-code-standards/src/main/package.json)
-  - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import?activeTab=code)
-- `@nx/vite` lists `vite` and `vitest` as peerDependencies. Double check the required version of `vite` and `vitest` in `package.json` of this [package](https://www.npmjs.com/package/@nx/vite?activeTab=code) before upgrading.
-  - `vitest`, `@vitest/coverage-v8` and `@vitest/ui` should be at the same version.
+     ```json
+       "@typescript-eslint/eslint-plugin": "^6.13.2",
+       "@typescript-eslint/parser": "^6.13.2",
+     ```
+
+   - `@nx/esbuild` lists `esbuild` as peerDependency. Double check the required version of `esbuild` in `package.json` of this [package](https://www.npmjs.com/package/@nx/esbuild?activeTab=code) before upgrading.
+
+   - `eslint` and `prettier` are a peerDependencies of the following packages. Double check the required versions in `package.json` of these packages before upgrading.
+     - [@aligent/ts-code-standard](https://github.com/aligent/ts-code-standards/blob/main/package.json)
+     - [eslint-plugin-import](https://www.npmjs.com/package/eslint-plugin-import?activeTab=code)
+   - `@nx/vite` lists `vite` and `vitest` as peerDependencies. Double check the required version of `vite` and `vitest` in `package.json` of this [package](https://www.npmjs.com/package/@nx/vite?activeTab=code) before upgrading.
+   - `vitest`, `@vitest/coverage-v8` and `@vitest/ui` should be at the same version.
+
+4. Remove the three SWC packages (`@swc-node/register`, `@swc/core`, and `@swc/helpers`) from devDependencies. These packages are used by `@nx/js` package. However, there is no obvious way to find out which version of these packages are required. The best way to add them back is generating a share lib.
+
+5. Run `npm install` to install all the dependencies. This will re-generate `node_modules` and `package-lock.json`.
+
+6. Run `npx nx g library libs/test-lib --unitTestRunner=none` to add back the correct version of SWC packages that we removed in step 4 above.
+
+7. Clean up by removing the newly generated `test-lib` by running `npx nx g rm test-lib`.
 
 ## Under development
 
