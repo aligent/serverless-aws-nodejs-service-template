@@ -6,12 +6,13 @@ import {
     joinPathFragments,
     updateJson,
 } from '@nx/devkit';
-// import openapiTS, { astToString } from 'openapi-typescript';
-import { generateOpenApiTypes } from '../../helpers/generate-openapi-types';
-// import { loadConfig } from '@redocly/openapi-core';
+import {
+    validate,
+    generateOpenApiTypes,
+    copySchema,
+} from '../../helpers/generate-openapi-types';
 import { ClientGeneratorSchema } from './schema';
 import { prompt } from 'enquirer';
-// import { spawn } from 'child_process';
 
 export async function clientGenerator(
     tree: Tree,
@@ -50,14 +51,16 @@ export async function clientGenerator(
         }
     }
 
-    // Generate types from schema
+    await validate(schemaPath);
+
     const contents = await generateOpenApiTypes(
         tree,
-        name,
         schemaPath,
         remote,
         configPath
     );
+
+    await copySchema(tree, name, schemaPath, remote);
 
     tree.write(`${projectRoot}/types/index.d.ts`, contents);
 

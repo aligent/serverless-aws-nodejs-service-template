@@ -1,24 +1,20 @@
+// @ts-expect-error This is ignored because openapi-typescript has issues with CJS support. https://arethetypeswrong.github.io/?p=openapi-typescript%407.5.2
+import openapiTS, { astToString } from 'openapi-typescript';
+
 import { Tree } from '@nx/devkit';
-import openapiTS, { astToString } from 'openapi-typescript'; // eslint-ignore-line
 import { loadConfig } from '@redocly/openapi-core';
 import { spawn } from 'child_process';
 
 /**
  * Generates the open api types using openapi-typescript,
- * @param tree
- * @param options
- * @returns
+ * @returns Generated type contents
  */
 export async function generateOpenApiTypes(
     tree: Tree,
-    name: string,
     schemaPath: string,
     remote = false,
     configPath?: string
 ) {
-    // Validate the schema follows OpenAPI 3.0 Spec
-    await validate(schemaPath);
-
     // Parse schema into type definition
     let contents;
     if (remote) {
@@ -30,9 +26,6 @@ export async function generateOpenApiTypes(
         );
         contents = await getLocalSchema(tree.root, schemaPath);
     }
-
-    console.log('Copying schema...');
-    await copySchema(tree, name, schemaPath, remote);
 
     return contents;
 }
@@ -84,7 +77,10 @@ async function getLocalSchema(rootDir: string, schemaPath: string) {
     }
 }
 
-async function copySchema(
+/**
+ * Copies the original schema from the source to newly generated client
+ */
+export async function copySchema(
     tree: Tree,
     name: string,
     schemaPath: string,
@@ -105,7 +101,7 @@ async function copySchema(
     }
 }
 
-async function validate(schemaPath: string) {
+export async function validate(schemaPath: string) {
     return new Promise((resolve, reject) => {
         const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
             stdio: ['pipe', 'inherit', 'inherit'],
