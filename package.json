@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-sns": "^3.606.0",
-    "enquirer": "^2.4.1"
+    "enquirer": "^2.4.1",
+    "openapi-typescript": "^7.5.2"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
@@ -30,7 +31,7 @@
     "@nx/web": "19.8.3",
     "@nx/workspace": "19.8.3",
     "@redocly/cli": "^1.25.7",
-    "@redocly/openapi-core": "^1.25.5",
+    "@redocly/openapi-core": "^1.27.2",
     "@storybook/addon-interactions": "^8.2.8",
     "@swc-node/register": "1.9.2",
     "@swc/cli": "0.3.14",

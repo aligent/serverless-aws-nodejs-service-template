@@ -1,5 +1,5 @@
 import { Tree } from '@nx/devkit';
-import openapiTS, { astToString } from 'openapi-typescript';
+import openapiTS, { astToString } from 'openapi-typescript'; // eslint-ignore-line
 import { loadConfig } from '@redocly/openapi-core';
 import { spawn } from 'child_process';
 
