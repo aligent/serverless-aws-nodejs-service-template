@@ -6,7 +6,7 @@ The openapi-plugin can create api clients based on local or remote schema files.
 
 ## Usage
 
-### Running
+### Generating a new client
 
 To build a new client in the clients folder:
 
@@ -21,6 +21,9 @@ Run `nx g client` with optional flags:
 - --configPath path to the redocly config file responsible for auth. For more information: https://openapi-ts.dev/cli#auth.
 - --remote Specify whether you would like to fetch remotely.
 
+### Regenerating types for an existing client
+
+To regenerate an existing client run the same generator command again (as above). If the client already exists in the Nx project, after confirmation it will have its types file regenerated from either the provided. 
 ### Building
 
 Run `nx build openapi-plugin` to build the library.
