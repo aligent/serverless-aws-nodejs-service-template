@@ -1,7 +1,7 @@
-const { eslintConfigs } = require('@aligent/ts-code-standards');
-const eslintPluginImport = require('eslint-plugin-import');
-const jsonParser = require('jsonc-eslint-parser');
-const nxEslintPlugin = require('@nx/eslint-plugin');
+import { eslintConfigs } from '@aligent/ts-code-standards';
+import nxEslintPlugin from '@nx/eslint-plugin';
+import eslintPluginImport from 'eslint-plugin-import';
+import jsonParser from 'jsonc-eslint-parser';
 
 const eslintBaseConfig = [
     ...eslintConfigs.core,
@@ -45,4 +45,4 @@ const eslintBaseConfig = [
     },
 ];
 
-module.exports = eslintBaseConfig;
+export default eslintBaseConfig;

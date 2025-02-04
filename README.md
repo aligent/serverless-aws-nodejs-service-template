@@ -8,11 +8,13 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 ### Setup
 
-1. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
+1. Install `yarn` package manager following their [instruction](https://yarnpkg.com/getting-started/install)
 
-2. Update brand name in `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
+2. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
 
-3. Install dependencies: `npm ci`
+3. Update brand name in `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
+
+4. Install dependencies: `yarn install --immutable`
 
 ### Working with services
 
@@ -92,6 +94,12 @@ Below are some example of general Nx. commands. For more information, check out 
 ## Maintenance
 
 ### Upgrading NPM packages
+
+#### Using Nx migration tool
+
+Nx provides a [tool for automatically upgrading NPM packages](https://nx.dev/features/automate-updating-dependencies). We can leverage the tool but also need to double check as this tool may add or remove files that are not relevant to our workspace.
+
+#### Manual
 
 The NPM packages in `devDependencies` in this repository has a complicated relationship with each other. Therefore, upgrading them should be handled with care.
 

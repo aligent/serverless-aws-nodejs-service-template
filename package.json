@@ -19,15 +19,15 @@
   "devDependencies": {
     "@aligent/serverless-conventions": "^1.0.0",
     "@aligent/ts-code-standards": "^2.0.2",
-    "@nx/devkit": "20.3.3",
-    "@nx/esbuild": "20.3.3",
-    "@nx/eslint": "20.3.3",
-    "@nx/eslint-plugin": "20.3.3",
-    "@nx/js": "20.3.3",
-    "@nx/plugin": "20.3.3",
-    "@nx/vite": "20.3.3",
-    "@nx/web": "20.3.3",
-    "@nx/workspace": "20.3.3",
+    "@nx/devkit": "20.4.0",
+    "@nx/esbuild": "20.4.0",
+    "@nx/eslint": "20.4.0",
+    "@nx/eslint-plugin": "20.4.0",
+    "@nx/js": "20.4.0",
+    "@nx/plugin": "20.4.0",
+    "@nx/vite": "20.4.0",
+    "@nx/web": "20.4.0",
+    "@nx/workspace": "20.4.0",
     "@swc-node/register": "~1.9.1",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
@@ -38,7 +38,7 @@
     "esbuild": "~0.19.2",
     "eslint": "^9.19.0",
     "eslint-plugin-import": "^2.31.0",
-    "nx": "20.3.3",
+    "nx": "20.4.0",
     "prettier": "^3.4.2",
     "serverless": "^3.38.0",
     "serverless-esbuild": "^1.54.6",
@@ -49,9 +49,10 @@
     "vitest": "^2.1.8"
   },
   "engines": {
-    "npm": ">=10.0.0",
-    "node": "^20.18.0"
+    "node": "^20.18.0",
+    "yarn": "^4.6.0"
   },
+  "packageManager": "yarn@4.6.0",
   "author": "Aligent Consulting",
   "license": "MIT"
 }
