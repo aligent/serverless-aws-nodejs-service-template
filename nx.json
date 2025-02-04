@@ -55,8 +55,19 @@
                 "testTargetName": "test",
                 "typecheckTargetName": "check-types"
             }
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "check-types"
+                }
+            }
         }
     ],
+    "sync": {
+        "disabledTaskSyncGenerators": ["@nx/js:typescript-sync"]
+    },
     "workspaceLayout": {
         "appsDir": "services",
         "libsDir": "libs"
