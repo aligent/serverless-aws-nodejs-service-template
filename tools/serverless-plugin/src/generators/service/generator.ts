@@ -44,6 +44,7 @@ export async function serviceGenerator(tree: Tree, options: serviceGeneratorSche
     const templateFilesLocation = getTemplateFilesLocation(type);
 
     generateFiles(tree, templateFilesLocation, projectRoot, options);
+
     await formatFiles(tree);
 }
 
