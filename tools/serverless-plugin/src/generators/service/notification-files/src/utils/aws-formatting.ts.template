@@ -1,8 +1,17 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { NotifyError } from '../../types/notify-error';
 
+dayjs.extend(utc);
+
+const LOGS_INSIGHTS_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
+
 /**
- * Extracts the name from an AWS Step Functions execution ARN
+ * Extracts the name from an AWS Step Functions or Lambda execution ARN
  * It assumes that the arn is always in the correct format
+ * For example:
+ * The Step Functions execution ARN format is: arn:aws:states:region:account_id:execution:state_machine_name:execution_name
+ * The Lambda execution ARN format is: arn:aws:lambda:region:account_id:function:function_name
  *
  * @param {string} arn - The AWS Step Functions execution ARN.
  * @returns {string} The extracted name from the execution ARN.
@@ -10,10 +19,15 @@ import { NotifyError } from '../../types/notify-error';
  */
 export function extractNameFromExecutionArn(arn: string) {
     const parts = arn.split(':');
-    const name = parts[6];
+    let name = parts[6];
 
     if (!name) {
         throw new Error('Invalid execution ARN');
+    }
+
+    // If it's a Step Function execution ARN, we want to include execution name
+    if (parts.length === 8) {
+        name += `: ${parts[7]}`;
     }
 
     return name;
@@ -22,27 +36,55 @@ export function extractNameFromExecutionArn(arn: string) {
 /**
  * Extracts the name from a resource name string.
  * It assumes our resource name is in the correct format
- * Eg: brand-int-service-name-stage-resourceName
+ * For example:
+ * Lambda resource name format is: brand-int-service-name-stage-lambdaName
+ * Step function resource name format is: brand-int-service-name-stage-stepFunctionName:994ee932-8e5f-f59f-5619-ebdefd8af815_087eb4a0-92a4-30d2-eea4-c078e9b9e5fa
  *
  * @param {string} resourceName - The resource name string.
  * @returns {string} The extracted name from the resource name.
  */
 export function extractNameFromResourceName(resourceName: string) {
+    // Only Step Function resource name contains : character.
+    if (resourceName.includes(':')) {
+        const [stateMachineName, executionName] = resourceName.split(':');
+
+        // This is a scheduled execution, we will use the state machine name instead
+        resourceName = (executionName?.includes('_') ? stateMachineName : executionName) as string;
+    }
+
     return resourceName.split('-').pop() as string;
 }
 
-function generateCloudWatchUrl(region: string, logGroupName?: string) {
-    const logGroupsUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:log-groups`;
+function generateCloudWatchInsightUrl(
+    region: string,
+    logGroupName: string,
+    requestId: string,
+    currentTime = new Date()
+) {
+    const logInsightUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:logs-insights`;
 
-    if (!logGroupName) {
-        return logGroupsUrl;
-    }
+    const encodedLogGroupName = encodeURIComponent(encodeURIComponent(`/${logGroupName}`)).replace(
+        /%/g,
+        '$'
+    );
 
-    const encodedLogGroupName = encodeURIComponent(
-        encodeURIComponent(logGroupName)
-    ).replace(/%/g, '$');
+    const end = `end~'${dayjs
+        .utc(currentTime)
+        .add(10, 'minutes')
+        .format(LOGS_INSIGHTS_TIME_FORMAT)}`;
 
-    return `${logGroupsUrl}/log-group/${encodedLogGroupName}`;
+    const start = `start~'${dayjs
+        .utc(currentTime)
+        .subtract(10, 'minutes')
+        .format(LOGS_INSIGHTS_TIME_FORMAT)}`;
+
+    const query = encodeURIComponent(
+        `fields @timestamp, @message | filter @requestId = "${requestId}" | sort @timestamp desc`
+    ).replace(/%/g, '*');
+
+    const queryDetail = `~(${end}~${start}~timeType~'ABSOLUTE~tz~'UTC~editorString~'${query}~queryId~'~source~(~'${encodedLogGroupName})~lang~'CWLI)`;
+
+    return `${logInsightUrl}?queryDetail=${queryDetail}`;
 }
 
 function generateStepFunctionUrl(region: string, executionArn: string) {
@@ -58,15 +100,16 @@ function generateStepFunctionUrl(region: string, executionArn: string) {
  * @throws {Error} If the required parameters are missing for the specified source.
  */
 export function generateChatbotNextSteps(input: NotifyError.NextStepsInput) {
-    const { source, region, executionArn, logGroupName } = input;
+    const { source, region, executionArn, logGroupName, requestId } = input;
     const steps: string[] = [];
 
     if (source === 'aws.lambda') {
         steps.push(
-            `Check the <${generateCloudWatchUrl(
+            `Check the <${generateCloudWatchInsightUrl(
                 region,
-                logGroupName
-            )}|*CloudWatch Logs*> for more details.`
+                logGroupName as string,
+                requestId as string
+            )}|*CloudWatch Insight*> for more details.`
         );
     }
 

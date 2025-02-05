@@ -14,8 +14,9 @@ The system consists of the following components:
 
 ## Setup
 
+- When posting to Slack, due to security restrictions, we do not deploy Amazon SNS & subscribe it ourselves. We will need to ask DevOps to set it up. As a result, we import the SNS arn via SSM.
 - This service exports a Lambda Arn named as the endpoint for receiving notification. Other services can import it by: `!ImportValue: ErrorNotificationLambdaFunction-${self:provider.stage}`
-- Since other services depends on this service exported value, we will need to tell Nx about this dependency by adding `implicitDependencies` & ``dependsOn` to the service `project.json` like so:
+- Since other services depends on this service exported value, we will need to tell Nx about this dependency by adding `implicitDependencies` & `dependsOn` to the service `project.json` like so:
 
 ```json
 {

@@ -14,20 +14,29 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
     console.log('Lambda event: ', JSON.stringify(event));
     try {
         const { source, region, detail } = event;
-        const { executionArn, logGroupName, cause } = detail;
+        const { executionArn, logGroupName, requestId, error, cause } = detail;
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
 
-        const { errorType, errorMessage } = JSON.parse(
-            cause
-        ) as NotifyError.Cause;
+        const errorType = error || 'Unknown Error';
+        let errorMessage = cause || 'Unknown Cause';
+
+        try {
+            const causeObject = JSON.parse(cause || '{}') as NotifyError.Cause;
+            errorMessage = causeObject.errorMessage || errorMessage;
+        } catch (error) {
+            console.warn('Error parsing cause, using as literal string: ', {
+                error,
+            });
+        }
 
         const nextSteps = generateChatbotNextSteps({
             source,
             region,
             logGroupName,
             executionArn,
+            requestId,
         });
 
         const message: NotifyError.Message = {

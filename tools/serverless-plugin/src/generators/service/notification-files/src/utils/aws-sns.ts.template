@@ -33,10 +33,7 @@ export class AmazonSNS {
      * @param {string} message - The message to send
      * @returns {Promise<PublishCommandOutput>}
      */
-    async publish(
-        subject: string,
-        message: string
-    ): Promise<PublishCommandOutput> {
+    async publish(subject: string, message: string): Promise<PublishCommandOutput> {
         const input: PublishCommandInput = {
             TopicArn: this.topicArn,
             Subject: subject,
