@@ -101,7 +101,7 @@ export async function copySchema(
     }
 }
 
-export async function validate(schemaPath: string) {
+export async function validateSchema(schemaPath: string) {
     return new Promise((resolve, reject) => {
         const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
             stdio: ['pipe', 'inherit', 'inherit'],

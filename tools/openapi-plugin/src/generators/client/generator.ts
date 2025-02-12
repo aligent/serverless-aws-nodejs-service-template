@@ -7,7 +7,7 @@ import {
     updateJson,
 } from '@nx/devkit';
 import {
-    validate,
+    validateSchema,
     generateOpenApiTypes,
     copySchema,
 } from '../../helpers/generate-openapi-types';
@@ -24,6 +24,7 @@ export async function clientGenerator(
         remote,
         importPath = `@clients/${name}`,
         configPath,
+        validate,
     } = options;
 
     const projectRoot = `clients/${name}`;
@@ -36,6 +37,17 @@ export async function clientGenerator(
             root: projectRoot,
             projectType: 'library',
             sourceRoot: `${projectRoot}/src`,
+            targets: {
+                validate: {
+                    executor: 'nx:run-commands',
+                    options: {
+                        cwd: projectRoot,
+                        command:
+                            'npx @redocly/cli lint schema' +
+                            schemaPath.slice(-5),
+                    },
+                },
+            },
             tags: ['client', name],
         });
     } catch (error) {
@@ -51,7 +63,9 @@ export async function clientGenerator(
         }
     }
 
-    await validate(schemaPath);
+    if (validate) {
+        await validateSchema(schemaPath);
+    }
 
     const contents = await generateOpenApiTypes(
         tree,

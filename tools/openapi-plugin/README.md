@@ -16,10 +16,12 @@ To build a new client in the clients folder:
 To build with flags (without needing to prompt):
 Run `nx g client` with optional flags:
 
-- --name Name of the api client.
-- --schemaPath Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.
-- --configPath path to the redocly config file responsible for auth. For more information: https://openapi-ts.dev/cli#auth.
-- --remote Specify whether you would like to fetch remotely.
+- `--validate` **Recommended**. If passed, this will pre-validate the schema file and only generate the client if the given file is a valid schema. 
+- `--name` Name of the api client.
+- `--schemaPath` Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.
+- `--remote` Specify whether you would like to fetch remotely.
+- `--configPath` path to the redocly config file responsible for authentication when fetching a schema remotely. For more information: https://openapi-ts.dev/cli#auth.
+
 
 ### Regenerating types for an existing client
 
@@ -52,3 +54,11 @@ graph LR;
   W-->NX[Nx generator uses tree to build directory];
   NX-->C[Cleanup];
 ```
+
+## What gets generated?
+The generator will generate two main things:
+
+A `types` file that will contain several typescript interfaces depending on the OpenAPI schema specification it was passed:
+- `paths`: Defines the routes that the API has as well as what parameters you can pass into them and what you should expect in return. [More information](https://swagger.io/docs/specification/v3_0/paths-and-operations/#paths)
+- `operations`: The defined operations that can be performed on a given path. [More information.](https://swagger.io/docs/specification/v3_0/paths-and-operations/#operations)
+- `components`: A way of avoid duplication when paths or operations contain the same structure in their responses. Components define a structure that is used multiple time throughout the API. [More information.](https://swagger.io/docs/specification/v3_0/components/)
