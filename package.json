@@ -48,8 +48,8 @@
     "vitest": "^2.0.0"
   },
   "engines": {
-    "npm": ">=9.0.0",
-    "node": "^20.13.0"
+    "npm": ">=10.8.2",
+    "node": "^20.18.0"
   },
   "author": "Aligent Consulting",
   "license": "MIT"
