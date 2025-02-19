@@ -24,7 +24,7 @@ definitions:
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
-          - pipe: docker://aligent/nx-serverless-deploy-pipe:20-alpine
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:20
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
