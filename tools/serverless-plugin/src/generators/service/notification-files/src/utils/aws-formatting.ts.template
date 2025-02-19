@@ -63,7 +63,7 @@ function generateCloudWatchInsightUrl(
 ) {
     const logInsightUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:logs-insights`;
 
-    const encodedLogGroupName = encodeURIComponent(encodeURIComponent(`/${logGroupName}`)).replace(
+    const encodedLogGroupName = encodeURIComponent(encodeURIComponent(logGroupName)).replace(
         /%/g,
         '$'
     );
@@ -79,7 +79,7 @@ function generateCloudWatchInsightUrl(
         .format(LOGS_INSIGHTS_TIME_FORMAT)}`;
 
     const query = encodeURIComponent(
-        `fields @timestamp, @message | filter @requestId = "${requestId}" | sort @timestamp desc`
+        `fields @timestamp, @message, @logStream | filter @requestId = "${requestId}" | sort @timestamp asc`
     ).replace(/%/g, '*');
 
     const queryDetail = `~(${end}~${start}~timeType~'ABSOLUTE~tz~'UTC~editorString~'${query}~queryId~'~source~(~'${encodedLogGroupName})~lang~'CWLI)`;
@@ -92,14 +92,18 @@ function generateStepFunctionUrl(region: string, executionArn: string) {
 }
 
 /**
- * Generates a list of AWS Chatbot custom message nextSteps.
- * For more information, please check https://docs.aws.amazon.com/chatbot/latest/adminguide/custom-notifs.html#event-schema
+ * Generates a list of AWS Chatbot custom additional steps.
+ * These steps can be used in custom message `nextStep` or merge with the description.
+ * Note:
+ * * Description is limited to 8000 characters
+ * * Each individual nextStep is limited to 350 characters
+ * * For more information, please check https://docs.aws.amazon.com/chatbot/latest/adminguide/custom-notifs.html
  *
  * @param {NotifyError.NextStepsInput} input - The input object containing the source, region, executionArn, and logGroupName.
  * @returns {string[]} An array of strings representing the next steps.
  * @throws {Error} If the required parameters are missing for the specified source.
  */
-export function generateChatbotNextSteps(input: NotifyError.NextStepsInput) {
+export function generateAdditionalSteps(input: NotifyError.NextStepsInput) {
     const { source, region, executionArn, logGroupName, requestId } = input;
     const steps: string[] = [];
 

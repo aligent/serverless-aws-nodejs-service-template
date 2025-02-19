@@ -1,15 +1,19 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import {
     extractNameFromExecutionArn,
     extractNameFromResourceName,
-    generateChatbotNextSteps,
+    generateAdditionalSteps,
 } from '../src/utils/aws-formatting';
 import { NotifyError } from '../types/notify-error';
+
+dayjs.extend(utc);
 
 describe('extractNameFromExecutionArn', () => {
     it('should extract the name from a valid execution ARN', () => {
         const arn =
             'arn:aws:states:ap-southeast-2:123456789012:execution:my-state-machine:my-execution-name';
-        const expectedName = 'my-state-machine';
+        const expectedName = 'my-state-machine: my-execution-name';
 
         const result = extractNameFromExecutionArn(arn);
 
@@ -77,39 +81,38 @@ describe('extractNameFromResourceName', () => {
 
         expect(result).toBe(expectedName);
     });
+
+    it('should handle scheduled step function execution name correctly', () => {
+        const resourceName = 'my-stateMachine:my-execution-name_execution-uuid';
+        const expectedName = 'stateMachine';
+
+        const result = extractNameFromResourceName(resourceName);
+
+        expect(result).toBe(expectedName);
+    });
 });
 
 describe('generateChatbotNextSteps', () => {
-    it('should generate a CloudWatch Log Groups URL if source is aws.lambda but logGroupName is missing', () => {
+    it('should generate a CloudWatch Insight URL if source is aws.lambda', () => {
+        const fakeDate = dayjs.utc('2024-12-12T10:30:00.000Z').toDate();
+        vi.useFakeTimers().setSystemTime(fakeDate);
+
         const input: NotifyError.NextStepsInput = {
             source: 'aws.lambda',
             region: 'ap-southeast-2',
             executionArn: 'my-execution-arn',
-            logGroupName: undefined,
+            logGroupName: '/aws/lambda/my-log-group',
+            requestId: '344c9ae5-adf7-4ccb-b5ae-ab7a8cbee698',
         };
 
         const expected = [
-            'Check the <https://ap-southeast-2.console.aws.amazon.com/cloudwatch/home?region=ap-southeast-2#logsV2:log-groups|*CloudWatch Logs*> for more details.',
+            `Check the <https://ap-southeast-2.console.aws.amazon.com/cloudwatch/home?region=ap-southeast-2#logsV2:logs-insights?queryDetail=~(end~'2024-12-12T10:40:00.000Z~start~'2024-12-12T10:20:00.000Z~timeType~'ABSOLUTE~tz~'UTC~editorString~'fields*20*40timestamp*2C*20*40message*2C*20*40logStream*20*7C*20filter*20*40requestId*20*3D*20*22344c9ae5-adf7-4ccb-b5ae-ab7a8cbee698*22*20*7C*20sort*20*40timestamp*20asc~queryId~'~source~(~'$252Faws$252Flambda$252Fmy-log-group)~lang~'CWLI)|*CloudWatch Insight*> for more details.`,
         ];
 
-        const result = generateChatbotNextSteps(input);
+        const result = generateAdditionalSteps(input);
         expect(result).toEqual(expected);
-    });
 
-    it('should generate a CloudWatch Logs URL if source is aws.lambda', () => {
-        const input: NotifyError.NextStepsInput = {
-            source: 'aws.lambda',
-            region: 'ap-southeast-2',
-            executionArn: 'my-execution-arn',
-            logGroupName: 'aws/lambda/my-log-group',
-        };
-
-        const expected = [
-            'Check the <https://ap-southeast-2.console.aws.amazon.com/cloudwatch/home?region=ap-southeast-2#logsV2:log-groups/log-group/aws$252Flambda$252Fmy-log-group|*CloudWatch Logs*> for more details.',
-        ];
-
-        const result = generateChatbotNextSteps(input);
-        expect(result).toEqual(expected);
+        vi.useRealTimers();
     });
 
     it('should generate a Step Functions URL if source is aws.states', () => {
@@ -118,13 +121,14 @@ describe('generateChatbotNextSteps', () => {
             region: 'ap-southeast-2',
             executionArn: 'my-execution-arn',
             logGroupName: undefined,
+            requestId: undefined,
         };
 
         const expected = [
             'Check the <https://ap-southeast-2.console.aws.amazon.com/states/home?region=ap-southeast-2#/v2/executions/details/my-execution-arn|*Step Functions execution*> for more details.',
         ];
 
-        const result = generateChatbotNextSteps(input);
+        const result = generateAdditionalSteps(input);
         expect(result).toEqual(expected);
     });
 });

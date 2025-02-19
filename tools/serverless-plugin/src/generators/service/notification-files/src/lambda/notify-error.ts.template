@@ -4,7 +4,7 @@ import type { NotifyError } from '../../types/notify-error';
 import {
     extractNameFromExecutionArn,
     extractNameFromResourceName,
-    generateChatbotNextSteps,
+    generateAdditionalSteps,
 } from '../utils/aws-formatting';
 import { AmazonSNS } from '../utils/aws-sns';
 
@@ -31,13 +31,15 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
             });
         }
 
-        const nextSteps = generateChatbotNextSteps({
+        const steps = generateAdditionalSteps({
             source,
             region,
-            logGroupName,
             executionArn,
+            logGroupName,
             requestId,
         });
+
+        const description = [`[${errorType}] ${errorMessage}`].concat(steps);
 
         const message: NotifyError.Message = {
             version: '1.0',
@@ -45,8 +47,7 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
             content: {
                 textType: 'client-markdown',
                 title: `${event.detail.status}: ${name}`,
-                description: `${name} service encountered an error: [${errorType}] ${errorMessage}`,
-                nextSteps,
+                description: description.join('\n• '),
             },
         };
 
