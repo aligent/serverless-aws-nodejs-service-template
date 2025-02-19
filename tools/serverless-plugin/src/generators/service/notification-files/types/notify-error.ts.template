@@ -10,10 +10,11 @@ export namespace NotifyError {
         detail: {
             executionArn: string;
             logGroupName?: string;
+            requestId?: string;
             name: string;
             status: string;
-            error: string;
-            cause: string;
+            error?: string;
+            cause?: string;
         };
     };
 
@@ -24,6 +25,7 @@ export namespace NotifyError {
         region: string;
         executionArn: string;
         logGroupName: string | undefined;
+        requestId: string | undefined;
     };
 
     export type Cause = {
