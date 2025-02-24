@@ -18,7 +18,6 @@ export const viteBaseConfig = defineConfig({
         globals: true,
         watch: false,
         environment: 'node',
-        passWithNoTests: true,
         reporters: ['default'],
         coverage: {
             provider: 'v8',
