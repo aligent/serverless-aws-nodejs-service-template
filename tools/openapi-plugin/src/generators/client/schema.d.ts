@@ -4,5 +4,5 @@ export interface ClientGeneratorSchema {
     remote?: boolean;
     configPath?: string;
     importPath?: string;
-    validate?: boolean;
+    skipValidate?: boolean;
 }

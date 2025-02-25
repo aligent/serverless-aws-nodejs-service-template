@@ -24,7 +24,7 @@ export async function clientGenerator(
         remote,
         importPath = `@clients/${name}`,
         configPath,
-        validate,
+        skipValidate = false,
     } = options;
 
     const projectRoot = `clients/${name}`;
@@ -63,7 +63,7 @@ export async function clientGenerator(
         }
     }
 
-    if (validate) {
+    if (!skipValidate) {
         await validateSchema(schemaPath);
     }
 
@@ -76,7 +76,7 @@ export async function clientGenerator(
 
     await copySchema(tree, name, schemaPath, remote);
 
-    tree.write(`${projectRoot}/types/index.d.ts`, contents);
+    tree.write(`${projectRoot}/generated/index.ts`, contents);
 
     // Generate new files if the project is new
     if (!existingProject) {

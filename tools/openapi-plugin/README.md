@@ -16,16 +16,20 @@ To build a new client in the clients folder:
 To build with flags (without needing to prompt):
 Run `nx g client` with optional flags:
 
-- `--validate` **Recommended**. If passed, this will pre-validate the schema file and only generate the client if the given file is a valid schema. 
 - `--name` Name of the api client.
 - `--schemaPath` Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.
 - `--remote` Specify whether you would like to fetch remotely.
 - `--configPath` path to the redocly config file responsible for authentication when fetching a schema remotely. For more information: https://openapi-ts.dev/cli#auth.
+- `--skipValidate` If passed, this will skip schema pre-validation. Only do this if you have good reason to - not validating the schema beforehand may produce unpredictable results (either things may not generate at all or they may generate something that is incorrect). 
 
+**Do not edit the files in the `/generated` folder after generating a client. These files are generated using the OpenAPI Schema and editing them may put you at risk of no longer conforming to the specifications of the API you are using!**
 
 ### Regenerating types for an existing client
 
-To regenerate an existing client run the same generator command again (as above). If the client already exists in the Nx project, after confirmation it will have its types file regenerated from either the provided. 
+To regenerate an existing client run the same generator command again (as above). If the client already exists in the Nx project, after confirmation it will have its types file regenerated from the either the existing schema or a newly provided one. 
+
+## Development
+
 ### Building
 
 Run `nx build openapi-plugin` to build the library.
@@ -34,7 +38,7 @@ Run `nx build openapi-plugin` to build the library.
 
 Run `nx test openapi-plugin` to execute the unit tests.
 
-## Development
+### Details
 
 The plugin was created following the standards for Nx custom plugins. It contains a single `generator.ts` file which is responsible for the main logic behind generating the client.
 For more information on client generation check [Nx plugin documentation]()

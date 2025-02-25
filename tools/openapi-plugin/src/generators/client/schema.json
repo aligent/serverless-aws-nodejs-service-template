@@ -34,9 +34,9 @@
             "type": "string",
             "description": "The package name used to import the client, like @myorg/my-awesome-client. Defaults to @clients/{name} if not supplied"
         },
-        "validate": {
+        "skipValidate": {
             "type": "boolean",
-            "description": "Include validation in the generation process"
+            "description": "Skip validation in the generation process"
         }
     },
     "required": ["name", "schemaPath"]
