@@ -1,5 +1,5 @@
 // The following is an example file generated to demonstrate how to use your newly generated types
-import { paths } from '../types';
+import { paths } from '../generated';
 import createClient from 'openapi-fetch';
 
 // This type is initialised using the types generated in the paths interface which is created when generation occurs.
