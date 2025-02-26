@@ -20,13 +20,13 @@ Run `nx g client` with optional flags:
 - `--schemaPath` Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.
 - `--remote` Specify whether you would like to fetch remotely.
 - `--configPath` path to the redocly config file responsible for authentication when fetching a schema remotely. For more information: https://openapi-ts.dev/cli#auth.
-- `--skipValidate` If passed, this will skip schema pre-validation. Only do this if you have good reason to - not validating the schema beforehand may produce unpredictable results (either things may not generate at all or they may generate something that is incorrect). 
+- `--skipValidate` If passed, this will skip schema pre-validation. Only do this if you have good reason to - not validating the schema beforehand may produce unpredictable results (either things may not generate at all or they may generate something that is incorrect).
 
 **Do not edit the files in the `/generated` folder after generating a client. These files are generated using the OpenAPI Schema and editing them may put you at risk of no longer conforming to the specifications of the API you are using!**
 
 ### Regenerating types for an existing client
 
-To regenerate an existing client run the same generator command again (as above). If the client already exists in the Nx project, after confirmation it will have its types file regenerated from the either the existing schema or a newly provided one. 
+To regenerate an existing client run the same generator command again (as above). If the client already exists in the Nx project, after confirmation it will have its types file regenerated from either the existing schema or a newly provided one.
 
 ## Development
 
@@ -60,9 +60,11 @@ graph LR;
 ```
 
 ## What gets generated?
+
 The generator will generate two main things:
 
 A `types` file that will contain several typescript interfaces depending on the OpenAPI schema specification it was passed:
+
 - `paths`: Defines the routes that the API has as well as what parameters you can pass into them and what you should expect in return. [More information](https://swagger.io/docs/specification/v3_0/paths-and-operations/#paths)
 - `operations`: The defined operations that can be performed on a given path. [More information.](https://swagger.io/docs/specification/v3_0/paths-and-operations/#operations)
 - `components`: A way of avoid duplication when paths or operations contain the same structure in their responses. Components define a structure that is used multiple time throughout the API. [More information.](https://swagger.io/docs/specification/v3_0/components/)
