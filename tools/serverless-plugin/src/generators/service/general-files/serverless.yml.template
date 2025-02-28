@@ -3,16 +3,17 @@ service: <%= brand %>-<%= name %>
 configValidationMode: error
 
 package:
+  individually: true
   patterns:
-    - src/
+    - src/**/*.js
+    - src/**/*.js.map
 
 custom:
   esbuild:
     bundle: true
     minify: true
     sourcemap: true
-    exclude:
-      - '@aws-sdk'
+    sourcesContent: false
 
 plugins:
   - '@aligent/serverless-conventions'
@@ -25,6 +26,9 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
   memorySize: 192 #mb (default for all)
+  tracing:
+    apiGateway: true
+    lambda: true
   environment:
     NODE_OPTIONS: --enable-source-maps
 
@@ -39,6 +43,8 @@ stepFunctions:
   stateMachines:
     helloWorld:
       name: ${self:service}-${self:provider.stage}-helloWorld
+      tracingConfig:
+        enabled: true
       definition:
         StartAt: Hello
         States:

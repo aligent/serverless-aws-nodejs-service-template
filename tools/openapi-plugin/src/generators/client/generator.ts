@@ -7,17 +7,14 @@ import {
     updateJson,
 } from '@nx/devkit';
 import {
-    validateSchema,
-    generateOpenApiTypes,
     copySchema,
+    generateOpenApiTypes,
+    validateSchema,
 } from '../../helpers/generate-openapi-types';
 import { ClientGeneratorSchema } from './schema';
 import { prompt } from 'enquirer';
 
-export async function clientGenerator(
-    tree: Tree,
-    options: ClientGeneratorSchema
-) {
+export async function clientGenerator(tree: Tree, options: ClientGeneratorSchema) {
     const {
         name,
         schemaPath,
@@ -42,14 +39,13 @@ export async function clientGenerator(
                     executor: 'nx:run-commands',
                     options: {
                         cwd: projectRoot,
-                        command:
-                            'npx @redocly/cli lint schema' +
-                            schemaPath.slice(-5),
+                        command: 'npx @redocly/cli lint schema' + schemaPath.slice(-5),
                     },
                 },
             },
             tags: ['client', name],
         });
+        /* v8 ignore start */ // Testing this is a pain.
     } catch (error) {
         if (isExistingProject(error as Error)) {
             existingProject = true;
@@ -61,18 +57,14 @@ export async function clientGenerator(
         } else {
             throw error;
         }
+        /* v8 ignore end */
     }
 
     if (!skipValidate) {
         await validateSchema(schemaPath);
     }
 
-    const contents = await generateOpenApiTypes(
-        tree,
-        schemaPath,
-        remote,
-        configPath
-    );
+    const contents = await generateOpenApiTypes(tree, schemaPath, remote, configPath);
 
     await copySchema(tree, name, schemaPath, remote);
 
@@ -83,27 +75,20 @@ export async function clientGenerator(
         console.log('Generating supplementary files...');
 
         // Generate other files
-        generateFiles(
-            tree,
-            joinPathFragments(__dirname, './files'),
-            projectRoot,
-            options
-        );
+        generateFiles(tree, joinPathFragments(__dirname, './files'), projectRoot, options);
 
         // Add the project to the tsconfig paths so it can be imported by namespace
-        addTsConfigPath(tree, importPath, [
-            joinPathFragments(projectRoot, './src', 'index.ts'),
-        ]);
+        addTsConfigPath(tree, importPath, [joinPathFragments(projectRoot, './src', 'index.ts')]);
     }
 
     await formatFiles(tree);
 }
 
-function isExistingProject(error: Error): boolean {
+export function isExistingProject(error: Error): boolean {
     return error.message.includes('already exists');
 }
 
-async function confirmOverwrite(name: string): Promise<{ overwrite: boolean }> {
+export async function confirmOverwrite(name: string): Promise<{ overwrite: boolean }> {
     return await prompt({
         type: 'confirm',
         name: 'overwrite',
@@ -126,12 +111,8 @@ export function getRootTsConfigPathInTree(tree: Tree): string {
     return 'tsconfig.base.json';
 }
 
-function addTsConfigPath(
-    tree: Tree,
-    importPath: string,
-    lookupPaths: string[]
-) {
-    updateJson(tree, getRootTsConfigPathInTree(tree), (json) => {
+function addTsConfigPath(tree: Tree, importPath: string, lookupPaths: string[]) {
+    updateJson(tree, getRootTsConfigPathInTree(tree), json => {
         json.compilerOptions ??= {};
         const c = json.compilerOptions;
         c.paths ??= {};

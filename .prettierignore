@@ -1,6 +1,6 @@
 # Add files here to ignore them from prettier formatting
-/dist
-/coverage
+**/dist
+**/coverage
 
 # nx format always picks this up and reformats
 # this file even if there's no issues, so we ignore it
@@ -11,4 +11,3 @@ pnpm-lock.yaml
 package-lock.json
 
 /.nx/cache
-/.nx/workspace-data

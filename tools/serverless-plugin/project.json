@@ -3,6 +3,7 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "tools/serverless-plugin/src",
     "projectType": "application",
+    "tags": ["tools", "serverless", "plugin"],
     "targets": {
         "build": {
             "executor": "@nx/esbuild:esbuild",
@@ -14,19 +15,6 @@
                 "assets": ["tools/serverless-plugin/*.md"],
                 "generatePackageJson": true
             }
-        },
-        "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "tools/serverless-plugin/**/*.ts",
-                    "tools/serverless-plugin/generators.json",
-                    "tools/serverless-plugin/package.json"
-                ],
-                "maxWarnings": 0
-            }
         }
-    },
-    "tags": []
+    }
 }

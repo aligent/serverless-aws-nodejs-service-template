@@ -5,5 +5,8 @@ export default mergeConfig(
     viteBaseConfig,
     defineConfig({
         cacheDir: '../../node_modules/.vite/serverless-plugin',
+        test: {
+            reporters: ["default"]
+        }
     })
 );

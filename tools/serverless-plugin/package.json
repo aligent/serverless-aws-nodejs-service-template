@@ -4,7 +4,6 @@
   "type": "commonjs",
   "generators": "./generators.json",
   "dependencies": {
-    "@nx/devkit": "19.8.3",
-    "vitest": "2.0.0"
+    "@nx/devkit": "^20.0.0"
   }
 }

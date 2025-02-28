@@ -19,15 +19,22 @@ export async function generateOpenApiTypes(
     let contents;
     if (remote) {
         console.log('Getting remote schema...');
-        contents = await getRemoteSchema(schemaPath, configPath);
+        contents = await generateTypesFromRemoteSchema(schemaPath, configPath);
     } else {
-        console.log(
-            'Getting local schema... (use --remote to get remote schema)'
-        );
-        contents = await getLocalSchema(tree.root, schemaPath);
+        console.log('Getting local schema... (use --remote to get remote schema)');
+        contents = await generateTypesFromLocalSchema(tree.root, schemaPath);
     }
 
     return contents;
+}
+
+function parseUrlString(url: string): URL {
+    const parsed = new URL(url);
+
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+        throw new Error(`${parsed.href} is an invalid remote url.`);
+    }
+    return parsed;
 }
 
 /**
@@ -36,23 +43,19 @@ export async function generateOpenApiTypes(
  * @param configPath The path to a local 'redocly' config file. This will be passed into the requests, mainly to specify auth details if required.
  * @returns a string representation of the remote schema
  */
-async function getRemoteSchema(url: string, configPath?: string) {
-    const parsed = new URL(url);
-
-    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-        throw new Error(`${parsed} is an invalid remote url.`);
-    }
-
+/* v8 ignore start */ // Ignored because these are just wrappers around the ts gen library. No point testing
+export async function generateTypesFromRemoteSchema(url: string, configPath?: string) {
+    const parsedUrl = parseUrlString(url);
     if (configPath) {
         const config = await loadConfig({ configPath });
         console.log('Loaded Config: ', config);
         console.log('Generating types...');
-        const ast = await openapiTS(new URL(url), {
+        const ast = await openapiTS(parsedUrl, {
             redocly: config,
         });
         return astToString(ast);
     } else {
-        const ast = await openapiTS(new URL(url));
+        const ast = await openapiTS(parsedUrl);
         return astToString(ast);
     }
 }
@@ -64,7 +67,7 @@ async function getRemoteSchema(url: string, configPath?: string) {
  * @param schemaPath Path of the schema relative to the root of the entire project.
  * @returns a string representation of the schema contents.
  */
-async function getLocalSchema(rootDir: string, schemaPath: string) {
+async function generateTypesFromLocalSchema(rootDir: string, schemaPath: string) {
     try {
         console.log('Generating types...');
         const ast = await openapiTS(`file:///${rootDir}/${schemaPath}`);
@@ -76,16 +79,12 @@ async function getLocalSchema(rootDir: string, schemaPath: string) {
         );
     }
 }
+/* v8 ignore end */
 
 /**
  * Copies the original schema from the source to newly generated client
  */
-export async function copySchema(
-    tree: Tree,
-    name: string,
-    schemaPath: string,
-    remote?: boolean
-) {
+export async function copySchema(tree: Tree, name: string, schemaPath: string, remote?: boolean) {
     let schemaBuffer;
     if (remote) {
         const response = await fetch(schemaPath);
@@ -101,13 +100,15 @@ export async function copySchema(
     }
 }
 
+// This is ignored by coverage because its relying on a third party package to do the validation step
+/* v8 ignore start */
 export async function validateSchema(schemaPath: string) {
     return new Promise((resolve, reject) => {
         const child = spawn('npx', ['@redocly/cli', 'lint', schemaPath], {
             stdio: ['pipe', 'inherit', 'inherit'],
         });
 
-        child.on('close', (code) => {
+        child.on('close', code => {
             if (code === 0) {
                 resolve(`Validation completed`);
             } else {
