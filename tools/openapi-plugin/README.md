@@ -44,7 +44,7 @@ The plugin was created following the standards for Nx custom plugins. It contain
 For more information on client generation check [Nx plugin documentation]()
 
 Normally, plugin generator take pre-defined files specified in the `/files` directory and automatically use that a basis for writing to a `Tree` object (the data structure Nx uses to generate files).
-Since we are using `openapi-typescript` to generate files in real time, we can simply create a pre-defined template. And must therefore write to the tree ourselves. We do this by taking the output of the Typescript generation and calling a built in `write` process, to write the returned generated code into a file whilst the generator runs.
+Since we are using `openapi-typescript` to generate files in real time, we can't simply create a pre-defined template. Instead we must write to the tree ourselves. We do this by taking the output of the Typescript generation and calling a built in `write` process, to write the returned generated code into a file whilst the generator runs.
 
 The flow for the generator is as follows:
 
@@ -68,3 +68,5 @@ A `types` file that will contain several typescript interfaces depending on the 
 - `paths`: Defines the routes that the API has as well as what parameters you can pass into them and what you should expect in return. [More information](https://swagger.io/docs/specification/v3_0/paths-and-operations/#paths)
 - `operations`: The defined operations that can be performed on a given path. [More information.](https://swagger.io/docs/specification/v3_0/paths-and-operations/#operations)
 - `components`: A way of avoid duplication when paths or operations contain the same structure in their responses. Components define a structure that is used multiple time throughout the API. [More information.](https://swagger.io/docs/specification/v3_0/components/)
+
+A `client` file that will contain some commented, boilerplate code to help you get started. 
