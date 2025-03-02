@@ -4,21 +4,10 @@ import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export const viteBaseConfig = defineConfig({
     plugins: [nxViteTsPaths()],
-
-    // Uncomment this if you are using workers.
-    // worker: {
-    //  plugins: [
-    //    viteTsConfigPaths({
-    //      root: '../../',
-    //    }),
-    //  ],
-    // },
-
     test: {
         globals: true,
         watch: false,
         environment: 'node',
-        passWithNoTests: true,
         reporters: ['default'],
         coverage: {
             provider: 'v8',
