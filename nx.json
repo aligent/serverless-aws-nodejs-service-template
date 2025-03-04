@@ -21,9 +21,6 @@
             "outputs": ["{projectRoot}/.serverless"],
             "cache": true
         },
-        "check-types": {
-            "cache": true
-        },
         "lint": {
             "inputs": ["default"],
             "cache": true
@@ -47,17 +44,10 @@
     },
     "plugins": [
         {
-            "plugin": "@nx/eslint/plugin",
-            "options": {
-                "targetName": "lint"
-            }
+            "plugin": "@nx/eslint/plugin"
         },
         {
-            "plugin": "@nx/vite/plugin",
-            "options": {
-                "testTargetName": "test",
-                "typecheckTargetName": "check-types"
-            }
+            "plugin": "@nx/vite/plugin"
         }
     ],
     "workspaceLayout": {
