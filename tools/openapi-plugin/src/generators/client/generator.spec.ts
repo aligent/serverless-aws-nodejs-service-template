@@ -1,7 +1,7 @@
 import { Tree, readProjectConfiguration } from '@nx/devkit';
-import { ClientGeneratorSchema } from './schema';
-import { clientGenerator } from './generator';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
+import { clientGenerator } from './generator';
+import { ClientGeneratorSchema } from './schema';
 
 describe('client generator', () => {
     let tree: Tree;

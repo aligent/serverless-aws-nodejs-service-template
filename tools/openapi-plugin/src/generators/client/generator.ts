@@ -6,13 +6,13 @@ import {
     joinPathFragments,
     updateJson,
 } from '@nx/devkit';
+import { prompt } from 'enquirer';
 import {
     copySchema,
     generateOpenApiTypes,
     validateSchema,
 } from '../../helpers/generate-openapi-types';
 import { ClientGeneratorSchema } from './schema';
-import { prompt } from 'enquirer';
 
 export async function clientGenerator(tree: Tree, options: ClientGeneratorSchema) {
     const {
