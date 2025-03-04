@@ -6,8 +6,6 @@ export default mergeConfig(
     defineConfig({
         cacheDir: '../../node_modules/.vite/openapi-plugin',
         test: {
-            mockReset: false,
-            reporters: ["default"]
         }
     })
 );

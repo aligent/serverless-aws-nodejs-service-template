@@ -4,8 +4,6 @@
         "esModuleInterop": true
     },
     "include": [
-        "vite.config.mts",
-        "../../libs/**/src/index.ts",
         "src/**/*.ts",
         "**/*.test.ts"
     ]
