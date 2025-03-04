@@ -12,8 +12,7 @@
                 "outputPath": "dist/tools/openapi-plugin",
                 "main": "tools/openapi-plugin/src/index.ts",
                 "tsConfig": "tools/openapi-plugin/tsconfig.lib.json",
-                "assets": ["tools/openapi-plugin/*.md"],
-                "generatePackageJson": true
+                "assets": ["tools/openapi-plugin/*.md"]
             }
         },
         "lint": {

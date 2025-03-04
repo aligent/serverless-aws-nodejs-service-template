@@ -11,5 +11,3 @@ export default mergeConfig(
         }
     })
 );
-
-// TODO: Add unit tests

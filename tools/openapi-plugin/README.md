@@ -32,11 +32,11 @@ To regenerate an existing client run the same generator command again (as above)
 
 ### Building
 
-Run `nx build openapi-plugin` to build the library.
+Run `nx build @aligent/openapi-plugin` to build the library.
 
 ### Running unit tests
 
-Run `nx test openapi-plugin` to execute the unit tests.
+Run `nx test @aligent/openapi-plugin` to execute the unit tests.
 
 ### Details
 
