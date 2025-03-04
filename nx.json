@@ -44,10 +44,12 @@
     },
     "plugins": [
         {
-            "plugin": "@nx/eslint/plugin"
+            "plugin": "@nx/eslint/plugin",
+            "options": {}
         },
         {
-            "plugin": "@nx/vite/plugin"
+            "plugin": "@nx/vite/plugin",
+            "options": {}
         }
     ],
     "workspaceLayout": {
