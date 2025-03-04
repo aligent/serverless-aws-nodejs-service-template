@@ -12,19 +12,8 @@
                 "outputPath": "dist/tools/openapi-plugin",
                 "main": "tools/openapi-plugin/src/index.ts",
                 "tsConfig": "tools/openapi-plugin/tsconfig.lib.json",
-                "assets": ["tools/openapi-plugin/*.md"]
-            }
-        },
-        "lint": {
-            "executor": "@nx/eslint:lint",
-            "outputs": ["{options.outputFile}"],
-            "options": {
-                "lintFilePatterns": [
-                    "tools/openapi-plugin/**/*.ts",
-                    "tools/openapi-plugin/generators.json",
-                    "tools/openapi-plugin/package.json"
-                ],
-                "maxWarnings": 0
+                "assets": ["tools/openapi-plugin/*.md"],
+                "generatePackageJson": true
             }
         }
     }
