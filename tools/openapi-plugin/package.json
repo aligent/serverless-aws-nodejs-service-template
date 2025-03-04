@@ -1,0 +1,13 @@
+{
+  "name": "@aligent/openapi-plugin",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "dependencies": {
+    "openapi-typescript": "^7.5.2",
+    "enquirer": "^2.3.6",
+    "@nx/devkit": "19.8.3",
+    "@redocly/openapi-core": "^1.27.2",
+    "vitest": "2.0.0"
+  },
+  "generators": "./generators.json"
+}
