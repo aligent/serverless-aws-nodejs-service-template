@@ -4,23 +4,34 @@ definitions:
   services:
     docker:
       memory: 3072
+  caches:
+    corepack-cache: $HOME/.cache/node/corepack
   steps:
     - step: &install
         name: ⚙️ Install
+        caches:
+          - corepack-cache
         script:
-          - npm ci
+          - corepack enable yarn
+          - yarn install --immutable
         artifacts:
           - node_modules/**
     - step: &lint
         name: 🧹 Lint
+        caches:
+          - corepack-cache
         script:
-          - npm run lint
-          - npm run format
-          - npm run check-types
+          - corepack enable yarn
+          - yarn run lint
+          - yarn run format
+          - yarn run check-types
     - step: &test
         name: 🧪 Test
+        caches:
+          - corepack-cache
         script:
-          - npm run test
+          - corepack enable yarn
+          - yarn run test
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:

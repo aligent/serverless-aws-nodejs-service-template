@@ -16,18 +16,39 @@ jobs:
       matrix:
         node-version: [20.18]
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm ci
-      - run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
-      - run: npx nx g service test-app
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Generate test library
+        run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
+
+      - name: Generate test app
+        run: npx nx g service test-app
+
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
-      - uses: nrwl/nx-set-shas@v4
-      - run: git fetch
-      - run: npx nx affected -t lint, test, build --parallel=3 --base=origin/main
-      - run: npx nx g rm test-lib
-      - run: npx nx g rm test-app
+      - name: Set base SHA to origin/main
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Fetch main
+        run: git fetch
+
+      - name: Run tests
+        run: npx nx affected -t lint, test, build --parallel=3 --base=origin/main
+
+      - name: Remove test library
+        run: npx nx g rm test-lib
+
+      - name: Remove test app
+        run: npx nx g rm test-app
