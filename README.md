@@ -8,11 +8,11 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 ### Setup
 
-1. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/<from>-<to>`. Eg: `@aligent-int/erp-ecomm`
+1. Update application name in `package.json`. It's recommend to have the name in the format of: `@<brand-name>-int/integrations`. Eg: `@aligent-int/integrations`
 
 2. Update brand name in `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
 
-3. Install dependencies: `npm ci`
+3. Install dependencies: `yarn install --immutable`
 
 ### Working with services
 
