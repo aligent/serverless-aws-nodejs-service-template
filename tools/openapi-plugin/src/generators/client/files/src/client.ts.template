@@ -1,0 +1,22 @@
+// The following is an example file generated to demonstrate how to use your newly generated types
+import { paths } from '../generated';
+import createClient from 'openapi-fetch';
+
+// This type is an example of what is initialised using the types generated in the paths interface which is created when generation occurs.
+// Its worth looking into that paths interface, to see the the types that were generated for your client.
+type ExampleResponse =
+    paths['/customers']['get']['responses']['200']['content']['application/json'];
+
+// Using openapi-fetch we can create a fully typed REST client by passing in paths as a generic.
+// If you wish however, you can use any api client you want (axios, basic fetch etc.) and use the paths separately to maintain type safety in your client.
+const client = createClient<paths>({
+    baseUrl: '',
+    signal: AbortSignal.timeout(10000),
+});
+
+// Client getters are then fully typed. Try deleting '/customers' and seeing what routes you can use!
+const response = client.GET('/customers', {
+    params: {
+        query: {},
+    },
+});

@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json-schema.org/schema",
+    "$id": "Client",
+    "type": "object",
+    "description": "Aligent OpenAPI Client plugin generator. This generator is used for generating type-safe REST API clients using OpenAPI 3.0 Schema files. ",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Name of the api client.",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            },
+            "x-prompt": "Name of your api client: "
+        },
+        "schemaPath": {
+            "type": "string",
+            "description": "Path to the schema. If using the --remote flag then you must specify a valid remote URL. If not you must specify a local file.",
+            "$default": {
+                "$source": "argv",
+                "index": 1
+            },
+            "x-prompt": "Schema path (URL to schema if using --remote): "
+        },
+        "remote": {
+            "type": "boolean",
+            "description": "Specify whether you would like to fetch remotely."
+        },
+        "configPath": {
+            "type": "string",
+            "description": "path to the redocly config file responsible for auth. For more information: https://openapi-ts.dev/cli#auth."
+        },
+        "importPath": {
+            "type": "string",
+            "description": "The package name used to import the client, like @myorg/my-awesome-client. Defaults to @clients/{name} if not supplied"
+        },
+        "skipValidate": {
+            "type": "boolean",
+            "description": "Skip validation in the generation process"
+        }
+    },
+    "required": ["name", "schemaPath"]
+}
