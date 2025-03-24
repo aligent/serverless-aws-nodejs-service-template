@@ -28,7 +28,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install dependencies
-        run: yarn install --immutable
+        run: yarn install
 
       - name: Generate test library
         run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
