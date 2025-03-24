@@ -12,7 +12,7 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 2. Update brand name in `nx.json`. The naming convention for this is: `<brand-name>-int`. Just be mindful about the length of service name. Eg: `alg-int`
 
-3. Install dependencies: `yarn install --immutable`
+3. Install dependencies: `yarn install`
 
 ### Working with services
 
