@@ -26,9 +26,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: yarn
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
       - name: Generate test library
         run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
