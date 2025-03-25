@@ -14,6 +14,8 @@ custom:
     minify: true
     sourcemap: true
     sourcesContent: false
+  # Use `!Ref SNSTopicNotifications` if we deploy SNS in this stack
+  alertSnsArn: ${ssm:/client/int/notifications/alert-sns-arn}
 
 plugins:
   - '@aligent/serverless-conventions'
@@ -33,10 +35,10 @@ provider:
           Action:
             - sns:Publish
           Resource:
-            - !Ref SNSTopicNotifications
+            - ${self:custom.alertSnsArn}
   environment:
     NODE_OPTIONS: --enable-source-maps
-    SNS_TOPIC_ARN: !Ref SNSTopicNotifications
+    SNS_TOPIC_ARN: ${self:custom.alertSnsArn}
 
 functions:
   notifyError:
@@ -44,11 +46,12 @@ functions:
 
 resources:
   Description: Notification service for error notifying
-  Resources:
-    SNSTopicNotifications:
-      Type: AWS::SNS::Topic
-      Properties:
-        TopicName: ${self:service}-${self:provider.stage}-notifications-topic
+  # Uncomment this part if we want to deploy SNS in this stack
+  # Resources:
+  #   SNSTopicNotifications:
+  #     Type: AWS::SNS::Topic
+  #     Properties:
+  #       TopicName: ${self:service}-${self:provider.stage}-notifications-topic
 
   Outputs:
     ErrorNotificationLambdaFunction:
