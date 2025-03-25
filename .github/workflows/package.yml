@@ -39,7 +39,7 @@ jobs:
 
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
       - name: Set base SHA to origin/main
-        uses: nrwl/nx-set-shas@v4
+        uses: nrwl/nx-set-shas@dbe0650947e5f2c81f59190a38512cf49126fe6b # v4
 
       - name: Fetch main
         run: git fetch
