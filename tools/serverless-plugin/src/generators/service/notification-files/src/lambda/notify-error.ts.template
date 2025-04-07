@@ -18,10 +18,7 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
-
-        const { errorType, errorMessage } = JSON.parse(
-            cause
-        ) as NotifyError.Cause;
+        const { errorType, errorMessage } = extractErrorDetails(event);
 
         const nextSteps = generateChatbotNextSteps({
             source,
