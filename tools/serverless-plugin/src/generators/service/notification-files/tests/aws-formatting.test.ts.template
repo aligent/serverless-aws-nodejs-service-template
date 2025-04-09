@@ -79,6 +79,108 @@ describe('extractNameFromResourceName', () => {
     });
 });
 
+
+describe('extractErrorDetails', () => {
+    it('should extract the error details from a valid Lambda event', () => {
+        const event: NotifyError.InvocationEvent = {
+            source: 'aws.lambda',
+            region: 'ap-southeast-2',
+            detail: {
+                cause: JSON.stringify({
+                    errorType: 'ErrorType',
+                    errorMessage: 'ErrorMessage',
+                }),
+                executionArn: 'my-execution-arn',
+                name: 'my-name',
+                status: 'my-status',
+                error: 'my-error',
+            },
+            id: 'my-id',
+            'detail-type': 'my-detail-type',
+            time: 'my-time',
+            resources: ['my-resource'],
+        };
+
+        const result = extractErrorDetails(event);
+
+        expect(result).toEqual({
+            errorType: 'ErrorType',
+            errorMessage: 'ErrorMessage',
+        });
+    });
+
+    it('should extract the error details from a valid StepFunctions event', () => {
+        const event: NotifyError.InvocationEvent = {
+            source: 'aws.states',
+            region: 'ap-southeast-2',
+            detail: {
+                cause: 'my-cause',
+                executionArn: 'my-execution-arn',
+                name: 'my-name',
+                status: 'my-status',
+                error: 'my-error',
+            },
+            id: 'my-id',
+            'detail-type': 'my-detail-type',
+            time: 'my-time',
+            resources: ['my-resource'],
+        };
+
+        const result = extractErrorDetails(event);
+
+        expect(result).toEqual({
+            errorType: 'my-error',
+            errorMessage: 'my-cause',
+        });
+    });
+
+    it('should throw an error if the cause is not a valid JSON string and the source is aws.lambda', () => {
+        const event: NotifyError.InvocationEvent = {
+            source: 'aws.lambda',
+            region: 'ap-southeast-2',
+            detail: {
+                cause: 'invalid-json',
+                executionArn: 'my-execution-arn',
+                name: 'my-name',
+                status: 'my-status',
+                error: 'my-error',
+            },
+            id: 'my-id',
+            'detail-type': 'my-detail-type',
+            time: 'my-time',
+            resources: ['my-resource'],
+        };
+
+        const result = () => extractErrorDetails(event);
+
+        expect(result).toThrowError(
+            'Unexpected token \'i\', "invalid-json" is not valid JSON'
+        );
+    });
+
+    it('should NOT throw an error if the cause is not a valid JSON string and the source is aws.states', () => {
+        const event: NotifyError.InvocationEvent = {
+            source: 'aws.states',
+            region: 'ap-southeast-2',
+            detail: {
+                cause: 'invalid-json',
+                executionArn: 'my-execution-arn',
+                name: 'my-name',
+                status: 'my-status',
+                error: 'my-error',
+            },
+            id: 'my-id',
+            'detail-type': 'my-detail-type',
+            time: 'my-time',
+            resources: ['my-resource'],
+        };
+
+        const result = () => extractErrorDetails(event);
+
+        expect(result).not.toThrowError();
+    });
+});
+
 describe('generateChatbotNextSteps', () => {
     it('should generate a CloudWatch Log Groups URL if source is aws.lambda but logGroupName is missing', () => {
         const input: NotifyError.NextStepsInput = {
