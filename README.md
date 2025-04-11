@@ -85,7 +85,7 @@ Below are some example of general Nx. commands. For more information, check out 
 
   `npx nx g rm <project-name>`
 
-- To run executors (`lint`, `test`, `format`, etc..) for all the projects:
+- To run executors (`lint`, `test`, etc..) for all the projects:
 
   `npx nx run-many -t <list-of-executors-separated-by-space-or-comma>`
 
