@@ -23,7 +23,6 @@ definitions:
         script:
           - corepack enable yarn
           - yarn run lint
-          - yarn run format
           - yarn run check-types
     - step: &test
         name: 🧪 Test
