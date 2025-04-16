@@ -57,41 +57,57 @@ export function extractNameFromResourceName(resourceName: string) {
 
 /**
  * Extracts the error details from the error detail object
+ * Notes:
+ *  - Lambda sends a JSON string in detail.cause
+ *  - Step Function Fail step sends an object that contains both detail.cause & detail.error
+ *  - When Step Function rethrow lambda error, it sends detail.cause is not a JSON string
+ *
  * @param {NotifyError.InvocationEvent['detail']} detail - The detail object to extract the error details from
  * @returns {NotifyError.Cause} The error details
  */
 export function extractErrorDetails(
-    event: NotifyError.InvocationEvent
+    detail: NotifyError.InvocationEvent['detail']
 ): NotifyError.Cause {
-    const { cause, error } = event.detail;
+    const { cause, error } = detail;
+
+    let errorType = error || 'UnknownError';
+    let errorMessage = cause || 'Unknown Error';
 
     try {
-        const { errorType, errorMessage } = JSON.parse(cause);
-        return {
-            errorType,
-            errorMessage,
-        };
-    } catch (err) {
-        // StepFunctions "Fail" steps return the error details in the "cause" field
-        // where as Lambda will include a JSON object in the "cause" field that
-        // contains the error details
-        if (event.source === 'aws.states') {
-            return {
-                errorType: error,
-                errorMessage: cause,
-            };
-        }
-        throw err;
+        // There are some cases when StepFunction re-throw Lambda errors.
+        // In these cases, the cause will not be a json string
+        const causeObj = JSON.parse(cause || '{}') as NotifyError.Cause;
+        errorType = causeObj.errorType || errorType;
+        errorMessage = causeObj.errorMessage || errorMessage;
+    } catch (error) {
+        console.warn('Error parsing cause, using as literal string: ', {
+            error,
+        });
     }
+
+    return {
+        errorType,
+        errorMessage,
+    };
 }
 
-
+/**
+ * Generates a CloudWatch Logs Insights URL for a specific log group and request ID.
+ * The URL includes a query to filter logs by the provided request ID and a time range
+ * of 10 minutes before and after the current time.
+ *
+ * @param {string} region - The AWS region where the log group is located.
+ * @param {string} logGroupName - The name of the CloudWatch log group.
+ * @param {string} requestId - The request ID to filter logs by.
+ * @param {Date} [currentTime=new Date()] - The current time to calculate the time range for the query.
+ * @returns {string} The generated CloudWatch Logs Insights URL.
+ */
 function generateCloudWatchInsightUrl(
     region: string,
     logGroupName: string,
     requestId: string,
-    currentTime = new Date()
-) {
+    currentTime: Date = new Date()
+): string {
     const logInsightUrl = `https://${region}.console.aws.amazon.com/cloudwatch/home?region=${region}#logsV2:logs-insights`;
 
     const encodedLogGroupName = encodeURIComponent(encodeURIComponent(logGroupName)).replace(
@@ -118,7 +134,15 @@ function generateCloudWatchInsightUrl(
     return `${logInsightUrl}?queryDetail=${queryDetail}`;
 }
 
-function generateStepFunctionUrl(region: string, executionArn: string) {
+/**
+ * Generates a Step Functions execution URL for a specific execution ARN.
+ * The URL links to the AWS Management Console for viewing the execution details.
+ *
+ * @param {string} region - The AWS region where the Step Function is located.
+ * @param {string} executionArn - The Step Function execution ARN.
+ * @returns {string} The generated Step Functions execution URL.
+ */
+function generateStepFunctionUrl(region: string, executionArn: string): string {
     return `https://${region}.console.aws.amazon.com/states/home?region=${region}#/v2/executions/details/${executionArn}`;
 }
 

@@ -2,6 +2,7 @@
 import type { Handler } from 'aws-lambda/handler';
 import type { NotifyError } from '../../types/notify-error';
 import {
+    extractErrorDetails,
     extractNameFromExecutionArn,
     extractNameFromResourceName,
     generateAdditionalSteps,
@@ -14,11 +15,11 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
     console.log('Lambda event: ', JSON.stringify(event));
     try {
         const { source, region, detail } = event;
-        const { executionArn, logGroupName, requestId, error, cause } = detail;
+        const { executionArn, logGroupName, requestId } = detail;
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
-        const { errorType, errorMessage } = extractErrorDetails(event);
+        const { errorType, errorMessage } = extractErrorDetails(detail);
 
         const steps = generateAdditionalSteps({
             source,
