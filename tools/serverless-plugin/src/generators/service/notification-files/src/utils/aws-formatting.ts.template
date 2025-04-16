@@ -10,12 +10,22 @@ const LOGS_INSIGHTS_TIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSS[Z]';
  * Extracts the name from an AWS Step Functions or Lambda execution ARN
  * It assumes that the arn is always in the correct format
  * For example:
- * The Step Functions execution ARN format is: arn:aws:states:region:account_id:execution:state_machine_name:execution_name
- * The Lambda execution ARN format is: arn:aws:lambda:region:account_id:function:function_name
+ * - The Step Functions execution ARN format is: arn:aws:states:region:account_id:execution:state_machine_name:execution_name
+ * - The Lambda execution ARN format is: arn:aws:lambda:region:account_id:function:function_name
  *
  * @param {string} arn - The AWS Step Functions execution ARN.
  * @returns {string} The extracted name from the execution ARN.
  * @throws {Error} If the provided ARN is invalid or does not contain a name.
+ *
+ * @example
+ * const arn = 'arn:aws:states:us-east-1:123456789012:execution:my-state-machine:my-execution';
+ * const name = extractNameFromExecutionArn(arn);
+ * console.log(name); // Output: 'my-state-machine: my-execution'
+ *
+ * @example
+ * const arn = 'arn:aws:lambda:us-east-1:123456789012:function:my-function';
+ * const name = extractNameFromExecutionArn(arn);
+ * console.log(name); // Output: 'my-function'
  */
 export function extractNameFromExecutionArn(arn: string) {
     const parts = arn.split(':');
@@ -37,11 +47,21 @@ export function extractNameFromExecutionArn(arn: string) {
  * Extracts the name from a resource name string.
  * It assumes our resource name is in the correct format
  * For example:
- * Lambda resource name format is: brand-int-service-name-stage-lambdaName
- * Step function resource name format is: brand-int-service-name-stage-stepFunctionName:994ee932-8e5f-f59f-5619-ebdefd8af815_087eb4a0-92a4-30d2-eea4-c078e9b9e5fa
+ * - Lambda resource name format is: brand-int-service-name-stage-lambdaName
+ * - Step function resource name format is: brand-int-service-name-stage-stepFunctionName:994ee932-8e5f-f59f-5619-ebdefd8af815_087eb4a0-92a4-30d2-eea4-c078e9b9e5fa
  *
  * @param {string} resourceName - The resource name string.
  * @returns {string} The extracted name from the resource name.
+ *
+ * @example
+ * const resourceName = 'brand-int-service-name-stage-lambdaName';
+ * const name = extractNameFromResourceName(resourceName);
+ * console.log(name); // Output: 'lambdaName'
+ *
+ * @example
+ * const resourceName = 'brand-int-service-name-stage-stepFunctionName:994ee932-8e5f-f59f-5619-ebdefd8af815_087eb4a0-92a4-30d2-eea4-c078e9b9e5fa';
+ * const name = extractNameFromResourceName(resourceName);
+ * console.log(name); // Output: 'stepFunctionName'
  */
 export function extractNameFromResourceName(resourceName: string) {
     // Only Step Function resource name contains : character.
@@ -64,6 +84,15 @@ export function extractNameFromResourceName(resourceName: string) {
  *
  * @param {NotifyError.InvocationEvent['detail']} detail - The detail object to extract the error details from
  * @returns {NotifyError.Cause} The error details
+ *
+ * @example
+ * const detail = {
+ *   cause: '{"errorType":"MyError","errorMessage":"Something went wrong"}',
+ *   error: "MyError"
+ * };
+ * const errorDetails = extractErrorDetails(detail);
+ * console.log(errorDetails);
+ * // Output: { errorType: "MyError", errorMessage: "Something went wrong" }
  */
 export function extractErrorDetails(
     detail: NotifyError.InvocationEvent['detail']
@@ -101,6 +130,14 @@ export function extractErrorDetails(
  * @param {string} requestId - The request ID to filter logs by.
  * @param {Date} [currentTime=new Date()] - The current time to calculate the time range for the query.
  * @returns {string} The generated CloudWatch Logs Insights URL.
+ *
+ * @example
+ * const region = 'us-east-1';
+ * const logGroupName = '/aws/lambda/my-function';
+ * const requestId = '12345678-1234-1234-1234-123456789012';
+ * const url = generateCloudWatchInsightUrl(region, logGroupName, requestId);
+ * console.log(url);
+ */
  */
 function generateCloudWatchInsightUrl(
     region: string,
@@ -141,6 +178,12 @@ function generateCloudWatchInsightUrl(
  * @param {string} region - The AWS region where the Step Function is located.
  * @param {string} executionArn - The Step Function execution ARN.
  * @returns {string} The generated Step Functions execution URL.
+ *
+ * @example
+ * const region = 'us-east-1';
+ * const executionArn = 'arn:aws:states:us-east-1:123456789012:execution:my-state-machine:my-execution';
+ * const url = generateStepFunctionUrl(region, executionArn);
+ * console.log(url);
  */
 function generateStepFunctionUrl(region: string, executionArn: string): string {
     return `https://${region}.console.aws.amazon.com/states/home?region=${region}#/v2/executions/details/${executionArn}`;
