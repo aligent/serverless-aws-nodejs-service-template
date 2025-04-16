@@ -55,6 +55,37 @@ export function extractNameFromResourceName(resourceName: string) {
     return resourceName.split('-').pop() as string;
 }
 
+/**
+ * Extracts the error details from the error detail object
+ * @param {NotifyError.InvocationEvent['detail']} detail - The detail object to extract the error details from
+ * @returns {NotifyError.Cause} The error details
+ */
+export function extractErrorDetails(
+    event: NotifyError.InvocationEvent
+): NotifyError.Cause {
+    const { cause, error } = event.detail;
+
+    try {
+        const { errorType, errorMessage } = JSON.parse(cause);
+        return {
+            errorType,
+            errorMessage,
+        };
+    } catch (err) {
+        // StepFunctions "Fail" steps return the error details in the "cause" field
+        // where as Lambda will include a JSON object in the "cause" field that
+        // contains the error details
+        if (event.source === 'aws.states') {
+            return {
+                errorType: error,
+                errorMessage: cause,
+            };
+        }
+        throw err;
+    }
+}
+
+
 function generateCloudWatchInsightUrl(
     region: string,
     logGroupName: string,

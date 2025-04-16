@@ -18,18 +18,7 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
-
-        const errorType = error || 'Unknown Error';
-        let errorMessage = cause || 'Unknown Cause';
-
-        try {
-            const causeObject = JSON.parse(cause || '{}') as NotifyError.Cause;
-            errorMessage = causeObject.errorMessage || errorMessage;
-        } catch (error) {
-            console.warn('Error parsing cause, using as literal string: ', {
-                error,
-            });
-        }
+        const { errorType, errorMessage } = extractErrorDetails(event);
 
         const steps = generateAdditionalSteps({
             source,
