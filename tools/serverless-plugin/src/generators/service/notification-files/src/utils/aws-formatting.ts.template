@@ -138,7 +138,6 @@ export function extractErrorDetails(
  * const url = generateCloudWatchInsightUrl(region, logGroupName, requestId);
  * console.log(url);
  */
- */
 function generateCloudWatchInsightUrl(
     region: string,
     logGroupName: string,
