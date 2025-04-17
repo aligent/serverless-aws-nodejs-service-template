@@ -63,7 +63,7 @@ export function extractNameFromExecutionArn(arn: string) {
  * const name = extractNameFromResourceName(resourceName);
  * console.log(name); // Output: 'stepFunctionName'
  */
-export function extractNameFromResourceName(resourceName: string) {
+export function extractNameFromResourceName(resourceName: string): string {
     // Only Step Function resource name contains : character.
     if (resourceName.includes(':')) {
         const [stateMachineName, executionName] = resourceName.split(':');
@@ -82,22 +82,22 @@ export function extractNameFromResourceName(resourceName: string) {
  *  - Step Function Fail step sends an object that contains both detail.cause & detail.error
  *  - When Step Function rethrow lambda error, it sends detail.cause is not a JSON string
  *
- * @param {NotifyError.InvocationEvent['detail']} detail - The detail object to extract the error details from
+ * @param {NotifyError.InvocationEvent} event - The event object to extract the error details from
  * @returns {NotifyError.Cause} The error details
  *
  * @example
- * const detail = {
- *   cause: '{"errorType":"MyError","errorMessage":"Something went wrong"}',
- *   error: "MyError"
+ * const event = {
+ *    detail: {
+ *        cause: '{"errorType":"MyError","errorMessage":"Something went wrong"}',
+ *        error: 'MyError',
+ *    }
  * };
- * const errorDetails = extractErrorDetails(detail);
+ * const errorDetails = extractErrorDetails(event);
  * console.log(errorDetails);
  * // Output: { errorType: "MyError", errorMessage: "Something went wrong" }
  */
-export function extractErrorDetails(
-    detail: NotifyError.InvocationEvent['detail']
-): NotifyError.Cause {
-    const { cause, error } = detail;
+export function extractErrorDetails(event: NotifyError.InvocationEvent): NotifyError.Cause {
+    const { cause, error } = event.detail;
 
     let errorType = error || 'UnknownError';
     let errorMessage = cause || 'Unknown Error';

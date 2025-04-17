@@ -19,7 +19,7 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
-        const { errorType, errorMessage } = extractErrorDetails(detail);
+        const { errorType, errorMessage } = extractErrorDetails(event);
 
         const steps = generateAdditionalSteps({
             source,
