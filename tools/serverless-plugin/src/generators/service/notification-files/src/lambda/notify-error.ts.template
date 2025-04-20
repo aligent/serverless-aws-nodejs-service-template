@@ -2,9 +2,10 @@
 import type { Handler } from 'aws-lambda/handler';
 import type { NotifyError } from '../../types/notify-error';
 import {
+    extractErrorDetails,
     extractNameFromExecutionArn,
     extractNameFromResourceName,
-    generateChatbotNextSteps,
+    generateAdditionalSteps,
 } from '../utils/aws-formatting';
 import { AmazonSNS } from '../utils/aws-sns';
 
@@ -14,18 +15,21 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
     console.log('Lambda event: ', JSON.stringify(event));
     try {
         const { source, region, detail } = event;
-        const { executionArn, logGroupName, cause } = detail;
+        const { executionArn, logGroupName, requestId } = detail;
 
         const resourceName = extractNameFromExecutionArn(executionArn);
         const name = extractNameFromResourceName(resourceName);
         const { errorType, errorMessage } = extractErrorDetails(event);
 
-        const nextSteps = generateChatbotNextSteps({
+        const steps = generateAdditionalSteps({
             source,
             region,
-            logGroupName,
             executionArn,
+            logGroupName,
+            requestId,
         });
+
+        const description = [`[${errorType}] ${errorMessage}`].concat(steps);
 
         const message: NotifyError.Message = {
             version: '1.0',
@@ -33,8 +37,7 @@ export const handler: Handler = async (event: NotifyError.InvocationEvent) => {
             content: {
                 textType: 'client-markdown',
                 title: `${event.detail.status}: ${name}`,
-                description: `${name} service encountered an error: [${errorType}] ${errorMessage}`,
-                nextSteps,
+                description: description.join('\n• '),
             },
         };
 
