@@ -4,7 +4,7 @@ const jsonParser = require('jsonc-eslint-parser');
 const nxEslintPlugin = require('@nx/eslint-plugin');
 
 const eslintBaseConfig = [
-    ...eslintConfigs.core,
+    ...eslintConfigs.base,
     {
         ignores: ['**/*.js', '**/*.cjs', '**/*.mjs', '**/coverage'],
     },
