@@ -1,6 +1,6 @@
 {
   "name": "@aligent/serverless-aws-nodejs-service-template",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Aligent AWS microservices template using Typescript and Serverless Framework",
   "author": "Aligent Consulting",
   "scripts": {
@@ -29,7 +29,7 @@
     "@swc/core": "^1.11.5",
     "@swc/helpers": "^0.5.15",
     "@types/aws-lambda": "^8.10.145",
-    "@types/node": "20.13.0",
+    "@types/node": "^22.14.0",
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
     "@vitest/coverage-v8": "^2.0.0",
@@ -53,7 +53,7 @@
     "vitest": "^2.0.0"
   },
   "engines": {
-    "node": "^20.18.0"
+    "node": "^22.14.0"
   },
   "license": "MIT",
   "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9"

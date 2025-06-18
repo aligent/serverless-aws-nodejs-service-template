@@ -1,4 +1,4 @@
-image: node:20
+image: node:22
 
 definitions:
   services:
@@ -34,7 +34,7 @@ definitions:
     - step: &push-serverless
         name: 🚀 Deploy Service
         script:
-          - pipe: docker://aligent/nx-serverless-deploy-pipe:20
+          - pipe: docker://aligent/nx-serverless-deploy-pipe:22
             variables:
               AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
               AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
