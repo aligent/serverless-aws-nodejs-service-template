@@ -8,7 +8,8 @@
         "noUncheckedSideEffectImports": true,
         "paths": {
             "@aligent/openapi-plugin": ["tools/openapi-plugin/src/index.ts"],
-            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"]
+            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"],
+            "@services/test-cdk-service": ["services/test-cdk-service/src/index.ts"]
         },
         "types": ["node", "vitest", "vitest/globals"]
     }

@@ -1,0 +1,25 @@
+{
+    "name": "aws-template-app",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "services/test-service/src",
+    "targets": {
+        "deploy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk deploy",
+                "cwd": "{projectRoot}"
+            }
+        },
+        "list": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk list",
+                "cwd": "{projectRoot}"
+            }
+        }
+    },
+    "tags": ["app", "cdk", "aws-template-app"]
+}

@@ -1,0 +1,8 @@
+{
+    "name": "test-cdk-service",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "services/test-cdk-service/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": ["service", "general", "test-cdk-service"]
+}

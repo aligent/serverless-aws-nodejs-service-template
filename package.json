@@ -34,6 +34,7 @@
     "@typescript-eslint/parser": "^8.26.0",
     "@vitest/coverage-v8": "^2.0.0",
     "@vitest/ui": "^2.0.0",
+    "aws-cdk": "^2.1018.1",
     "dotenv": "^16.3.1",
     "enquirer": "^2.4.1",
     "esbuild": "~0.19.2",
@@ -56,5 +57,10 @@
     "node": "^22.14.0"
   },
   "license": "MIT",
-  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9"
+  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9",
+  "dependencies": {
+    "aws-cdk-lib": "^2.201.0",
+    "constructs": "^10.4.2",
+    "source-map-support": "^0.5.21"
+  }
 }
