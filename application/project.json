@@ -1,5 +1,5 @@
 {
-    "name": "aws-template-app",
+    "name": "application",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
     "sourceRoot": "services/test-service/src",
@@ -12,7 +12,15 @@
                 "cwd": "{projectRoot}"
             }
         },
-        "list": {
+        "deploy:staging": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk deploy stg/**",
+                "cwd": "{projectRoot}"
+            }
+        },
+        "stacks": {
             "executor": "nx:run-commands",
             "options": {
                 "color": true,
@@ -21,5 +29,5 @@
             }
         }
     },
-    "tags": ["app", "cdk", "aws-template-app"]
+    "tags": ["application", "cdk", "aligent"]
 }
