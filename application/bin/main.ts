@@ -1,20 +1,24 @@
 #!/usr/bin/env node
-import { App } from 'aws-cdk-lib';
+import { App, Tags } from 'aws-cdk-lib';
 import 'source-map-support/register';
-import { Application } from '../lib/app';
+import { ApplicationStage } from '../lib/application-stage';
 
 const app = new App();
 
-new Application(app, 'stg', {
+const staging = new ApplicationStage(app, 'stg', {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: process.env.CDK_DEFAULT_REGION,
     },
 });
 
-new Application(app, 'prd', {
+Tags.of(staging).add('STAGE', 'stg');
+
+new ApplicationStage(app, 'prd', {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: process.env.CDK_DEFAULT_REGION,
     },
 });
+
+Tags.of(staging).add('STAGE', 'prd');

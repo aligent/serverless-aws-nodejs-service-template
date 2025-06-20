@@ -3,6 +3,23 @@
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "services/test-cdk-service/src",
     "projectType": "library",
-    "targets": {},
+    "targets": {
+        "deploy": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk deploy",
+                "cwd": "{projectRoot}"
+            }
+        },
+        "deploy:staging": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk deploy stg/**",
+                "cwd": "{projectRoot}"
+            }
+        }
+    },
     "tags": ["service", "general", "test-cdk-service"]
 }
