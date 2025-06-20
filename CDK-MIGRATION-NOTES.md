@@ -17,7 +17,11 @@ The latest version of a deployed lambdas and step functions now has an alias of 
 CDK Step Function setup produces a different base definition for lambda tasks
 
 - Uses the `LambdaInvoke` resource, not the Lambda ARN directly
-- Automatically adds a retry block
+- Automatically adds a retry block for internal AWS service failures
+- Outputs the task result nested inside the `Payload` property on a metadata object
+
+To get task outputs similar to the direct lambda resource invocation, we can use the new Jsonata syntax and the `outputs` property.
+Jsonata data transformation documentation: https://docs.aws.amazon.com/step-functions/latest/dg/transforming-data.html
 
 # CDK Documentation
 

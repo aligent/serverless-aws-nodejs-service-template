@@ -6,6 +6,7 @@ import {
     CfnStateMachineVersion,
     DefinitionBody,
     Pass,
+    QueryLanguage,
     StateMachine,
 } from 'aws-cdk-lib/aws-stepfunctions';
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
@@ -54,10 +55,14 @@ export class TestCdkServiceStack extends Stack {
 
         const helloTask = new LambdaInvoke(this, 'Hello', {
             lambdaFunction: helloFunction,
+            queryLanguage: QueryLanguage.JSONATA,
+            outputs: '{% $states.result.Payload %}',
         });
 
         const worldTask = new LambdaInvoke(this, 'World', {
             lambdaFunction: worldFunction,
+            queryLanguage: QueryLanguage.JSONATA,
+            outputs: '{% $states.result.Payload %}',
         });
 
         const passthru = new Pass(this, 'Passthru');
