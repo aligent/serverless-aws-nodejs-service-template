@@ -10,12 +10,12 @@ import { Construct } from 'constructs';
 type StageId = 'dev' | 'stg' | 'prd' | (string & {});
 
 export class ApplicationStage extends Stage {
-    constructor(scope: Construct, id: StageId, props?: StageProps) {
-        super(scope, id as string, props);
+    constructor(scope: Construct, stage: StageId, props?: StageProps) {
+        super(scope, stage as string, props);
 
         new TestCdkServiceStack(this, 'brand-name-test-cdk', {
             ...props,
-            stackName: `brand-name-test-cdk-${id}`,
+            stackName: `brand-name-test-cdk-${stage}`,
             description: 'Service template generated using Nx',
         });
     }

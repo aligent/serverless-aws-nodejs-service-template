@@ -39,3 +39,6 @@ https://github.com/kevinslin/open-cdk
 - CDK best practices are to NOT name resources directly. I'm not exactly sure what this means though - does it apply to Lambda.functionName, for instance?
 - Should we continue to version lambda functions? I don't think I've ever invoked an older version.
 - If we continue versioning, what's a useful alias strategy?
+- How do we get step functions to call other step functions, especially in yaml definition?
+- How do we get step functions to reference the stage name and other env variables?
+- How do we work with env variables in general? What about the ones in SSM?
