@@ -1,0 +1,44 @@
+States:
+  Get config:
+    Type: Task
+    Resource: arn:aws:states:::aws-sdk:s3:getObject
+    Next: Pick a random number
+    QueryLanguage: JSONata
+    Arguments:
+      Bucket: ${stackName}-config
+      Key: random-number-config.json
+    Output: "{% $parse($states.result.Body) %}"
+    Comment: |-
+      Example output:
+      {
+          "max": 3,
+          "min": 6
+      }
+  Pick a random number:
+    Type: Pass
+    Next: Cache number
+    QueryLanguage: JSONata
+    Output:
+      number: "{% ($min := $states.input.min; $max := $states.input.max; $min +
+        $random() * ($max - $min)) %}"
+    Comment: |-
+      Example output:
+      {
+          "number": 4.56789
+      }
+  Cache number:
+    Type: Task
+    Resource: arn:aws:states:::dynamodb:putItem
+    QueryLanguage: JSONata
+    Arguments:
+      TableName: ${stackName}-cache
+      Item:
+        id:
+          S: "{% $uuid() %}"
+        timestamp:
+          S: "{% $now() %}"
+        number:
+          N: "{% $string($states.input.number) %}"
+    Comment: Cache number along with a UUID and timestamp
+    End: true
+StartAt: Get config

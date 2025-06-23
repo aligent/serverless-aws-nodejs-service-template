@@ -20,6 +20,14 @@
                 "cwd": "{projectRoot}"
             }
         },
+        "destroy:staging": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "command": "cdk destroy stg/**",
+                "cwd": "{projectRoot}"
+            }
+        },
         "stacks": {
             "executor": "nx:run-commands",
             "options": {

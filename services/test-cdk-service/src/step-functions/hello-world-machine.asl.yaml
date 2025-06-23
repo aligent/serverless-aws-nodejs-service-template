@@ -5,7 +5,7 @@ States:
     OutputPath: $.Payload
     Parameters:
       Payload.$: $
-      FunctionName: hello
+      FunctionName: ${stackName}-hello
     Retry:
       - ErrorEquals:
           - Lambda.ServiceException
@@ -23,7 +23,7 @@ States:
     OutputPath: $.Payload
     Parameters:
       Payload.$: $
-      FunctionName: world
+      FunctionName: ${stackName}-world
     Retry:
       - ErrorEquals:
           - Lambda.ServiceException
