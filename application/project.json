@@ -4,11 +4,11 @@
     "projectType": "application",
     "sourceRoot": "services/test-service/src",
     "targets": {
-        "deploy": {
+        "cdk": {
             "executor": "nx:run-commands",
             "options": {
                 "color": true,
-                "command": "cdk deploy",
+                "command": "cdk",
                 "cwd": "{projectRoot}"
             }
         },
@@ -17,22 +17,6 @@
             "options": {
                 "color": true,
                 "command": "cdk deploy stg/**",
-                "cwd": "{projectRoot}"
-            }
-        },
-        "destroy:staging": {
-            "executor": "nx:run-commands",
-            "options": {
-                "color": true,
-                "command": "cdk destroy stg/**",
-                "cwd": "{projectRoot}"
-            }
-        },
-        "stacks": {
-            "executor": "nx:run-commands",
-            "options": {
-                "color": true,
-                "command": "cdk list",
                 "cwd": "{projectRoot}"
             }
         }

@@ -1,0 +1,8 @@
+{
+    "name": "legacy-service",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "services/legacy-service/src",
+    "projectType": "library",
+    "targets": {},
+    "tags": ["service", "general", "legacy-service"]
+}

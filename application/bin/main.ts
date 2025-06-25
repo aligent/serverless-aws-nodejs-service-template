@@ -1,18 +1,36 @@
 #!/usr/bin/env node
-import { App, Tags } from 'aws-cdk-lib';
+import { App, Duration } from 'aws-cdk-lib';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import 'source-map-support/register';
 import { ApplicationStage } from '../lib/application-stage';
 
-const app = new App();
+const app = new App({});
 
-const staging = new ApplicationStage(app, 'stg', {
+app.node.setContext('lambda', {
+    timeout: Duration.seconds(6),
+    memorySize: 192,
+    runtime: Runtime.NODEJS_20_X,
+    tracing: Tracing.ACTIVE,
+    environment: {
+        NODE_OPTIONS: '--enable-source-maps',
+    },
+    bundling: {
+        sourceMap: true,
+    },
+    alias: 'LATEST',
+});
+
+app.node.setContext('step-function', {
+    tracingEnabled: true,
+    alias: 'LATEST',
+});
+
+new ApplicationStage(app, 'stg', {
     env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: process.env.CDK_DEFAULT_REGION,
     },
 });
-
-Tags.of(staging).add('STAGE', 'stg');
 
 new ApplicationStage(app, 'prd', {
     env: {
@@ -20,5 +38,3 @@ new ApplicationStage(app, 'prd', {
         region: process.env.CDK_DEFAULT_REGION,
     },
 });
-
-Tags.of(staging).add('STAGE', 'prd');

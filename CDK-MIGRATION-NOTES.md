@@ -37,8 +37,13 @@ https://github.com/kevinslin/open-cdk
 # Questions
 
 - CDK best practices are to NOT name resources directly. I'm not exactly sure what this means though - does it apply to Lambda.functionName, for instance?
+  - YES. We can support legacy naming to some extent, but new stacks should allow CDK to name things
 - Should we continue to version lambda functions? I don't think I've ever invoked an older version.
-- If we continue versioning, what's a useful alias strategy?
+  - YES. Eventually we want to move closer to continuous deployment with rollbacks
+- What's a useful alias strategy? Eventually we want to
 - How do we get step functions to call other step functions, especially in yaml definition?
 - How do we get step functions to reference the stage name and other env variables?
 - How do we work with env variables in general? What about the ones in SSM?
+  - Use `cdk.context.json` for things we want to configure at deploy time.
+- What does testing look like now?
+- Do we need a typesafe way of declaring/fetching default config using the context system?

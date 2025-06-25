@@ -1,0 +1,4 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "include": ["**/*.ts", "../../libs/cdk-utils/src/lib/constructs/lambda-function.ts"]
+}

@@ -1,22 +1,39 @@
-import { TestCdkServiceStack } from '@services/test-cdk-service';
-import { Stage, type StageProps } from 'aws-cdk-lib';
+import { OverrideFunctionNameInjector, OverrideStateMachineNameInjector } from '@aligent/cdk-utils';
+import { CdkServiceStack } from '@services/cdk-service';
+import { LegacyStack } from '@services/legacy-service';
+import { Stage, Tags, type StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
 /**
  * StageId can be any string, but it's strongly recommended to use
- * a 3 letter preset in most cases. This type uses a trick to provide
- * recommended options in intellisense while accepting any string.
+ * a 3 letter preset. This type uses a trick to provide recommended
+ * options in intellisense while accepting any string.
  */
 type StageId = 'dev' | 'stg' | 'prd' | (string & {});
 
+/**
+ * ApplicationStage is the main repeatable unit of deployment.
+ * It should contain all the stacks required by this application
+ */
 export class ApplicationStage extends Stage {
     constructor(scope: Construct, stage: StageId, props?: StageProps) {
         super(scope, stage as string, props);
 
-        new TestCdkServiceStack(this, 'brand-name-test-cdk', {
+        const legacyNameFormatter = (id: string) => `legacy-service-${stage}-${id}`;
+        new LegacyStack(this, 'legacy-service', {
             ...props,
-            stackName: `brand-name-test-cdk-${stage}`,
-            description: 'Service template generated using Nx',
+            description: 'Legacy service template generated using Nx',
+            propertyInjectors: [
+                new OverrideFunctionNameInjector(legacyNameFormatter),
+                new OverrideStateMachineNameInjector(legacyNameFormatter),
+            ],
         });
+
+        new CdkServiceStack(this, 'cdk-service', {
+            ...props,
+            description: 'CDK service template generated using Nx',
+        });
+
+        Tags.of(this).add('STAGE', stage);
     }
 }

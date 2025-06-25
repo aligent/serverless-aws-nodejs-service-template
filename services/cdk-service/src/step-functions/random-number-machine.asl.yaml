@@ -5,8 +5,8 @@ States:
     Next: Pick a random number
     QueryLanguage: JSONata
     Arguments:
-      Bucket: ${stackName}-config
-      Key: random-number-config.json
+      Bucket: ${configBucketName}
+      Key: ${configFileName}
     Output: "{% $parse($states.result.Body) %}"
     Comment: |-
       Example output:
@@ -31,7 +31,7 @@ States:
     Resource: arn:aws:states:::dynamodb:putItem
     QueryLanguage: JSONata
     Arguments:
-      TableName: ${stackName}-cache
+      TableName: ${cacheTableName}
       Item:
         id:
           S: "{% $uuid() %}"

@@ -62,3 +62,6 @@ vitest.config.*.timestamp*
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+# Claude Code
+CLAUDE.md
