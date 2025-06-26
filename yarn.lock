@@ -43,6 +43,7 @@ __metadata:
     "@vitest/ui": "npm:^2.0.0"
     aws-cdk: "npm:^2.1019.2"
     aws-cdk-lib: "npm:^2.201.0"
+    cdk-nag: "npm:^2.36.26"
     constructs: "npm:^10.4.2"
     dotenv: "npm:^16.3.1"
     enquirer: "npm:^2.4.1"
@@ -7185,6 +7186,16 @@ __metadata:
   version: 1.6.3
   resolution: "case@npm:1.6.3"
   checksum: 10c0/43fcbb1dff1c4add94dd2bc98bd923d6616f10bff6959adf686d192c3db7d7ced35410761e1ac94cc4a1f5c41c86406ad79d390805539e421e8a77e553f67223
+  languageName: node
+  linkType: hard
+
+"cdk-nag@npm:^2.36.26":
+  version: 2.36.26
+  resolution: "cdk-nag@npm:2.36.26"
+  peerDependencies:
+    aws-cdk-lib: ^2.156.0
+    constructs: ^10.0.5
+  checksum: 10c0/9740d9a0465de6515d26d7950048264137d7aa3d6d37f9051b175aaac3f7c69eec8ba6dfc637228f120e3eb456518607179e5a6ff3024b1c0038c2dccb5eded6
   languageName: node
   linkType: hard
 

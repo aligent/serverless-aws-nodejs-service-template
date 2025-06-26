@@ -36,6 +36,7 @@
     "@vitest/coverage-v8": "^2.0.0",
     "@vitest/ui": "^2.0.0",
     "aws-cdk": "^2.1019.2",
+    "cdk-nag": "^2.36.26",
     "dotenv": "^16.3.1",
     "enquirer": "^2.4.1",
     "esbuild": "~0.19.2",

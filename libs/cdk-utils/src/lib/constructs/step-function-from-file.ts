@@ -16,9 +16,16 @@ export interface StepFunctionFromFileProps extends StateMachineProps {
 @propertyInjectable
 export class StepFunctionFromFile extends StateMachine {
     readonly PROPERTY_INJECTION_ID = '@aligent.cdk-utils.StepFunctionFromFile';
+    static readonly CONTEXT_KEY = '@aligent.cdk-utils.StepFunctionFromFile';
+
+    static defineContext(props: Omit<StepFunctionFromFileProps, 'filepath'>) {
+        return {
+            [this.CONTEXT_KEY]: props,
+        };
+    }
 
     constructor(scope: Construct, id: string, props: StepFunctionFromFileProps) {
-        const defaults = scope.node.tryGetContext('step-function') || {};
+        const defaults = scope.node.tryGetContext(StepFunctionFromFile.CONTEXT_KEY) || {};
 
         super(scope, id, {
             definitionBody: DefinitionBody.fromFile(props.filepath),
