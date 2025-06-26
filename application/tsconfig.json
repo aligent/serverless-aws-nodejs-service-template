@@ -1,9 +1,4 @@
 {
     "extends": "../tsconfig.base.json",
-    "include": [
-        "**/*.ts",
-        "../services/**/*.ts",
-        "../libs/cdk-utils/src/lib/constructs/lambda-function.ts",
-        "../libs/cdk-utils/src/lib/constructs/step-function-from-file.ts"
-    ]
+    "include": ["**/*.ts", "../services/**/*.ts"]
 }
