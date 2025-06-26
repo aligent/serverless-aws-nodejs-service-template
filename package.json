@@ -1,7 +1,7 @@
 {
   "name": "@aligent/serverless-aws-nodejs-service-template",
   "version": "4.0.0",
-  "description": "Aligent AWS microservices template using Typescript and Serverless Framework",
+  "description": "Aligent AWS microservices template using Typescript and AWS CDK",
   "author": "Aligent Consulting",
   "scripts": {
     "test": "nx affected -t test --coverage",
