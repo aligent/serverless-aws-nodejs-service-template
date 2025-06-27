@@ -1,0 +1,51 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "CdkService",
+    "title": "CDK Service Generator",
+    "type": "object",
+    "properties": {
+        "brand": {
+            "type": "string",
+            "description": "The brand/company name for the service",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            },
+            "x-prompt": "What is the brand/company name?"
+        },
+        "name": {
+            "type": "string",
+            "description": "The name of the service",
+            "$default": {
+                "$source": "argv",
+                "index": 1
+            },
+            "x-prompt": "What is the name of the service?"
+        },
+        "type": {
+            "type": "string",
+            "description": "The type of CDK service to generate",
+            "enum": ["general", "notification"],
+            "default": "general",
+            "$default": {
+                "$source": "argv",
+                "index": 2
+            },
+            "x-prompt": {
+                "message": "What type of service would you like to generate?",
+                "type": "list",
+                "items": [
+                    {
+                        "value": "general",
+                        "label": "General CDK service"
+                    },
+                    {
+                        "value": "notification",
+                        "label": "Notification CDK service"
+                    }
+                ]
+            }
+        }
+    },
+    "required": ["brand", "name"]
+}

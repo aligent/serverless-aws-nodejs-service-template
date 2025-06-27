@@ -1,0 +1,24 @@
+import { RemovalPolicy, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { Topic } from 'aws-cdk-lib/aws-sns';
+import { Construct } from 'constructs';
+
+export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps extends StackProps {
+    /**
+     * Whether to use legacy naming conventions for resources.
+     * When true, resources will be named using the pattern: ${serviceId}-${stageName}-${resourceName}
+     * @default false - for new services
+     */
+    useLegacyNaming?: boolean;
+}
+
+export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {
+    constructor(scope: Construct, id: string, props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
+        super(scope, id, props);
+
+        new Topic(this, 'notificationTopic', {
+            displayName: '<%= name %> Notifications',
+        });
+
+        Tags.of(this).add('SERVICE', id);
+    }
+}

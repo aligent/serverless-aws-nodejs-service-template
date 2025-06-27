@@ -1,0 +1,13 @@
+import { describe, expect, it } from 'vitest';
+import { exampleTestData } from './__data__/example-data';
+
+describe('<%= name %> service', () => {
+    it('should process test data correctly', () => {
+        const { input, expectedOutput } = exampleTestData;
+        
+        // Example unit test - replace with actual service logic tests
+        const result = `Processed: ${input.setting}`;
+        
+        expect(result).toBe(expectedOutput.result);
+    });
+});

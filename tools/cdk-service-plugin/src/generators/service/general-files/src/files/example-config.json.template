@@ -1,0 +1,5 @@
+{
+    "setting": "example-value",
+    "enabled": true,
+    "threshold": 100
+}

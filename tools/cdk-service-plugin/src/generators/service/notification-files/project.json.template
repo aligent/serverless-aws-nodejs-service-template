@@ -1,0 +1,17 @@
+{
+    "name": "<%= name %>",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "services/<%= name %>/src",
+    "projectType": "library",
+    "targets": {
+        "typecheck": {
+            "executor": "nx:run-commands",
+            "options": {
+                "cwd": "{projectRoot}",
+                "color": true,
+                "command": "tsc --noEmit --pretty"
+            }
+        }
+    },
+    "tags": ["service", "notification", "<%= name %>"]
+}

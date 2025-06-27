@@ -1,0 +1,9 @@
+{
+  "name": "@aligent/cdk-service-plugin",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "generators": "./generators.json",
+  "dependencies": {
+    "@nx/devkit": "^20.0.0"
+  }
+}

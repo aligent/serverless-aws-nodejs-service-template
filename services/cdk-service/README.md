@@ -1,4 +1,4 @@
-# test-service
+# CDK Service
 
 Service template generated with [Nx](https://nx.dev).
 

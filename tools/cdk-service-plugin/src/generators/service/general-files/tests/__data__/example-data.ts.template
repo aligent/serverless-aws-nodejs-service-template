@@ -1,0 +1,10 @@
+export const exampleTestData = {
+    input: {
+        setting: 'test-value',
+        enabled: true,
+        threshold: 50,
+    },
+    expectedOutput: {
+        result: 'Processed: test-value',
+    },
+};

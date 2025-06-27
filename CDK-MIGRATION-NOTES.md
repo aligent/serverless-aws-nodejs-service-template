@@ -34,6 +34,10 @@ https://docs.aws.amazon.com/cdk/v2/guide/best-practices.html
 
 https://github.com/kevinslin/open-cdk
 
+## Issues
+
+- cdk-nag (and Aspects in general) do **not** work with CDK Stages: https://github.com/cdklabs/cdk-nag/issues/1726
+
 # Questions
 
 - CDK best practices are to NOT name resources directly. I'm not exactly sure what this means though - does it apply to Lambda.functionName, for instance?

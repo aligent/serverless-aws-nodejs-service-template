@@ -1,0 +1,16 @@
+import { App } from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import { <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack } from '../src/index';
+
+describe('<%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack', () => {
+    test('creates expected resources', () => {
+        const app = new App();
+        const stack = new <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack(app, 'TestStack');
+        const template = Template.fromStack(stack);
+
+        // Test that required resources are created
+        template.hasResourceProperties('AWS::SNS::Topic', {
+            DisplayName: '<%= name %> Notifications',
+        });
+    });
+});
