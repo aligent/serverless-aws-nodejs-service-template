@@ -1,6 +1,6 @@
 # Migrating from v3 Serverless Framework services
 
-## Service naming conventions
+## Service and resource naming conventions
 
 Serverless Framework services used a static naming convention instead of allowing AWS to control the naming of resources.
 
