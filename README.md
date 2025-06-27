@@ -84,6 +84,7 @@ Deploy the `stg` stage of your application to your `playground` AWS Profile:
 
 ```bash
 yarn deploy:playground
+# You may be prompted to confirm deployment of changes
 ```
 
 If you need more control, arbitrary CDK commands can be run using the application project
