@@ -16,7 +16,7 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
    Example: `alg-int`
 
-3. Install dependencies: `yarn install --immutable`
+3. Install dependencies: `yarn install`
 
    You may need to run `nvm use` to ensure you're on a compatible version of NodeJS
 
