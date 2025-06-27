@@ -11,7 +11,9 @@
                 "$source": "argv",
                 "index": 1
             },
-            "x-prompt": "What is the name of the service?"
+            "x-prompt": "What is the name of the service?",
+            "pattern": "^(?!.*[Ss]tack|.*[Ss]ervice).*$",
+            "patternErrorMessage": "Service name cannot contain '[Ss]tack' or '[Ss]ervice'"
         },
         "type": {
             "type": "string",
