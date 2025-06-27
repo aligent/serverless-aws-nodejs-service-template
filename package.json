@@ -11,7 +11,8 @@
     "check-types": "nx affected -t typecheck",
     "check-types:all": "nx run-many -t typecheck",
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true",
-    "deploy:playground": "nx run application:cdk deploy 'stg/**' --profile playground"
+    "playground:deploy": "nx run application:cdk deploy 'stg/**' --profile playground",
+    "playground:destroy": "nx run application:cdk destroy 'stg/**' --profile playground"
   },
   "devDependencies": {
     "@aligent/serverless-conventions": "latest",
