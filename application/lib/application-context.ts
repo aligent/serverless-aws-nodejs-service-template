@@ -20,4 +20,6 @@ export const APPLICATION_CONTEXT = {
         tracingEnabled: true,
         alias: 'LATEST',
     }),
+    configFileName: 'random-number-config.json',
+    clientName: 'aligent',
 } as const;

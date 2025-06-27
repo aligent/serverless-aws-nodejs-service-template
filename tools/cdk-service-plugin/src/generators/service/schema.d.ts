@@ -1,5 +1,4 @@
-export interface CdkServiceGeneratorSchema {
-    brand: string;
+export interface ServiceGeneratorSchema {
     name: string;
     type: 'general' | 'notification';
 }

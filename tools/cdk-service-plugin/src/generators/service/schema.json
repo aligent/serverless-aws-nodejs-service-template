@@ -4,15 +4,6 @@
     "title": "CDK Service Generator",
     "type": "object",
     "properties": {
-        "brand": {
-            "type": "string",
-            "description": "The brand/company name for the service",
-            "$default": {
-                "$source": "argv",
-                "index": 0
-            },
-            "x-prompt": "What is the brand/company name?"
-        },
         "name": {
             "type": "string",
             "description": "The name of the service",
@@ -47,5 +38,5 @@
             }
         }
     },
-    "required": ["brand", "name"]
+    "required": ["name"]
 }

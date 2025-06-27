@@ -6,12 +6,7 @@ import { Construct } from 'constructs';
 import path from 'node:path';
 
 export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps extends StackProps {
-    /**
-     * Whether to use legacy naming conventions for resources.
-     * When true, resources will be named using the pattern: ${serviceId}-${stageName}-${resourceName}
-     * @default false - for new services
-     */
-    useLegacyNaming?: boolean;
+    description: string;
 }
 
 export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {

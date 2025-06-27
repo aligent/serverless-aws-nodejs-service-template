@@ -8,9 +8,7 @@
         "@aligent/serverless-plugin:service": {
             "brand": "brand-name"
         },
-        "@aligent/cdk-service-plugin:cdk-service": {
-            "brand": "brand-name"
-        },
+        "@aligent/cdk-service-plugin:cdk-service": {},
         "@nx/js:library": {
             "bundler": "none",
             "linter": "eslint",

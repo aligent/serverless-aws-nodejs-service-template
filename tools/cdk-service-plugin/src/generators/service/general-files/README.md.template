@@ -1,6 +1,6 @@
 # <%= name %>
 
-This is a CDK service generated using the <%= brand %> template.
+This is a CDK service generated using `@aligent/cdk-service-plugin` for Nx.
 
 ## Architecture
 
