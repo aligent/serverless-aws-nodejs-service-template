@@ -1,4 +1,3 @@
-import { CdkServiceStack } from '@services/cdk-service';
 import { Stage, Tags, type StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
@@ -16,11 +15,6 @@ type StageId = 'dev' | 'stg' | 'prd' | (string & {});
 export class ApplicationStage extends Stage {
     constructor(scope: Construct, stage: StageId, props?: StageProps) {
         super(scope, stage as string, props);
-
-        new CdkServiceStack(this, 'cdk-service', {
-            ...props,
-            description: 'CDK service template generated using Nx',
-        });
 
         Tags.of(this).add('STAGE', stage);
     }

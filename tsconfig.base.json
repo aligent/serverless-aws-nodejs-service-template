@@ -10,8 +10,7 @@
             "@aligent/cdk-service-plugin": ["tools/cdk-service-plugin/src/index.ts"],
             "@aligent/cdk-utils": ["tools/cdk-utils/src/index.ts"],
             "@aligent/openapi-plugin": ["tools/openapi-plugin/src/index.ts"],
-            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"],
-            "@services/cdk-service": ["services/cdk-service/src/index.ts"]
+            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"]
         },
         "types": ["node", "vitest", "vitest/globals"]
     }
