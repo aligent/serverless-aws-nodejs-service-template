@@ -1,4 +1,4 @@
-import { LambdaFunction, MicroservicesChecks, StepFunctionFromFile } from '@aligent/cdk-utils';
+import { LambdaFunction, MicroserviceChecks, StepFunctionFromFile } from '@aligent/cdk-utils';
 import { App, Aspects, Duration, Stack } from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
@@ -37,7 +37,7 @@ beforeEach(() => {
 
     stack = new CdkServiceStack(app, 'TestStack');
 
-    Aspects.of(stack).add(new MicroservicesChecks());
+    Aspects.of(stack).add(new MicroserviceChecks());
 
     template = Template.fromStack(stack);
 });
@@ -55,7 +55,7 @@ describe('CdkNag', () => {
 
         expect(
             errors,
-            'Microservices checks failed - inspect console logs for details'
+            'Microservice checks failed - inspect console logs for details'
         ).toHaveLength(0);
     });
 });

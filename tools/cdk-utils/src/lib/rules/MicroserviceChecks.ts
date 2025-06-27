@@ -3,7 +3,7 @@ import { NagMessageLevel, NagPack, rules, type NagPackProps } from 'cdk-nag';
 import type { IConstruct } from 'constructs';
 
 /**
- * Microservices Checks are a compilation of rules to validate infrastructure-as-code template
+ * Microservice Checks are a compilation of rules to validate infrastructure-as-code template
  * against recommended practices using the cdk-nag library.
  *
  * @see https://github.com/cdk-patterns/cdk-nag/
@@ -13,7 +13,7 @@ import type { IConstruct } from 'constructs';
  * const stack = new Stack(app, 'MyStack');
  * Aspects.of(stack).add(new MicroservicesChecks());
  */
-export class MicroservicesChecks extends NagPack {
+export class MicroserviceChecks extends NagPack {
     constructor(props?: NagPackProps) {
         super(props);
         this.packName = 'Microservices';

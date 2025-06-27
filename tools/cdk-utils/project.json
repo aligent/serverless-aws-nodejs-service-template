@@ -1,10 +1,9 @@
 {
-    "name": "cdk-utils",
+    "name": "@aligent/cdk-utils",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "sourceRoot": "tools/cdk-utils/src",
     "projectType": "library",
     "tags": ["cdk", "utils"],
-    "// targets": "to see all targets run: nx show project cdk-utils --web",
     "targets": {
         "typecheck": {
             "executor": "nx:run-commands",
@@ -12,6 +11,17 @@
                 "cwd": "{projectRoot}",
                 "color": true,
                 "command": "tsc --noEmit --pretty"
+            }
+        },
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/tools/cdk-utils",
+                "main": "tools/cdk-utils/src/index.ts",
+                "tsConfig": "tools/cdk-utils/tsconfig.lib.json",
+                "assets": ["tools/cdk-utils/*.md"],
+                "generatePackageJson": true
             }
         }
     }
