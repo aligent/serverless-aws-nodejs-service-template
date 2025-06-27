@@ -28,7 +28,7 @@ Services are the core components deployed to AWS by the application
 
 <summary>Instructions for working with services</summary>
 
-[Add](#-adding-a-new-service) | [Test](#-testing-the-application) | [Deploy](#-first-deploy-of-the-application) | [Remove](#-removing-a-service)
+[Add a service](#⭐-adding-a-new-service) | [Test app](#🧪-testing-the-application) | [Deploy app](#🚀-playground-deploy-of-the-application) | [Clean up app](#🗑️-clean-up-the-application-from-playground) | [Remove a service](#❌-removing-a-service)
 
 ### ⭐ Adding a new service
 
@@ -78,12 +78,12 @@ yarn test:all
 
 ---
 
-### 🚀 First deploy of the application
+### 🚀 Playground deploy of the application
 
 Deploy the `stg` stage of your application to your `playground` AWS Profile:
 
 ```bash
-yarn deploy:playground
+yarn playground:deploy
 # You may be prompted to confirm deployment of changes
 ```
 
@@ -95,7 +95,20 @@ yarn nx run application:cdk synth stg/**
 
 ---
 
-### 🗑️ Removing a service
+### 🗑️ Clean up the application from playground
+
+During normal development CDK will remove resources that are no longer used by your application.
+
+If necessary, the entire application can be removed from the account associated with your `playground` AWS profile:
+
+```bash
+yarn playground:destroy
+# You will be prompted to confirm deletion of the stacks
+```
+
+---
+
+### ❌ Removing a service
 
 Always remove services using the Nx generator
 
