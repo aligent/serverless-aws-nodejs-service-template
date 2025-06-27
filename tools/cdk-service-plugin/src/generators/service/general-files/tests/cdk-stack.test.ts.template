@@ -60,7 +60,7 @@ describe('CdkNag', () => {
     });
 });
 
-describe('CdkServiceStack', () => {
+describe('<%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack', () => {
     it('should create a single S3 bucket', () => {
         template.resourceCountIs('AWS::S3::Bucket', 1);
     });
