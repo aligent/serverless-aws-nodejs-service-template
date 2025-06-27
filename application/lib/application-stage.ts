@@ -1,6 +1,4 @@
-import { OverrideFunctionNameInjector, OverrideStateMachineNameInjector } from '@aligent/cdk-utils';
 import { CdkServiceStack } from '@services/cdk-service';
-import { LegacyStack } from '@services/legacy-service';
 import { Stage, Tags, type StageProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 
@@ -18,16 +16,6 @@ type StageId = 'dev' | 'stg' | 'prd' | (string & {});
 export class ApplicationStage extends Stage {
     constructor(scope: Construct, stage: StageId, props?: StageProps) {
         super(scope, stage as string, props);
-
-        const legacyNameFormatter = (id: string) => `legacy-service-${stage}-${id}`;
-        new LegacyStack(this, 'legacy-service', {
-            ...props,
-            description: 'Legacy service template generated using Nx',
-            propertyInjectors: [
-                new OverrideFunctionNameInjector(legacyNameFormatter),
-                new OverrideStateMachineNameInjector(legacyNameFormatter),
-            ],
-        });
 
         new CdkServiceStack(this, 'cdk-service', {
             ...props,
