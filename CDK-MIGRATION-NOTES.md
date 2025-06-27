@@ -1,3 +1,23 @@
+# Migrating from v3 Serverless Framework services
+
+## Service naming conventions
+
+Serverless Framework services used a static naming convention instead of allowing AWS to control the naming of resources.
+
+If you need to support this, the `@aligent/cdk-utils` toolset provides property injectors for easy stack-wide overriding of resource names.
+
+```typescript
+const legacyNameFormatter = (id: string) => `legacy-service-${stage}-${id}`;
+new LegacyStack(this, 'legacy-service', {
+  ...props,
+  description: 'Legacy service template generated using Nx',
+  propertyInjectors: [
+    new OverrideFunctionNameInjector(legacyNameFormatter),
+    new OverrideStateMachineNameInjector(legacyNameFormatter),
+  ],
+});
+```
+
 # Differences between serverless framework and cdk templates
 
 ## Deployment
@@ -51,3 +71,7 @@ https://github.com/kevinslin/open-cdk
   - Use `cdk.context.json` for things we want to configure at deploy time.
 - What does testing look like now?
 - Do we need a typesafe way of declaring/fetching default config using the context system?
+
+```
+
+```
