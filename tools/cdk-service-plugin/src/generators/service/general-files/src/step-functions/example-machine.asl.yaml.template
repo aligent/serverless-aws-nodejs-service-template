@@ -1,42 +1,22 @@
 States:
-  Get config:
+  Process example:
     Type: Task
-    Resource: arn:aws:states:::aws-sdk:s3:getObject
-    Next: Process data
-    QueryLanguage: JSONata
-    Arguments:
-      Bucket: ${configBucketName}
-      Key: ${configFileName}
-    Output: "{% $parse($states.result.Body) %}"
-    Comment: |-
-      Example output:
-      {
-          "setting": "value"
-      }
-  Process data:
-    Type: Pass
+    Resource: ${exampleFunction}
     Next: Cache result
-    QueryLanguage: JSONata
-    Output:
-      result: "{% 'Processed: ' & $states.input.setting %}"
-    Comment: |-
-      Example output:
-      {
-          "result": "Processed: value"
-      }
+    Comment: Process data using Lambda function
   Cache result:
     Type: Task
     Resource: arn:aws:states:::dynamodb:putItem
     QueryLanguage: JSONata
     Arguments:
-      TableName: ${cacheTableName}
+      TableName: ${CACHE_TABLE}
       Item:
         id:
           S: "{% $uuid() %}"
         timestamp:
           S: "{% $now() %}"
         result:
-          S: "{% $states.input.result %}"
+          S: "{% $states.input.body %}"
     Comment: Cache result along with a UUID and timestamp
     End: true
-StartAt: Get config
+StartAt: Process example

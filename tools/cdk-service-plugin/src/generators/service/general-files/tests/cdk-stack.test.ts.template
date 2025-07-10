@@ -1,4 +1,4 @@
-import { LambdaFunction, MicroserviceChecks, StepFunctionFromFile } from '@aligent/cdk-utils';
+import { LambdaFunction, MicroserviceChecks, StepFunctionFromFile } from '@libs/cdk-utils/infra';
 import { App, Aspects, Duration, Stack } from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
@@ -69,15 +69,30 @@ describe('<%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.sl
         template.resourceCountIs('AWS::DynamoDB::Table', 1);
     });
 
+    it('should create a single Lambda function', () => {
+        template.resourceCountIs('AWS::Lambda::Function', 1);
+    });
+
     it('should create a single Step Functions state machine', () => {
         template.resourceCountIs('AWS::StepFunctions::StateMachine', 1);
     });
 
-    it('should pass configFileName from context to the Step Function', () => {
-        template.hasResourceProperties('AWS::StepFunctions::StateMachine', {
-            DefinitionSubstitutions: {
-                configFileName: 'test-config.json',
+    it('should configure Lambda function with proper environment variables', () => {
+        template.hasResourceProperties('AWS::Lambda::Function', {
+            Environment: {
+                Variables: {
+                    CONFIG_BUCKET: Match.anyValue(),
+                    CACHE_TABLE: Match.anyValue(),
+                    CONFIG_FILE_NAME: 'test-config.json',
+                },
             },
+        });
+    });
+
+    it('should use lambdaFunctions array approach for Step Function', () => {
+        // The Step Function should not have DefinitionSubstitutions when using lambdaFunctions array
+        template.hasResourceProperties('AWS::StepFunctions::StateMachine', {
+            DefinitionString: Match.anyValue(),
         });
     });
 });

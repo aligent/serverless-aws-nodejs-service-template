@@ -1,0 +1,22 @@
+import { LambdaFunction } from '@libs/cdk-utils/infra';
+import { Construct } from 'constructs';
+import { resolveAssetPath } from '../../index';
+
+export interface LambdaFunctionsProps {
+    commonEnvironment: Record<string, string>;
+}
+
+export class LambdaFunctions extends Construct {
+    public readonly exampleFunction: LambdaFunction;
+
+    constructor(scope: Construct, id: string, props: LambdaFunctionsProps) {
+        super(scope, id);
+
+        const { commonEnvironment } = props;
+
+        this.exampleFunction = new LambdaFunction(this, 'example', {
+            entry: resolveAssetPath('runtime/handlers/example.ts'),
+            environment: commonEnvironment,
+        });
+    }
+}

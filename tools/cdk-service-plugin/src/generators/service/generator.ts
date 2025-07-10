@@ -37,7 +37,7 @@ export async function serviceGenerator(tree: Tree, options: ServiceGeneratorSche
         projectType: 'library',
         sourceRoot: `${projectRoot}/src`,
         targets: {
-            typecheck: {
+            'check-types': {
                 executor: 'nx:run-commands',
                 options: {
                     cwd: '{projectRoot}',

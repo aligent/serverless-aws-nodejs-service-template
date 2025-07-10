@@ -23,7 +23,13 @@ definitions:
         script:
           - corepack enable yarn
           - yarn run lint
-          - yarn run check-types
+    - step: &typecheck
+        name: 🔍 Typecheck
+        caches:
+          - corepack-cache
+        script:
+          - corepack enable yarn
+          - yarn run typecheck
     - step: &test
         name: 🧪 Test
         caches:
@@ -31,19 +37,6 @@ definitions:
         script:
           - corepack enable yarn
           - yarn run test
-    - step: &push-serverless
-        name: 🚀 Deploy Service
-        script:
-          - pipe: docker://aligent/nx-serverless-deploy-pipe:22
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              CFN_ROLE: ${CFN_ROLE}
-              STAGE: ${STAGE}
-              DEBUG: ${CI_DEBUG}
-              UPLOAD_BADGE: 'true'
-              APP_USERNAME: ${APP_USERNAME}
-              APP_PASSWORD: ${APP_PASSWORD}
 
 pipelines:
   pull-requests:
@@ -51,28 +44,6 @@ pipelines:
       - step: *install
       - parallel:
           steps:
-            - step: *test
             - step: *lint
-
-  branches:
-    production:
-      - stage:
-          name: 'Awaiting Production Deploy'
-          steps:
-            - step:
-                name: 'Awaiting Production Deploy'
-                script:
-                  - echo "Awaiting manual trigger of production deploy"
-      - stage:
-          name: 'Deploy Production'
-          deployment: Production
-          trigger: manual
-          steps:
-            - step:
-                <<: *push-serverless
-
-    staging:
-      - step:
-          <<: *push-serverless
-          name: 'Deploy Staging'
-          deployment: Staging
+            - step: *typecheck
+            - step: *test

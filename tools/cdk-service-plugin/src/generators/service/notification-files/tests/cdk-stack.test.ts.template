@@ -1,4 +1,4 @@
-import { LambdaFunction, MicroserviceChecks, StepFunctionFromFile } from '@aligent/cdk-utils';
+import { LambdaFunction, MicroserviceChecks, StepFunctionFromFile } from '@libs/cdk-utils/infra';
 import { App, Aspects, Duration, Stack } from 'aws-cdk-lib';
 import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';

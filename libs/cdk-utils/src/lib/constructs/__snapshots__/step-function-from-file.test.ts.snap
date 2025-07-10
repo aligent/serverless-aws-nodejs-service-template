@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StepFunctionFromFile > integration tests > creates a state machine from a file 1`] = `
+{
+  "MyStateMachine6C968CA5": {
+    "DeletionPolicy": "Delete",
+    "DependsOn": [
+      "MyStateMachineRoleD59FFEBC",
+    ],
+    "Properties": {
+      "DefinitionS3Location": {
+        "Bucket": "[SNAPSHOT_PLACEHOLDER]",
+        "Key": "[SNAPSHOT_PLACEHOLDER]",
+      },
+      "RoleArn": {
+        "Fn::GetAtt": [
+          "MyStateMachineRoleD59FFEBC",
+          "Arn",
+        ],
+      },
+    },
+    "Type": "AWS::StepFunctions::StateMachine",
+    "UpdateReplacePolicy": "Delete",
+  },
+}
+`;

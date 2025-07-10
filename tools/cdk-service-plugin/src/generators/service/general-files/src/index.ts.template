@@ -1,16 +1,28 @@
-import { StepFunctionFromFile } from '@aligent/cdk-utils';
+import { StepFunctionFromFile } from '@libs/cdk-utils/infra';
 import { RemovalPolicy, Stack, StackProps, Tags } from 'aws-cdk-lib';
 import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import path from 'node:path';
+import { LambdaFunctions } from './infra/functions/lambda-functions';
+import { SERVICE_NAME } from './service-name';
 
 export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps extends StackProps {
     description: string;
 }
 
+/**
+ * Resolves a path to runtime or infra assets relative to this stack
+ *
+ * @param assetPath - The path to the asset.
+ * @returns The resolved path.
+ */
+export function resolveAssetPath(assetPath: `${'runtime/' | 'infra/'}${string}`) {
+    return path.resolve(import.meta.dirname, assetPath);
+}
+
 export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {
-    constructor(scope: Construct, id: string, props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
+    constructor(scope: Construct, id: typeof SERVICE_NAME | (string & {}), props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
         super(scope, id, props);
 
         const configBucket = new Bucket(this, 'configBucket', {
@@ -24,17 +36,27 @@ export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
-        const exampleSfn = new StepFunctionFromFile(this, 'example', {
-            filepath: path.join(__dirname, 'step-functions/example-machine.asl.yaml'),
-            definitionSubstitutions: {
-                configBucketName: configBucket.bucketName,
-                configFileName: this.node.tryGetContext('configFileName'),
-                cacheTableName: cacheTable.tableName,
-            },
+        // Common environment variables for Lambda functions
+        const commonEnvironment = {
+            CONFIG_BUCKET: configBucket.bucketName,
+            CACHE_TABLE: cacheTable.tableName,
+            CONFIG_FILE_NAME: this.node.tryGetContext('configFileName') || 'config.json',
+        };
+
+        // Lambda functions organized in construct class
+        const { exampleFunction } = new LambdaFunctions(this, 'LambdaFunctions', { 
+            commonEnvironment 
         });
 
-        configBucket.grantRead(exampleSfn);
-        cacheTable.grantWriteData(exampleSfn);
+        // Step Function using lambdaFunctions array approach
+        const exampleSfn = new StepFunctionFromFile(this, 'example', {
+            filepath: resolveAssetPath('infra/step-functions/example-machine.asl.yaml'),
+            lambdaFunctions: [exampleFunction],
+        });
+
+        // Grant resource permissions
+        configBucket.grantRead(exampleFunction);
+        cacheTable.grantWriteData(exampleFunction);
 
         Tags.of(this).add('SERVICE', id);
     }

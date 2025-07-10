@@ -1,0 +1,10 @@
+/**
+ * Service name constant for <%= name %>
+ * 
+ * This constant is used throughout the service for:
+ * - Stack identification and naming
+ * - Resource tagging
+ * - Logging context
+ * - Service discovery
+ */
+export const SERVICE_NAME = '<%= name %>' as const;

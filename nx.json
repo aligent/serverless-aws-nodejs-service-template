@@ -1,14 +1,8 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "defaultBase": "main",
+    "defaultBase": "origin/staging",
     "generators": {
-        "@aligent/openapi-plugin:client": {
-            "brand": "brand-name"
-        },
-        "@aligent/serverless-plugin:service": {
-            "brand": "brand-name"
-        },
-        "@aligent/cdk-service-plugin:cdk-service": {},
+        "@tools/cdk-service-plugin:cdk-service": {},
         "@nx/js:library": {
             "bundler": "none",
             "linter": "eslint",
@@ -29,7 +23,13 @@
         "test": {
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
-            "cache": true
+            "cache": true,
+            "dependsOn": ["^build"]
+        },
+        "@nx/js:tsc": {
+            "cache": true,
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
         }
     },
     "namedInputs": {
@@ -52,10 +52,30 @@
         {
             "plugin": "@nx/vite/plugin",
             "options": {}
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "typecheck"
+                },
+                "build": {
+                    "targetName": "build",
+                    "configName": "tsconfig.lib.json",
+                    "buildDepsName": "build-deps",
+                    "watchDepsName": "watch-deps"
+                }
+            },
+            "include": ["tools/cdk-service-plugin/*"]
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "typecheck"
+                }
+            },
+            "include": ["libs/cdk-utils/*", "application/*"]
         }
-    ],
-    "workspaceLayout": {
-        "appsDir": "services",
-        "libsDir": "libs"
-    }
+    ]
 }

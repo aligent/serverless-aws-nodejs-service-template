@@ -1,0 +1,6 @@
+{
+  "name": "@aligent/application",
+  "version": "0.0.1",
+  "type": "module",
+  "./package.json": "./package.json"
+}

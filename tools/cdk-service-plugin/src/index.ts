@@ -4,4 +4,4 @@
  * For our use case, it has no effects.
  */
 /* v8 ignore next 1 */
-module.exports = {};
+export default {};

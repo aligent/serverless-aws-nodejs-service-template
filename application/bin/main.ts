@@ -1,27 +1,46 @@
 #!/usr/bin/env node
-import { App, Aspects } from 'aws-cdk-lib';
-import { AwsSolutionsChecks, ServerlessChecks } from 'cdk-nag';
-import 'source-map-support/register';
+import { type } from 'arktype';
+import { App } from 'aws-cdk-lib';
 import { APPLICATION_CONTEXT } from '../lib/application-context';
-import { ApplicationStage } from '../lib/application-stage';
+import { Bootstrap, Development, Production, Staging } from '../lib/application-stages';
+
+const { CDK_DEFAULT_ACCOUNT, CDK_DEFAULT_REGION } = type({
+    CDK_DEFAULT_ACCOUNT: 'string',
+    CDK_DEFAULT_REGION: 'string',
+})
+    .describe(
+        'correct AWS account and region to deploy to. Check your profile and credentials configuration'
+    )
+    .assert(process.env);
 
 const app = new App({
     context: APPLICATION_CONTEXT,
 });
 
-new ApplicationStage(app, 'stg', {
+new Bootstrap(app, 'bootstrap', {
     env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION,
+        account: CDK_DEFAULT_ACCOUNT,
+        region: CDK_DEFAULT_REGION,
     },
 });
 
-new ApplicationStage(app, 'prd', {
+new Development(app, {
     env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION,
+        account: CDK_DEFAULT_ACCOUNT,
+        region: CDK_DEFAULT_REGION,
     },
 });
 
-Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true, reports: true }));
-Aspects.of(app).add(new ServerlessChecks({ verbose: true, reports: true }));
+new Staging(app, {
+    env: {
+        account: CDK_DEFAULT_ACCOUNT,
+        region: CDK_DEFAULT_REGION,
+    },
+});
+
+new Production(app, {
+    env: {
+        account: CDK_DEFAULT_ACCOUNT,
+        region: CDK_DEFAULT_REGION,
+    },
+});

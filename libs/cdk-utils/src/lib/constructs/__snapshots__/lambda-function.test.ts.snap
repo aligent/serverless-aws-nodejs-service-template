@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LambdaFunction > integration tests > creates a lambda function with default properties 1`] = `
+{
+  "MyFunction3BAA72D1": {
+    "DependsOn": [
+      "MyFunctionServiceRole3C357FF2",
+    ],
+    "Properties": {
+      "Code": {
+        "S3Bucket": "[SNAPSHOT_PLACEHOLDER]",
+        "S3Key": "[SNAPSHOT_PLACEHOLDER]",
+      },
+      "Environment": {
+        "Variables": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "NODE_OPTIONS": "--enable-source-maps",
+        },
+      },
+      "Handler": "index.handler",
+      "LoggingConfig": {
+        "LogGroup": {
+          "Ref": "awslambdaMyFunction9F5970AC",
+        },
+      },
+      "Role": {
+        "Fn::GetAtt": [
+          "MyFunctionServiceRole3C357FF2",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs16.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;
+
+exports[`LambdaFunction > integration tests > creates a lambda function with overridden properties via context 1`] = `
+{
+  "MyFunction3BAA72D1": {
+    "DependsOn": [
+      "MyFunctionServiceRole3C357FF2",
+    ],
+    "Properties": {
+      "Code": {
+        "S3Bucket": "[SNAPSHOT_PLACEHOLDER]",
+        "S3Key": "[SNAPSHOT_PLACEHOLDER]",
+      },
+      "Environment": {
+        "Variables": {
+          "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+          "NODE_OPTIONS": "--enable-source-maps",
+        },
+      },
+      "Handler": "index.handler",
+      "LoggingConfig": {
+        "LogGroup": {
+          "Ref": "awslambdaMyFunction9F5970AC",
+        },
+      },
+      "MemorySize": 512,
+      "Role": {
+        "Fn::GetAtt": [
+          "MyFunctionServiceRole3C357FF2",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs16.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;

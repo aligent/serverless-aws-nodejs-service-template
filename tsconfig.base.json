@@ -1,17 +1,34 @@
 {
-    "extends": "@aligent/ts-code-standards/tsconfigs-base",
-    "compileOnSave": false,
+    // The @nx/js:library generator doesn't allow ANY keys other than
+    // compilerOptions here if you want it to use the new project references/workspaces setup
+    // @see node_modules/@nx/js/src/utils/typescript/ts-solution-setup.js#isWorkspaceSetupWithTsSolution
     "compilerOptions": {
-        "rootDir": ".",
-        "baseUrl": ".",
-        "exactOptionalPropertyTypes": false,
+        "composite": true, // Required by Nx to use the new project references/workspaces setup
+        "declaration": true, // Required by Nx to use the new project references/workspaces setup
+        "declarationMap": true,
+        "emitDeclarationOnly": true,
+        "experimentalDecorators": true, // Required by ESBuild to bundle property decorators
+        "importHelpers": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
         "noUncheckedSideEffectImports": true,
-        "paths": {
-            "@aligent/cdk-service-plugin": ["tools/cdk-service-plugin/src/index.ts"],
-            "@aligent/cdk-utils": ["tools/cdk-utils/src/index.ts"],
-            "@aligent/openapi-plugin": ["tools/openapi-plugin/src/index.ts"],
-            "@aligent/serverless-plugin": ["tools/serverless-plugin/src/index.ts"]
-        },
-        "types": ["node", "vitest", "vitest/globals"]
+        "types": ["node", "vitest", "vitest/globals"],
+        "strictNullChecks": true,
+        // Aligent defaults from ts-code-standards
+        "lib": ["ES2023"],
+        "strict": true,
+        "allowUnusedLabels": false,
+        "allowUnreachableCode": false,
+        "exactOptionalPropertyTypes": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "isolatedModules": true,
+        "checkJs": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true
     }
 }

@@ -1,23 +1,44 @@
-import { YOUR_ENV_VAR, simpleObject } from './__data__/example-data';
+import { describe, expect, it, beforeEach, afterEach } from 'vitest';
+import { getServiceEnv } from '../src/runtime/lib/utils/get-service-env';
 
-describe('Passing tests', () => {
-    test('Passing test', () => {
-        expect(1).toBeTruthy();
+describe('getServiceEnv', () => {
+    let originalEnv: NodeJS.ProcessEnv;
+
+    beforeEach(() => {
+        originalEnv = { ...process.env };
     });
 
-    test.skip('Skipped/Failing test', () => {
-        expect(-1).toBeGreaterThan(0);
+    afterEach(() => {
+        process.env = originalEnv;
     });
-});
 
-describe('Simple object tests', () => {
-    test('Object has correct name', () => {
-        expect(simpleObject.name).toEqual('Test Object');
+    it('should return environment variables when all are present', () => {
+        process.env.CONFIG_BUCKET = 'test-bucket';
+        process.env.CACHE_TABLE = 'test-table';
+        process.env.CONFIG_FILE_NAME = 'test-config.json';
+
+        const env = getServiceEnv();
+
+        expect(env).toEqual({
+            CONFIG_BUCKET: 'test-bucket',
+            CACHE_TABLE: 'test-table',
+            CONFIG_FILE_NAME: 'test-config.json',
+        });
     });
-});
 
-describe('Env config tests', () => {
-    test('Env config is set correctly', () => {
-        expect(YOUR_ENV_VAR).toEqual('environment-variable');
+    it('should throw error when required environment variables are missing', () => {
+        delete process.env.CONFIG_BUCKET;
+        delete process.env.CACHE_TABLE;
+        delete process.env.CONFIG_FILE_NAME;
+
+        expect(() => getServiceEnv()).toThrow();
+    });
+
+    it('should throw error when only some environment variables are present', () => {
+        process.env.CONFIG_BUCKET = 'test-bucket';
+        delete process.env.CACHE_TABLE;
+        delete process.env.CONFIG_FILE_NAME;
+
+        expect(() => getServiceEnv()).toThrow();
     });
 });

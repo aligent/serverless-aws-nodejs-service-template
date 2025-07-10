@@ -1,0 +1,24 @@
+import { pickFromProcessEnv } from '@libs/cdk-utils/runtime';
+
+/**
+ * Environment variables for <%= name %> service
+ */
+export interface ServiceEnvironment {
+    CONFIG_BUCKET: string;
+    CACHE_TABLE: string;
+    CONFIG_FILE_NAME: string;
+}
+
+/**
+ * Get typed environment variables for the service
+ * 
+ * @returns Validated environment variables
+ * @throws Error if required environment variables are missing
+ */
+export function getServiceEnv(): ServiceEnvironment {
+    return pickFromProcessEnv([
+        'CONFIG_BUCKET',
+        'CACHE_TABLE', 
+        'CONFIG_FILE_NAME',
+    ]);
+}

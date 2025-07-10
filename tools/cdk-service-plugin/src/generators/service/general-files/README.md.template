@@ -1,6 +1,6 @@
 # <%= name %>
 
-This is a CDK service generated using `@aligent/cdk-service-plugin` for Nx.
+This is a CDK service generated using `@tools/cdk-service-plugin` for Nx.
 
 ## Architecture
 
@@ -11,7 +11,7 @@ This is a CDK service generated using `@aligent/cdk-service-plugin` for Nx.
 ### Type Checking
 
 ```bash
-npx nx typecheck <%= name %>
+npx nx check-types <%= name %>
 ```
 
 ### Testing

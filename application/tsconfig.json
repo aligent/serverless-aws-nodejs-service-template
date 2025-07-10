@@ -1,4 +1,10 @@
 {
     "extends": "../tsconfig.base.json",
-    "include": ["**/*.ts", "../services/**/*.ts"]
+    "files": [],
+    "include": [],
+    "references": [
+        {
+            "path": "../libs/cdk-utils"
+        }
+    ]
 }

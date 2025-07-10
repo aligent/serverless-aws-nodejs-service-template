@@ -11,22 +11,6 @@
                 "command": "cdk",
                 "cwd": "{projectRoot}"
             }
-        },
-        "deploy:staging": {
-            "executor": "nx:run-commands",
-            "options": {
-                "color": true,
-                "command": "cdk deploy stg/**",
-                "cwd": "{projectRoot}"
-            }
-        },
-        "typecheck": {
-            "executor": "nx:run-commands",
-            "options": {
-                "cwd": "{projectRoot}",
-                "color": true,
-                "command": "tsc --noEmit --pretty"
-            }
         }
     },
     "tags": ["application", "cdk", "aligent"]

@@ -19,7 +19,7 @@ NO_COLOUR="\033[0m"
 
 echo -e "${GREEN} Executing git hook $0 $@ ${NO_COLOUR}"
 
-commands=("npx nx affected -t lint, typecheck --parallel=3" "npx nx affected:test --coverage")
+commands=("yarn nx affected -t lint, typecheck --parallel=3" "yarn nx affected:test --coverage")
 failures=()
 
 # Loop over commands, execute and push failure message if we see one
