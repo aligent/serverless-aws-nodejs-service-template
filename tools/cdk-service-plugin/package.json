@@ -33,5 +33,6 @@
         }
       }
     }
-  }
+  },
+  "generators": "./generators.json"
 }
