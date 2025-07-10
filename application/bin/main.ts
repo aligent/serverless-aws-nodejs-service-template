@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { type } from 'arktype';
-import { App } from 'aws-cdk-lib';
+import { App, Tags } from 'aws-cdk-lib';
 import { APPLICATION_CONTEXT } from '../lib/application-context';
 import { Bootstrap, Development, Production, Staging } from '../lib/application-stages';
 
@@ -44,3 +44,5 @@ new Production(app, {
         region: CDK_DEFAULT_REGION,
     },
 });
+
+Tags.of(app).add('OWNER', APPLICATION_CONTEXT.APPLICATION_OWNER);

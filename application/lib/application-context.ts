@@ -11,6 +11,7 @@ import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
  * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.Context.html
  */
 export const APPLICATION_CONTEXT = {
+    APPLICATION_OWNER: 'aligent',
     ...LambdaFunction.defineContext({
         timeout: Duration.seconds(6),
         memorySize: 192,
