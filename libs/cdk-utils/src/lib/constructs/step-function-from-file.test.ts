@@ -1,6 +1,7 @@
 import { App, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { StateMachineType } from 'aws-cdk-lib/aws-stepfunctions';
 import { join as pathJoin } from 'path';
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { StepFunctionFromFile } from './step-function-from-file';
@@ -210,6 +211,21 @@ describe('StepFunctionFromFile', () => {
         test('returns empty object when no context is set', () => {
             const context = StepFunctionFromFile.getContext(stack);
             expect(context).toEqual({});
+        });
+
+        it('sets up logging for EXPRESS step functions', () => {
+            new StepFunctionFromFile(stack, 'ExpressStateMachine', {
+                filepath: pathJoin(__dirname, '__data__', 'test-machine.asl.yaml'),
+                stateMachineType: StateMachineType.EXPRESS,
+            });
+
+            synthDefaultStack();
+
+            defaultTemplate.hasResourceProperties('AWS::StepFunctions::StateMachine', {
+                LoggingConfiguration: {
+                    Level: 'ALL',
+                },
+            });
         });
     });
 });

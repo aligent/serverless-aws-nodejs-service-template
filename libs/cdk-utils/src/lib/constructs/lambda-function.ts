@@ -1,14 +1,15 @@
-import { RemovalPolicy, Stage } from 'aws-cdk-lib';
+import { Stage } from 'aws-cdk-lib';
 import {
     LogLevel,
     NodejsFunction,
     OutputFormat,
     type NodejsFunctionProps,
 } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import { propertyInjectable } from 'aws-cdk-lib/core/lib/prop-injectable';
 import { Construct } from 'constructs';
 import { DevelopmentApplicationStage, StagingApplicationStage } from './application-stage';
+import { logGroupProperties } from './log-group-properties';
 
 /**
  * LambdaFunctionProps
@@ -127,41 +128,6 @@ export class LambdaFunction extends NodejsFunction {
         if (props.alias) {
             this.addAlias(props.alias);
         }
-    }
-}
-
-/**
- * Get stage-specific log group properties
- *
- * Development and staging log groups don't need to last forever
- * and should be cleaned up along with their stack when removed
- *
- * @param stage - The stage to get the log group properties for
- * @returns The log group properties for the stage
- */
-function logGroupProperties(stage: Stage) {
-    const devConfig = {
-        retention: RetentionDays.ONE_WEEK,
-        removalPolicy: RemovalPolicy.DESTROY,
-    };
-
-    const stagingConfig = {
-        retention: RetentionDays.SIX_MONTHS,
-        removalPolicy: RemovalPolicy.DESTROY,
-    };
-
-    const productionConfig = {
-        retention: RetentionDays.TWO_YEARS,
-        removalPolicy: RemovalPolicy.RETAIN,
-    };
-
-    switch (true) {
-        case stage instanceof DevelopmentApplicationStage:
-            return devConfig;
-        case stage instanceof StagingApplicationStage:
-            return stagingConfig;
-        default:
-            return productionConfig;
     }
 }
 
