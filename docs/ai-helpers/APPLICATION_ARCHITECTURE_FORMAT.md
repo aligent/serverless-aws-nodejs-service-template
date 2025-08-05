@@ -5,13 +5,16 @@ This document describes the process for creating comprehensive architecture diag
 ## Process Overview
 
 ### 1. Analyze CDK Application Structure
-- Read the main application stages file (`application/lib/application-stages.ts`)
-- Identify all services from the stack creation file (`application/lib/create-application-stacks.ts`)
+
+- Read the main application stages file (`applications/core/lib/application-stages.ts`)
+- Identify all services from the stack creation file (`applications/core/lib/create-application-stacks.ts`)
 - List all services and their descriptions
 - Analyze each service to understand what business entities it integrates (products, orders, customers, etc.)
 
 ### 2. Examine Each Service's AWS Resources
+
 For each service in the `services/` directory:
+
 - **Lambda Functions**: Check `src/infra/functions/lambda-functions.ts`
 - **Step Functions**: Look for `.asl.yaml` files in `src/infra/step-functions/`
 - **Storage**: Identify S3 buckets, DynamoDB tables
@@ -23,7 +26,9 @@ For each service in the `services/` directory:
 - **Data Schemas**: Review `src/runtime/lib/schemas/` or `src/runtime/lib/types/` for entity definitions
 
 ### 3. Map Step Function Workflows
+
 Read each Step Function definition file (`.asl.yaml`) to understand:
+
 - **Sequential flows**: Linear execution of Lambda functions
 - **Parallel branches**: Concurrent processing (Map states)
 - **Choice logic**: Conditional branching with decision points
@@ -31,9 +36,11 @@ Read each Step Function definition file (`.asl.yaml`) to understand:
 - **Loops**: Pagination and iterative processing
 
 ### 4. Create Service-Specific Diagrams
+
 For each service, create a Mermaid flowchart with:
 
 #### Structure:
+
 ```mermaid
 flowchart TB
     subgraph External["External Systems"]
@@ -51,18 +58,19 @@ flowchart TB
         Lambda2 --> Choice{Decision Point}
         Choice -->|Yes| Lambda3
         Choice -->|No| Lambda4
-        
+
         subgraph MapProcessor["Map Processor"]
             ParallelLambda[Parallel Processing]
         end
     end
-    
+
     ServiceName_Storage[Storage Resources]
     ServiceName_Queue[Message Queues]
     ServiceName_EB[EventBridge Rules]
 ```
 
 #### Key Principles:
+
 - **Lambda functions inside Step Functions**: Show the actual workflow execution
 - **External systems**: MYOB, Magento APIs as separate entities
 - **Shared resources**: SSM Parameters, EventBridge as external to Step Functions
@@ -87,6 +95,7 @@ classDef errorhandling fill:#cf3759,stroke:#333,stroke-width:2px,color:#fff
 ```
 
 **Color Categories:**
+
 - **External APIs**: `#00429d` (Primary external systems)
 - **Lambda Functions**: `#ffffe0` (Service components)
 - **Storage (S3)**: `#ffbcaf` (Data sources)
@@ -102,11 +111,13 @@ classDef errorhandling fill:#cf3759,stroke:#333,stroke-width:2px,color:#fff
 ## Common Step Function Patterns
 
 ### 1. Linear Sequence
+
 ```mermaid
 Lambda1 --> Lambda2 --> Lambda3 --> Lambda4
 ```
 
 ### 2. Conditional Branching
+
 ```mermaid
 Lambda1 --> Choice{Condition?}
 Choice -->|Yes| Lambda2
@@ -116,6 +127,7 @@ Lambda3 --> Lambda4
 ```
 
 ### 3. Pagination Loop
+
 ```mermaid
 Lambda1 --> Lambda2 --> More{More Data?}
 More -->|Yes| Lambda1
@@ -123,6 +135,7 @@ More -->|No| End[Finish]
 ```
 
 ### 4. Parallel Processing
+
 ```mermaid
 Lambda1 --> MapProcessor[Map: Parallel Processing]
 subgraph MapProcessor
@@ -132,6 +145,7 @@ MapProcessor --> Lambda2
 ```
 
 ### 5. Error Handling
+
 ```mermaid
 Lambda1 --> Lambda2
 Lambda2 --> ErrorCheck{Success?}
@@ -143,7 +157,9 @@ ErrorHandler --> Cleanup[Cleanup]
 ## Documentation Structure
 
 ### Main Architecture File
+
 Create `ARCHITECTURE.md` with:
+
 1. **Overview**: List all services and their purposes
 2. **Integrated Business Entities**: Comprehensive list of all business entities integrated by the application
 3. **Individual Service Diagrams**: One diagram per service
@@ -152,7 +168,9 @@ Create `ARCHITECTURE.md` with:
 6. **Security & Permissions**: IAM and access patterns
 
 ### Service-Specific Sections
+
 For each service include:
+
 - **Purpose**: Brief description of what the service does
 - **Mermaid Diagram**: Visual representation of the architecture
 - **Key Components**: Lambda functions, Step Functions, storage, etc.
@@ -163,6 +181,7 @@ For each service include:
 ## Tools and Commands
 
 ### Analysis Commands
+
 ```bash
 # Find all Step Function definitions
 find services -name "*.asl.yaml" -type f
@@ -175,6 +194,7 @@ find services -name "index.ts" -path "*/src/index.ts"
 ```
 
 ### Validation
+
 - Ensure all Lambda functions referenced in Step Functions exist
 - Verify resource connections match IAM permissions
 - Check that external API calls are properly documented

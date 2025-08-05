@@ -16,11 +16,21 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
    You may need to run `nvm use` to ensure you're on a compatible version of NodeJS
 
+3. (Optional) Bootstrap SSM parameters:
+
+   ```bash
+   # Copy the example template
+   cp ./applications/core/config/.env.example.json ./applications/core/config/.env.json
+
+   # Setup required SSM parameters for your environment
+   yarn pg:parameters
+   ```
+
 ## Services
 
 Services are the core components deployed to AWS by the application
 
-[Add a service](#⭐-adding-a-new-service) | [Test app](#🧪-testing-the-application) | [Deploy app](#🚀-playground-deploy-of-the-application) | [Clean up app](#🗑️-clean-up-the-application-from-playground) | [Remove a service](#❌-removing-a-service)
+[Add a service](#⭐-adding-a-new-service) | [Test app](#🧪-testing-the-application) | [Deploy app](#🚀-playground-deploy-of-the-application) | [Clean up app](#🗑️-clean-up-the-application-from-playground) | [Remove a service](#❌-removing-a-service) | [Mock Endpoints](#🧪-testing-with-mock-services)
 
 ### ⭐ Adding a new service
 
@@ -33,7 +43,7 @@ yarn nx g cdk-service
 # 2. Select the service type (general or notification)
 ```
 
-Import and instantiate it in `application/lib/create-application-stacks.ts`:
+Import and instantiate it in `applications/core/lib/create-application-stacks.ts`:
 
 ```typescript
 import { YourServiceStack } from '@services/your-service-name';
@@ -107,6 +117,12 @@ yarn nx g remove <service-name>
 ```
 
 You may need to remove imports of the service from the application first
+
+### 🧪 Testing with Mock Services
+
+The application may include mock services for testing integrations without external dependencies
+
+To switch between mock and real dependencies, change the value of the relevant url SSM Parameter.
 
 ## Libraries
 

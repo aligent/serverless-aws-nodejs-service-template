@@ -1,0 +1,27 @@
+{
+  "name": "@applications/core",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./bin/main.ts",
+  "types": "./bin/main.ts",
+  "nx": {
+    "targets": {
+      "cdk": {
+        "executor": "nx:run-commands",
+        "options": {
+          "color": true,
+          "command": "cdk",
+          "cwd": "{projectRoot}"
+        }
+      },
+      "pg:parameters": {
+        "executor": "nx:run-commands",
+        "options": {
+          "color": true,
+          "cwd": "{projectRoot}",
+          "command": "scripts/setup-parameters.sh"
+        }
+      }
+    }
+  }
+}

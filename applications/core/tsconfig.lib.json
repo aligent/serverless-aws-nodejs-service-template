@@ -12,7 +12,7 @@
     "include": ["src/**/*.ts"],
     "references": [
         {
-            "path": "../libs/cdk-utils/tsconfig.lib.json"
+            "path": "../../libs/cdk-utils/tsconfig.lib.json"
         }
     ],
     "exclude": [

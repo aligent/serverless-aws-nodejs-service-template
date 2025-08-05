@@ -11,7 +11,7 @@ Services are composed in the CDK application through a centralized pattern:
 #### Application Stage Structure
 
 ```typescript
-// application/lib/create-application-stacks.ts
+// applications/core/lib/create-application-stacks.ts
 import { YourServiceStack } from '@services/your-service-name';
 
 export function createApplicationStacks(scope: Construct, stage: string, props?: StageProps) {

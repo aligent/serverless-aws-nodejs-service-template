@@ -52,7 +52,7 @@ new StepFunctionFromFile(this, 'MyStateMachine', {
 Context allows you to define default properties that apply to all instances of a construct. Each construct provides a static `defineContext` method for type-safe context creation.
 
 ```typescript
-// In application/lib/application-context.ts
+// In applications/core/lib/application-context.ts
 import { LambdaFunction, StepFunctionFromFile } from '@libs/cdk-utils/infra';
 import { Duration } from 'aws-cdk-lib';
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
@@ -92,7 +92,7 @@ export const APPLICATION_CONTEXT = {
 Context is injected at the App level and automatically flows down to all constructs.
 
 ```typescript
-// In application/bin/main.ts
+// In applications/core/bin/main.ts
 import { App } from 'aws-cdk-lib';
 import { APPLICATION_CONTEXT } from '../lib/application-context';
 

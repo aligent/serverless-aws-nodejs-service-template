@@ -2,7 +2,7 @@
 import { type } from 'arktype';
 import { App, Tags } from 'aws-cdk-lib';
 import { APPLICATION_CONTEXT } from '../lib/application-context';
-import { Bootstrap, Development, Production, Staging } from '../lib/application-stages';
+import { Development, Production, Staging } from '../lib/application-stages';
 
 const { CDK_DEFAULT_ACCOUNT, CDK_DEFAULT_REGION } = type({
     CDK_DEFAULT_ACCOUNT: 'string',
@@ -15,13 +15,6 @@ const { CDK_DEFAULT_ACCOUNT, CDK_DEFAULT_REGION } = type({
 
 const app = new App({
     context: APPLICATION_CONTEXT,
-});
-
-new Bootstrap(app, 'bootstrap', {
-    env: {
-        account: CDK_DEFAULT_ACCOUNT,
-        region: CDK_DEFAULT_REGION,
-    },
 });
 
 new Development(app, {

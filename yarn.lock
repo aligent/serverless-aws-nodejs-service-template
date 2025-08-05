@@ -77,6 +77,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@applications/core@workspace:applications/core":
+  version: 0.0.0-use.local
+  resolution: "@applications/core@workspace:applications/core"
+  languageName: unknown
+  linkType: soft
+
 "@ark/schema@npm:0.46.0":
   version: 0.46.0
   resolution: "@ark/schema@npm:0.46.0"

@@ -6,4 +6,6 @@ import type { Construct } from 'constructs';
  *
  * This is the primary mechanism for composing services and other stacks to create the application.
  */
-export function createApplicationStacks(_scope: Construct, _stage: string, _props?: StageProps) {}
+export function createApplicationStacks(_scope: Construct, _stage: string, _props?: StageProps) {
+    // Instantiate service stacks here as required
+}

@@ -4,7 +4,7 @@
     "files": [],
     "references": [
         {
-            "path": "./application"
+            "path": "./applications/core"
         },
         {
             "path": "./tools/cdk-service-plugin"
