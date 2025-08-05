@@ -90,7 +90,7 @@
                     "targetName": "typecheck"
                 }
             },
-            "include": ["libs/cdk-utils/*", "application/*"]
+            "include": ["libs/cdk-utils/*", "applications/core/*"]
         }
     ]
 }
