@@ -14,12 +14,12 @@
           "cwd": "{projectRoot}"
         }
       },
-      "pg:parameters": {
-        "executor": "nx:run-commands",
-        "options": {
-          "color": true,
-          "cwd": "{projectRoot}",
-          "command": "scripts/setup-parameters.sh"
+      "pg": {
+        "configurations": {
+          "parameters": {
+            "cwd": "{projectRoot}",
+            "command": "scripts/setup-parameters.sh"
+          }
         }
       }
     }
