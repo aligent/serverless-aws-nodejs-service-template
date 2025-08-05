@@ -1,29 +1,52 @@
-import { addProjectConfiguration, formatFiles, generateFiles, Tree, updateJson } from '@nx/devkit';
+import { formatFiles, generateFiles, Tree, updateJson } from '@nx/devkit';
 import * as path from 'path';
 import { ServiceGeneratorSchema } from './schema';
 
-function getRootTsConfigPathInTree(tree: Tree): string {
-    for (const path of ['tsconfig.base.json', 'tsconfig.json']) {
-        if (tree.exists(path)) {
-            return path;
-        }
-    }
-    return 'tsconfig.base.json';
-}
+function addTsConfigReference(tree: Tree, referencePath: string) {
+    updateJson(tree, 'tsconfig.json', json => {
+        json.references ??= [];
 
-function addTsConfigPath(tree: Tree, importPath: string, lookupPaths: string[]) {
-    updateJson(tree, getRootTsConfigPathInTree(tree), json => {
-        json.compilerOptions ??= {};
-        const c = json.compilerOptions;
-        c.paths ??= {};
-
-        if (c.paths[importPath]) {
+        if (json.references.some((r: { path: string }) => r.path === referencePath)) {
             throw new Error(
-                `You already have a library using the import path "${importPath}". Make sure to specify a unique one.`
+                `You already have a library using the import path "${referencePath}". Make sure to specify a unique one.`
             );
         }
 
-        c.paths[importPath] = lookupPaths;
+        json.references.push({
+            path: referencePath,
+        });
+
+        return json;
+    });
+}
+
+function registerWithTypecheckPlugin(tree: Tree, referencePath: string) {
+    updateJson(tree, 'nx.json', json => {
+        json.plugins ??= [];
+
+        // Services should be non-buildable, so we need to register them with the typescript plugin configuration
+        // that adds typechecking but not a build argument
+        const plugin = json.plugins.find(
+            (p: {
+                plugin: string;
+                include: string[];
+                options?: { typecheck?: unknown; build?: unknown };
+            }) => p.plugin === '@nx/js/typescript' && p.options?.typecheck && !p.options?.build
+        );
+
+        if (!plugin) {
+            json.plugins.push({
+                plugin: '@nx/js/typescript',
+                options: {
+                    typecheck: {
+                        targetName: 'typecheck',
+                    },
+                },
+                include: [referencePath],
+            });
+        } else {
+            plugin.include.push(referencePath);
+        }
 
         return json;
     });
@@ -31,23 +54,6 @@ function addTsConfigPath(tree: Tree, importPath: string, lookupPaths: string[]) 
 
 export async function serviceGenerator(tree: Tree, options: ServiceGeneratorSchema) {
     const projectRoot = `services/${options.name}`;
-
-    addProjectConfiguration(tree, options.name, {
-        root: projectRoot,
-        projectType: 'library',
-        sourceRoot: `${projectRoot}/src`,
-        targets: {
-            'check-types': {
-                executor: 'nx:run-commands',
-                options: {
-                    cwd: '{projectRoot}',
-                    color: true,
-                    command: 'tsc --noEmit --pretty',
-                },
-            },
-        },
-        tags: ['service', options.type, options.name],
-    });
 
     const templatePath =
         options.type === 'notification'
@@ -59,9 +65,10 @@ export async function serviceGenerator(tree: Tree, options: ServiceGeneratorSche
         template: '',
     });
 
-    // Add the service to tsconfig.base.json paths
+    // Add the service to tsconfig.json references and nx.json plugins
     // The root application needs to import stacks from the service
-    addTsConfigPath(tree, `@services/${options.name}`, [`${projectRoot}/src/index.ts`]);
+    addTsConfigReference(tree, `./${projectRoot}`);
+    registerWithTypecheckPlugin(tree, `${projectRoot}/*`);
 
     await formatFiles(tree);
 }

@@ -56,6 +56,8 @@ export function createApplicationStacks(scope: Construct, _stage: string, props?
 }
 ```
 
+Note: You will need to run `yarn` and `yarn nx sync` before other projects will detect the new service
+
 ---
 
 ### 🧪 Testing the application
@@ -116,7 +118,8 @@ Always remove services using the Nx generator
 yarn nx g remove <service-name>
 ```
 
-You may need to remove imports of the service from the application first
+You may need to remove imports of the service from the application first.
+You may need to remove references to the service in `nx.json` afterwards.
 
 ### 🧪 Testing with Mock Services
 

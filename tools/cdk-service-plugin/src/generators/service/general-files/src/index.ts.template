@@ -21,6 +21,11 @@ export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part
     constructor(scope: Construct, id: typeof SERVICE_NAME | (string & {}), props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
         super(scope, id, props);
 
+        const STAGE = Stage.of(this)?.stageName;
+        if (!STAGE) {
+            throw new Error('This construct must be used within a CDK Stage');
+        }
+
         Tags.of(this).add('SERVICE', id);
     }
 }
