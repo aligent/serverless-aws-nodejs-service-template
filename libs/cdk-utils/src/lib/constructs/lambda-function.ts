@@ -12,6 +12,24 @@ import { DevelopmentApplicationStage, StagingApplicationStage } from './applicat
 import { logGroupProperties } from './log-group-properties';
 
 /**
+ * ESM support banner
+ *
+ * This is a workaround to support ESM in Lambda functions.
+ * Aliases are used to avoid name conflicts, this may not be a real issue
+ *
+ * @see https://github.com/evanw/esbuild/issues/1944
+ * @see https://aws.plainenglish.io/significantly-improve-typescript-lambda-function-readability-in-aws-console-613bc5ae98f6
+ */
+const ESM_SUPPORT_BANNER = [
+    `import { fileURLToPath } from 'url';`,
+    `import { createRequire as topLevelCreateRequire } from 'module';`,
+    `import { dirname as ddirname } from 'path';`,
+    `const require = topLevelCreateRequire(import.meta.url);`,
+    `const __filename = fileURLToPath(import.meta.url);`,
+    `const __dirname = ddirname(__filename);`,
+].join(''); // Must be a single line, if the banner has `\n` characters they cause a syntax error
+
+/**
  * LambdaFunctionProps
  *
  * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.NodejsFunctionProps.html
@@ -148,6 +166,7 @@ function bundlingProperties(stage: Stage) {
         sourceMap: false,
         metafile: true, // Required for bundle analysis
         format: OutputFormat.ESM,
+        banner: ESM_SUPPORT_BANNER,
     } satisfies NodejsFunctionProps['bundling'];
 
     // Staging/Production configurations optimised for bundle size
@@ -161,6 +180,7 @@ function bundlingProperties(stage: Stage) {
             treeShaking: 'true',
         },
         format: OutputFormat.ESM,
+        banner: ESM_SUPPORT_BANNER,
     } satisfies NodejsFunctionProps['bundling'];
 
     const productionConfig = {
@@ -175,6 +195,7 @@ function bundlingProperties(stage: Stage) {
             treeShaking: 'true',
         },
         format: OutputFormat.ESM,
+        banner: ESM_SUPPORT_BANNER,
     } satisfies NodejsFunctionProps['bundling'];
 
     switch (true) {
