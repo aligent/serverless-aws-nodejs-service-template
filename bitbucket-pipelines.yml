@@ -37,6 +37,21 @@ definitions:
         script:
           - corepack enable yarn
           - yarn run test
+    - step: &deploy
+        name: 'Deploy service'
+        script:
+          - pipe: docker://aligent/cdk-deploy-pipe:22-alpine # Ensure we are using the correct node version in the docker pipeline
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $CDK_DEFAULT_REGION
+              CDK_DEPLOY: 'true'
+              CDK_DIFF: 'false'
+              CDK_SYNTH: 'false'
+              CDK_EXTRA_ARGS: '--require-approval never $STACK'
+              CDK_CONFIG_PATH: ./cdk-config.yml
+              CHECK_FORMAT: 'false'
+              CDK_BOOTSTRAP: 'false'
 
 pipelines:
   pull-requests:
@@ -47,3 +62,14 @@ pipelines:
             - step: *lint
             - step: *typecheck
             - step: *test
+  branches:
+    staging:
+      - step:
+          <<: *deploy
+          name: 'Deploy Staging'
+          deployment: Staging
+    production:
+      - step:
+          <<: *deploy
+          name: 'Deploy Production'
+          deployment: Production
