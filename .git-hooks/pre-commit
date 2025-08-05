@@ -6,11 +6,8 @@
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# This take the current active node version you want to verify the hook
-export NVM_DIR="$HOME/.nvm"
-a=$(nvm current)
-
-export PATH="$NVM_DIR/versions/node/$a/bin:$PATH"
+# Disable Nx terminal UI
+export NX_TUI=false
 
 # Define colours for nicer CLI output
 RED="\033[1;31m"
@@ -18,6 +15,9 @@ GREEN="\033[1;32m"
 NO_COLOUR="\033[0m"
 
 echo -e "${GREEN} Executing git hook $0 $@ ${NO_COLOUR}"
+
+# Use the current Node version explicitly
+nvm use
 
 commands=("yarn nx affected -t lint, typecheck --parallel=3" "yarn nx affected:test --coverage")
 failures=()
