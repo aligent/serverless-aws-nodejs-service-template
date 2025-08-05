@@ -6,7 +6,6 @@
         "editorconfig.editorconfig",
         "amazonwebservices.aws-toolkit-vscode",
         "usernamehw.errorlens",
-        "yoavbls.pretty-ts-errors",
-        "mylesmurphy.prettify-ts"
+        "yoavbls.pretty-ts-errors"
     ]
 }

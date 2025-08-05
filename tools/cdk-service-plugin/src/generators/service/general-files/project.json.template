@@ -1,8 +1,0 @@
-{
-    "name": "<%= name %>",
-    "$schema": "../../node_modules/nx/schemas/project-schema.json",
-    "sourceRoot": "services/<%= name %>/src",
-    "projectType": "library",
-"targets": {},
-    "tags": ["service", "general", "<%= name %>"]
-}

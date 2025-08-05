@@ -1,10 +1,8 @@
+/* v8 ignore start */
 /**
- * Service name constant for <%= name %>
- * 
- * This constant is used throughout the service for:
- * - Stack identification and naming
- * - Resource tagging
- * - Logging context
- * - Service discovery
+ * The default service name used to identify this service in the CDK stack and logs
+ *
+ * It should be the same as in project.json, but that file doesn't
+ * get bundled in with lambda code so we export the value here.
  */
 export const SERVICE_NAME = '<%= name %>' as const;
