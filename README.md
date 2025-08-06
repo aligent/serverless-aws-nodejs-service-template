@@ -56,7 +56,7 @@ export function createApplicationStacks(scope: Construct, _stage: string, props?
 }
 ```
 
-Note: You will need to run `yarn` and `yarn nx sync` before other projects will detect the new service
+Note: You will need to run `yarn install` and `yarn nx sync` before other projects will detect the new service
 
 ---
 
@@ -83,11 +83,11 @@ yarn test:all
 Deploy the `dev` stage of your application to your `playground` AWS Profile:
 
 ```bash
-yarn playground:deploy
+yarn pg:deploy
 # You may be prompted to confirm deployment of changes
 ```
 
-If you just want to check the CDK compilation process without deploying, use `yarn playground:synth`.
+If you just want to check the CDK compilation process without deploying, use `yarn pg:synth`.
 
 If you need more control, arbitrary CDK commands can be run using the application project
 
@@ -104,7 +104,7 @@ During normal development CDK will remove resources that are no longer used by y
 If necessary, the entire application can be removed from the account associated with your `playground` AWS profile:
 
 ```bash
-yarn playground:destroy
+yarn pg:destroy
 # You will be prompted to confirm deletion of the stacks
 ```
 
