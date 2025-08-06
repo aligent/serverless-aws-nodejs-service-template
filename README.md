@@ -58,7 +58,7 @@ Import and instantiate it in `applications/core/lib/create-application-stacks.ts
 import { YourServiceStack } from '@services/your-service-name';
 
 export function createApplicationStacks(scope: Construct, _stage: string, props?: StageProps) {
-  new YourServiceStack(this, 'your-service-name', {
+  new YourServiceStack(scope, 'your-service-name', {
     ...props,
     description: 'Your service description',
   });
@@ -76,7 +76,7 @@ After adding a new service, test the application:
 ```bash
 yarn lint        # Lint affected projects
 yarn test        # Run tests for affected projects
-yarn check-types # Type check affected projects
+yarn typecheck   # Type check affected projects
 ```
 
 By default, Nx will only test code impacted by recent changes to save time. Post-fixing with `:all` will test the whole repository, not just recently affected parts
@@ -98,10 +98,10 @@ yarn pg:deploy
 
 If you just want to check the CDK compilation process without deploying, use `yarn pg:synth`.
 
-If you need more control, arbitrary CDK commands can be run using the application project
+If you need more control, arbitrary CDK commands can be run using the core application project
 
 ```bash
-yarn nx run application:cdk list prd/**
+yarn nx run core:cdk list prd/**
 ```
 
 ---

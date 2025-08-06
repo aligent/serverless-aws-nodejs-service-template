@@ -71,7 +71,3 @@ https://github.com/kevinslin/open-cdk
   - Use `cdk.context.json` for things we want to configure at deploy time.
 - What does testing look like now?
 - Do we need a typesafe way of declaring/fetching default config using the context system?
-
-```
-
-```

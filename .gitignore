@@ -8,7 +8,6 @@
 dist
 tmp
 out-tsc
-.serverless
 .build
 
 # dependencies
@@ -63,11 +62,3 @@ vitest.config.*.timestamp*
 # CDK asset staging directory
 .cdk.staging
 cdk.out
-
-# Claude Code
-CLAUDE.md
-
-# Legacy Source Code
-service-to-migrate
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
