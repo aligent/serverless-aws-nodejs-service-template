@@ -26,6 +26,15 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
    yarn pg:parameters
    ```
 
+4. (Optional) Change default base branch
+   If your pull requests will target a branch other than `main`, change the value of `defaultBranch` in `nx.json` to the name of the branch that Nx should compare to when running tasks with `affected`
+
+   ```json
+   {
+     "defaultBase": "origin/staging"
+   }
+   ```
+
 ## Services
 
 Services are the core components deployed to AWS by the application
