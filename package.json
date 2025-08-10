@@ -14,7 +14,7 @@
     "prepare": "[ -d .git ] && git config core.hooksPath '.git-hooks' || true",
     "pg:parameters": "nx run core:pg:parameters",
     "pg:synth": "nx run core:cdk synth 'dev/**' --exclusively --profile playground",
-    "pg:deploy": "nx run core:cdk deploy 'dev/**' --exclusively --profile playground",
+    "pg:deploy": "nx run core:cdk deploy --method 'direct' 'dev/**' --exclusively --profile playground --require-approval never",
     "pg:destroy": "nx run core:cdk destroy 'dev/**' --profile playground",
     "analyze:function": "nx run core:cdk synth 'dev/**' --exclusively --quiet --context analyze=$1"
   },

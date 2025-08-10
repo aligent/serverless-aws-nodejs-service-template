@@ -42,7 +42,10 @@
                     "command": "cdk synth '{args.stack}' --exclusively --profile playground"
                 },
                 "deploy": {
-                    "command": "cdk deploy '{args.stack}' --exclusively --profile playground"
+                    "command": "cdk deploy --method direct '{args.stack}' --exclusively --profile playground"
+                },
+                "watch": {
+                    "command": "cdk watch --method direct '{args.stack}' --exclusively --profile playground"
                 }
             }
         }
