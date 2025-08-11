@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.18]
+        node-version: [22.14]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,7 +35,7 @@ jobs:
         run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
 
       - name: Generate test app
-        run: npx nx g service test-app
+        run: npx nx g cdk-service test-app
 
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
       - name: Set base SHA to origin/main
