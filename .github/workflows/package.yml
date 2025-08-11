@@ -12,6 +12,8 @@ jobs:
   deploy:
     name: Test package building
     runs-on: ubuntu-latest
+    env:
+      YARN_ENABLE_HARDENED_MODE: 0
     strategy:
       matrix:
         node-version: [22.14]
