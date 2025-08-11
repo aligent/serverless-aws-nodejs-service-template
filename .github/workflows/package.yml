@@ -35,10 +35,10 @@ jobs:
         run: yarn install
 
       - name: Generate test library
-        run: npx nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
+        run: yarn nx g library test-lib --directory=libs/test-lib --unitTestRunner=none
 
       - name: Generate test app
-        run: npx nx g service test-app general
+        run: yarn nx g service test-app --type=general
 
       # The next 2 lines are needed for nx affected to work when CI is running on a PR
       - name: Set base SHA to origin/main
@@ -48,10 +48,10 @@ jobs:
         run: git fetch
 
       - name: Run tests
-        run: npx nx affected -t lint, test, build --parallel=3 --base=origin/main
+        run: yarn nx affected -t lint, typecheck, build --parallel=3 --base=origin/main
 
       - name: Remove test library
-        run: npx nx g rm test-lib
+        run: yarn nx g rm @aligent/test-lib
 
       - name: Remove test app
-        run: npx nx g rm test-app
+        run: yarn nx g rm @services/test-app
