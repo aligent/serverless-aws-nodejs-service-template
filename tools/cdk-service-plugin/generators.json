@@ -1,6 +1,6 @@
 {
     "generators": {
-        "cdk-service": {
+        "service": {
             "factory": "./src/generators/service/generator",
             "schema": "./src/generators/service/schema.json",
             "description": "CDK service generator"
