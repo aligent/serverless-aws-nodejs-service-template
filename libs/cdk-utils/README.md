@@ -1,40 +1,20 @@
 # CDK Utils Library
 
-This library provides utilities for AWS CDK applications, including property injectors for customizing resource naming.
+This library provides utilities for AWS CDK applications, including property injectors, aspects, and constructs for building scalable serverless applications.
 
 ## Constructs
 
-This library contains custom constructs for common low level use cases. Constructs are all Property Injectable under the `@aligent.cdk-utils` namespace, and have support for defining default properties using AWS Context.
+This library contains custom constructs for common low level use cases.
 
 Current constructs:
 
-- LambdaFunction
 - StepFunctionFromFile
 
 <details>
 
 <summary>Instructions for working with Constructs</summary>
 
-### Using the Constructs
-
-The constructs in this library are decorated with `@propertyInjectable`, making them compatible with CDK's property injection system. They also support context-based default configuration.
-
-#### LambdaFunction
-
-Extends `NodejsFunction` with support for automatic aliasing
-
-```typescript
-import { LambdaFunction } from '@libs/cdk-utils/infra';
-import { Duration } from 'aws-cdk-lib';
-import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
-
-// Basic usage
-new LambdaFunction(this, 'MyFunction', {
-  entry: 'src/lambda/handler.ts',
-});
-```
-
-#### StepFunctionFromFile
+### StepFunctionFromFile
 
 A Step Function construct that loads its definition from a YAML or JSON file.
 
@@ -45,100 +25,159 @@ import { StepFunctionFromFile } from '@libs/cdk-utils/infra';
 new StepFunctionFromFile(this, 'MyStateMachine', {
   filepath: 'src/step-functions/workflow.yml',
 });
-```
 
-### Preparing Context Objects with Type Safety
-
-Context allows you to define default properties that apply to all instances of a construct. Each construct provides a static `defineContext` method for type-safe context creation.
-
-```typescript
-// In applications/core/lib/application-context.ts
-import { LambdaFunction, StepFunctionFromFile } from '@libs/cdk-utils/infra';
-import { Duration } from 'aws-cdk-lib';
-import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
-
-export const APPLICATION_CONTEXT = {
-  // Define defaults for all Lambda functions
-  ...LambdaFunction.defineContext({
-    timeout: Duration.seconds(6),
-    memorySize: 192,
-    runtime: Runtime.NODEJS_22_X,
-    tracing: Tracing.ACTIVE,
-    environment: {
-      NODE_OPTIONS: '--enable-source-maps',
-    },
-    bundling: {
-      sourceMap: true,
-    },
-    alias: 'LATEST',
-  }),
-
-  // Define defaults for all Step Functions
-  ...StepFunctionFromFile.defineContext({
-    tracingEnabled: true,
-    alias: 'LATEST',
-  }),
-
-  // Add other application-wide context
-  configFileName: 'app-config.json',
-  clientName: 'my-org',
-} as const;
-```
-
-**Note**: The `defineContext` method uses `Omit<>` to exclude required instance-specific properties (like `entry` for Lambda or `filepath` for Step Functions) from the context type, ensuring type safety.
-
-### Injecting Context in an App
-
-Context is injected at the App level and automatically flows down to all constructs.
-
-```typescript
-// In applications/core/bin/main.ts
-import { App } from 'aws-cdk-lib';
-import { APPLICATION_CONTEXT } from '../lib/application-context';
-
-const app = new App({
-  context: APPLICATION_CONTEXT,
-});
-
-// Now all LambdaFunction and StepFunctionFromFile constructs
-// will automatically use the default values from context
-```
-
-### How Context Merging Works
-
-When a construct is instantiated:
-
-1. It retrieves default values from context using `scope.node.tryGetContext(CONTEXT_KEY)`
-2. Instance-specific props are merged with defaults
-3. Instance props take precedence over context defaults
-
-```typescript
-// This Lambda will use:
-// - memorySize: 512 (overrides context default of 192)
-// - timeout: 6 seconds (from context)
-// - runtime: NODEJS_22_X (from context)
-// - All other context defaults
-new LambdaFunction(this, 'SpecialFunction', {
-  entry: 'src/lambda/special.ts',
-  memorySize: 512, // Override context default
+// With Lambda function substitutions
+new StepFunctionFromFile(this, 'WorkflowWithLambdas', {
+  filepath: 'src/step-functions/workflow.yml',
+  lambdaFunctions: [myLambda1, myLambda2],
+  definitionSubstitutions: {
+    MyCustomParam: 'CustomValue',
+  },
 });
 ```
 
-### Property Injection Namespace
+</details>
 
-All constructs are injectable under the `@aligent.cdk-utils` namespace. This means property injectors can target them specifically:
+## Property Injectors
+
+This library provides stage-aware property injectors that automatically configure resources based on deployment stage (dev/stg/prd). Property injectors use CDK's built-in property injection system to apply defaults without requiring custom constructs.
+
+Current injectors:
+
+- NodeJsFunctionDefaultsInjector - Stage-specific Lambda function configuration
+- LogGroupDefaultsInjector - Stage-specific CloudWatch log group configuration  
+- StepFunctionDefaultsInjector - Automatic logging for EXPRESS Step Functions
+
+<details>
+
+<summary>Instructions for working with Property Injectors</summary>
+
+### Using Property Injectors
+
+Property injectors are typically added at the application stage level to apply stage-specific defaults to all resources within that stage.
 
 ```typescript
-// Custom property injector for LambdaFunction
-class MyLambdaInjector implements IPropertyInjector {
-  readonly constructUniqueId = '@aligent.cdk-utils.LambdaFunction';
+import {
+  NodeJsFunctionDefaultsInjector,
+  LogGroupDefaultsInjector,
+  StepFunctionDefaultsInjector,
+} from '@libs/cdk-utils';
+import { PropertyInjectors, Stage } from 'aws-cdk-lib';
 
-  inject(props: any, context: InjectionContext) {
-    // Modify props here
-    return props;
+class ApplicationStage extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps) {
+    super(scope, id, props);
+
+    // Apply stage-specific defaults
+    PropertyInjectors.of(this).add(
+      new NodeJsFunctionDefaultsInjector(id).addProps({
+        timeout: Duration.seconds(6),
+        memorySize: 192,
+        runtime: Runtime.NODEJS_22_X,
+        tracing: Tracing.ACTIVE,
+        architecture: Architecture.ARM_64,
+      }),
+      new StepFunctionDefaultsInjector(id),
+      new LogGroupDefaultsInjector(id)
+    );
   }
 }
 ```
+
+### NodeJsFunctionDefaultsInjector
+
+Applies stage-specific defaults to Lambda functions:
+
+- **dev**: Optimized for debugging (source maps disabled, minimal bundling)
+- **stg**: Balanced configuration (source maps enabled, optimized bundling)
+- **prd**: Optimized for production (minified, tree-shaking enabled)
+
+```typescript
+// Stage-specific bundling configuration is applied automatically
+new Function(stack, 'MyFunction', {
+  runtime: Runtime.NODEJS_22_X,
+  handler: 'index.handler',
+  code: Code.fromAsset('src/lambda'),
+  // Bundling configuration, source maps, etc. applied via injector
+});
+```
+
+### LogGroupDefaultsInjector
+
+Applies stage-specific retention and removal policies:
+
+- **dev**: 1 week retention, DESTROY removal policy
+- **stg**: 6 months retention, DESTROY removal policy  
+- **prd**: 2 years retention, RETAIN removal policy
+
+```typescript
+// Retention and removal policies applied automatically
+new LogGroup(stack, 'MyLogGroup');
+```
+
+### StepFunctionDefaultsInjector
+
+Automatically creates log groups and configures logging for EXPRESS Step Functions:
+
+```typescript
+// Log group and logging configuration added automatically for EXPRESS type
+new StateMachine(stack, 'MyExpressWorkflow', {
+  stateMachineType: StateMachineType.EXPRESS,
+  definitionBody: DefinitionBody.fromFile('workflow.asl.yaml'),
+});
+```
+
+### Customizing Injector Defaults
+
+You can override injector defaults using the `addProps` method:
+
+```typescript
+new NodeJsFunctionDefaultsInjector('prd').addProps({
+  memorySize: 512, // Override default memory
+  timeout: Duration.seconds(30), // Override default timeout
+});
+```
+
+</details>
+
+## Aspects
+
+This library provides aspects that automatically apply cross-cutting concerns to resources.
+
+Current aspects:
+
+- VersionResourcesAspect - Automatic versioning and aliasing for Lambda functions and Step Functions
+
+<details>
+
+<summary>Instructions for working with Aspects</summary>
+
+### VersionResourcesAspect
+
+Automatically creates versions and aliases for Lambda functions and Step Functions. This is essential for blue-green deployments and traffic shifting.
+
+```typescript
+import { VersionResourcesAspect } from '@libs/cdk-utils';
+import { Aspects } from 'aws-cdk-lib';
+
+// Apply to entire app for automatic versioning
+Aspects.of(app).add(new VersionResourcesAspect());
+
+// Or with custom alias name
+Aspects.of(app).add(new VersionResourcesAspect({ alias: 'PROD' }));
+```
+
+**What it does:**
+
+- **Lambda Functions**: Adds a function alias (default: "LATEST")
+- **Step Functions**: Creates a version and alias with 100% traffic routing
+
+**Benefits:**
+
+- Enables blue-green deployments
+- Supports traffic shifting between versions
+- Provides stable ARNs for external integrations
+- Required for some AWS services that need versioned resources
 
 </details>
 
@@ -289,146 +328,3 @@ class CustomMicroserviceChecks extends MicroserviceChecks {
 
 </details>
 
-## Override Naming Injectors
-
-The `override-naming-injectors` module provides CDK property injectors that allow you to override the default naming of AWS resources.
-
-Currently supported resources:
-
-- StateMachine
-- Function (Lambda)
-
-<details>
-
-<summary>Instructions for working with Override Naming Injectors</summary>
-
-### Features
-
-- Property injection-based approach for clean, non-intrusive naming overrides
-- Support for Lambda Functions and Step Functions
-- Flexible naming through custom formatting functions
-- Works with CDK's native property injection system
-
-### Available Injectors
-
-#### OverrideFunctionNameInjector
-
-Overrides the `functionName` property of Lambda functions using a custom formatting function.
-
-```typescript
-import { OverrideFunctionNameInjector } from '@cdk-utils/lib/injectors/override-naming-injectors';
-import { App } from 'aws-cdk-lib';
-
-const app = new App();
-
-// Define your naming format
-const formatName = (id: string) => `my-prefix-${id}-suffix`;
-
-// Add the injector to the app
-app.addPropertyInjector(new OverrideFunctionNameInjector(formatName));
-```
-
-#### OverrideStateMachineNameInjector
-
-Overrides the `stateMachineName` property of Step Functions state machines using a custom formatting function.
-
-```typescript
-import { OverrideStateMachineNameInjector } from '@cdk-utils/lib/injectors/override-naming-injectors';
-import { App } from 'aws-cdk-lib';
-
-const app = new App();
-
-// Define your naming format
-const formatName = (id: string) => `workflow-${id}`;
-
-// Add the injector to the app
-app.addPropertyInjector(new OverrideStateMachineNameInjector(formatName));
-```
-
-### Usage Examples
-
-#### Basic Usage with Both Injectors
-
-```typescript
-import { App, Stack } from 'aws-cdk-lib';
-import { Function, Runtime, Code } from 'aws-cdk-lib/aws-lambda';
-import { StateMachine, Pass } from 'aws-cdk-lib/aws-stepfunctions';
-import {
-  OverrideFunctionNameInjector,
-  OverrideStateMachineNameInjector,
-} from '@libs/cdk-utils/infra';
-
-const app = new App();
-
-// Create a naming format that includes service and stage
-const serviceId = 'my-service';
-const stage = 'dev';
-const formatName = (id: string) => `${serviceId}-${stage}-${id}`;
-
-// Add both injectors
-app.addPropertyInjector(new OverrideFunctionNameInjector(formatName));
-app.addPropertyInjector(new OverrideStateMachineNameInjector(formatName));
-
-const stack = new Stack(app, 'MyStack');
-
-// This Lambda will be named "my-service-dev-processor"
-new Function(stack, 'processor', {
-  runtime: Runtime.NODEJS_22_X,
-  handler: 'index.handler',
-  code: Code.fromInline('exports.handler = async () => {}'),
-});
-
-// This State Machine will be named "my-service-dev-workflow"
-new StateMachine(stack, 'workflow', {
-  definition: new Pass(stack, 'PassState'),
-});
-```
-
-### Important Notes
-
-1. **Resource Replacement**: Changing resource names after deployment will cause CloudFormation to replace the resources. Only use this during initial deployment or when resource replacement is acceptable.
-
-2. **Name Constraints**: Ensure your formatting function produces valid names according to AWS service limits:
-   - Lambda function names: 1-64 characters, alphanumeric and hyphens
-   - Step Function names: 1-80 characters, alphanumeric, hyphens, and underscores
-
-3. **Injection Order**: Only one property injector can be applied to each resource in CDK. If multiple injectors modify the same property, the last one wins.
-
-4. **Scope**: Injectors added to the app apply to all stacks and constructs within that app.
-
-### Migration from Serverless Framework
-
-When migrating from Serverless Framework to CDK, you can use these injectors to maintain existing resource names:
-
-```typescript
-// Match Serverless naming: ${self:service}-${self:provider.stage}-${functionName}
-const service = 'my-service';
-const stage = 'prod';
-const formatName = (id: string) => `${service}-${stage}-${id}`;
-
-app.addPropertyInjector(new OverrideFunctionNameInjector(formatName));
-```
-
-### Supporting more resource types
-
-To create injectors for other resource types, follow the same pattern:
-
-```typescript
-import { IPropertyInjector, InjectionContext } from 'aws-cdk-lib';
-import { Bucket, BucketProps } from 'aws-cdk-lib/aws-s3';
-
-export class OverrideBucketNameInjector implements IPropertyInjector {
-  public readonly constructUniqueId = Bucket.PROPERTY_INJECTION_ID;
-
-  constructor(private readonly formatName: (id: string) => string) {}
-
-  public inject(originalProps: BucketProps, context: InjectionContext) {
-    return {
-      ...originalProps,
-      bucketName: this.formatName(context.id),
-    };
-  }
-}
-```
-
-</details>

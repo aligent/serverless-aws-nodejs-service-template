@@ -56,8 +56,9 @@ This is an AWS microservices template using:
 2. **CDK Application Structure**
 
    - Entry point: `applications/core/bin/main.ts` creates CDK App and stages
-   - Stages (dev/stg/prd) are defined as ApplicationStage instances in `applications/core/lib/application-stages.ts`
-   - Each stage instantiates all service stacks with appropriate configuration
+   - Stages (dev/stg/prd) are created as ApplicationStage instances directly in `main.ts`
+   - Stage-specific configuration is applied via property injectors and aspects
+   - Each stage automatically configures resources based on deployment environment
 
 3. **Lambda and Step Functions**
 
@@ -65,8 +66,17 @@ This is an AWS microservices template using:
    - Step Functions use YAML definitions in `services/<service>/src/step-functions/`
    - Shared constructs in `services/<service>/src/lib/constructs/`
    - Step Functions use JSONata for output transformations
+   - Automatic versioning and aliasing applied via VersionResourcesAspect
+   - Stage-specific configuration applied via property injectors
 
-4. **Testing Strategy**
+4. **Property Injection Architecture**
+
+   - Stage-specific defaults applied via property injectors (NodeJsFunctionDefaultsInjector, LogGroupDefaultsInjector, StepFunctionDefaultsInjector)
+   - Cross-cutting concerns handled by aspects (VersionResourcesAspect for automatic versioning)
+   - Configuration scales automatically with environment (dev/stg/prd)
+   - No need for custom constructs - uses CDK's built-in property injection system
+
+5. **Testing Strategy**
    - Vitest for unit testing with coverage reports
    - Test files colocated with source files as `*.spec.ts` or `*.test.ts`
    - Workspace-level Vitest configuration in `vitest.workspace.ts`
@@ -75,11 +85,12 @@ This is an AWS microservices template using:
 
 ### CDK Migration Notes
 
-- Project is migrating from Serverless Framework to CDK
+- Project migrated from Serverless Framework to CDK using property injection pattern
 - CDK construct IDs are critical - changing them will replace resources
-- Lambda versions now have LATEST alias by default
+- Lambda versions and aliases are automatically created via VersionResourcesAspect
 - Step Functions use `LambdaInvoke` resource with automatic retry blocks
 - Task outputs are nested in `Payload` property - use JSONata to transform
+- Stage-specific resource configuration handled by property injectors
 
 ### Configuration
 
