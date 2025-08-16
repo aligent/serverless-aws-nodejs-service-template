@@ -1,0 +1,11 @@
+Comment: A simple minimal example of a Step Functions state machine
+StartAt: Hello
+States:
+  Hello:
+    Type: Pass
+    Result: Hello
+    Next: World
+  World:
+    Type: Pass
+    Result: World
+    End: true

@@ -19,6 +19,7 @@ export type TemporaryDataBucketProps = BucketProps;
  */
 export class TemporaryDataBucket extends Bucket {
     constructor(scope: Construct, id: string, props?: TemporaryDataBucketProps) {
+        // TODO replace with an Aspect based on tags
         const defaultProps = {
             autoDeleteObjects: true,
             removalPolicy: RemovalPolicy.DESTROY,

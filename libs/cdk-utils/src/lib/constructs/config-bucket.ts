@@ -21,6 +21,7 @@ export type ConfigBucketProps = BucketProps;
  */
 export class ConfigBucket extends Bucket {
     constructor(scope: Construct, id: string, props?: ConfigBucketProps) {
+        // TODO replace with an Aspect based on tags
         const defaultProps = {
             versioned: true,
             autoDeleteObjects: true,

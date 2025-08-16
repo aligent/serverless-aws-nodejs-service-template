@@ -1,7 +1,3 @@
-import { LambdaFunction, StepFunctionFromFile } from '@libs/cdk-utils/infra';
-import { Duration } from 'aws-cdk-lib';
-import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
-
 /**
  * App-level context
  *
@@ -12,15 +8,4 @@ import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
  */
 export const APPLICATION_CONTEXT = {
     APPLICATION_OWNER: 'aligent',
-    ...LambdaFunction.defineContext({
-        timeout: Duration.seconds(6),
-        memorySize: 192,
-        runtime: Runtime.NODEJS_22_X,
-        tracing: Tracing.ACTIVE,
-        alias: 'LATEST',
-    }),
-    ...StepFunctionFromFile.defineContext({
-        tracingEnabled: true,
-        alias: 'LATEST',
-    }),
 } as const;
