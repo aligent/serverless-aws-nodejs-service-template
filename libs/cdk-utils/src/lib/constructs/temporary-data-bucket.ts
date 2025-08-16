@@ -18,6 +18,13 @@ export type TemporaryDataBucketProps = BucketProps;
  * These defaults can be overridden via props if needed.
  */
 export class TemporaryDataBucket extends Bucket {
+    /**
+     * Creates a new TemporaryDataBucket construct
+     *
+     * @param scope - The parent construct
+     * @param id - The construct ID
+     * @param props - Optional bucket properties that override or extend the defaults
+     */
     constructor(scope: Construct, id: string, props?: TemporaryDataBucketProps) {
         // TODO replace with an Aspect based on tags
         const defaultProps = {

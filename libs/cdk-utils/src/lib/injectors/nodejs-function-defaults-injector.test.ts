@@ -45,7 +45,7 @@ describe('NodeJsFunctionDefaultsInjector', () => {
 
     it('Should add additional properties', () => {
         PropertyInjectors.of(stack).add(
-            new NodeJsFunctionDefaultsInjector().addProps({
+            new NodeJsFunctionDefaultsInjector().withProps({
                 memorySize: 1024,
             })
         );

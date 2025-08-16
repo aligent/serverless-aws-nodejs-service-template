@@ -39,7 +39,7 @@ class ApplicationStage extends Stage {
         Aspects.of(app).add(new VersionResourcesAspect());
 
         PropertyInjectors.of(this).add(
-            new NodeJsFunctionDefaultsInjector(id).addProps({
+            new NodeJsFunctionDefaultsInjector(id).withProps({
                 timeout: Duration.seconds(6),
                 memorySize: 192,
                 runtime: Runtime.NODEJS_22_X,

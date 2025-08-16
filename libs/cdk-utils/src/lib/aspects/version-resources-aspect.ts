@@ -8,13 +8,32 @@ import {
 import { IConstruct } from 'constructs';
 
 /**
- * Aspect to add versioning and aliases to resources
+ * Aspect that automatically adds versioning and aliases to resources
+ *
+ * Visits all constructs in the scope and automatically creates versions and aliases
+ * for supported resource types. This enables blue-green deployments, traffic shifting,
+ * and provides stable ARNs for external integrations.
  *
  * Currently supports:
- * - Step Functions
- * - Lambda Functions
+ * - Lambda Functions: Creates function aliases
+ * - Step Functions: Creates versions and aliases with 100% traffic routing
+ *
+ * @example
+ * ```typescript
+ * // Apply to entire app for automatic versioning
+ * Aspects.of(app).add(new VersionResourcesAspect());
+ *
+ * // Or with custom alias name
+ * Aspects.of(app).add(new VersionResourcesAspect({ alias: 'PROD' }));
+ * ```
  */
 export class VersionResourcesAspect implements IAspect {
+    /**
+     * Creates a new VersionResourcesAspect
+     *
+     * @param props - Configuration for the aspect
+     * @param props.alias - Name for the alias to create. Defaults to 'LATEST'
+     */
     constructor(
         private readonly props: {
             alias: string;
@@ -23,6 +42,14 @@ export class VersionResourcesAspect implements IAspect {
         }
     ) {}
 
+    /**
+     * Visits a construct and applies versioning if it's a supported resource type
+     *
+     * For Lambda Functions: Adds a function alias pointing to $LATEST
+     * For Step Functions: Creates a version and alias with 100% traffic routing
+     *
+     * @param node - The construct to potentially add versioning to
+     */
     visit(node: IConstruct): void {
         if (node instanceof StateMachine) {
             const version = new CfnStateMachineVersion(node, `Version`, {

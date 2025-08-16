@@ -13,12 +13,13 @@ export interface StepFunctionFromFileProps extends StateMachineProps {
 }
 
 /**
- * Merge in definition substitutions supporting the format `Resource: ${lambdaId}`
- * in YAML syntax
+ * Merges Lambda function ARNs into definition substitutions
  *
- * @param definitionSubstitutions - The definition substitutions to merge in.
- * @param lambdaFunctions - The lambda functions to merge in.
- * @returns Merged definitions if lambda functions provided, empty object otherwise
+ * Creates definition substitutions that map Lambda function IDs to their ARNs,
+ * enabling the use of `${functionId}` placeholders in Step Function definitions.
+ *
+ * @param props - The Step Function properties containing lambda functions and substitutions
+ * @returns Object with merged definition substitutions, or empty object if no lambda functions
  */
 function prepareDefinitionSubstitutionsObject(props: StepFunctionFromFileProps) {
     const { definitionSubstitutions, lambdaFunctions } = props;
@@ -34,8 +35,47 @@ function prepareDefinitionSubstitutionsObject(props: StepFunctionFromFileProps) 
     return { definitionSubstitutions: { ...definitionSubstitutions, ...lambdaDefinitions } };
 }
 
+/**
+ * Step Function construct that loads its definition from a file
+ *
+ * Extends the standard StateMachine construct to load the state machine definition
+ * from an external YAML or JSON file. Supports automatic Lambda function integration
+ * through definition substitutions and IAM permission grants.
+ *
+ * Features:
+ * - Loads definition from external files (YAML or JSON)
+ * - Automatic Lambda function ARN substitution using `${functionId}` placeholders
+ * - Automatic IAM permission grants for Lambda function invocation
+ * - Property injectable for configuration via CDK property injectors
+ *
+ * @example
+ * ```typescript
+ * // Basic usage
+ * new StepFunctionFromFile(this, 'MyWorkflow', {
+ *   filepath: 'src/step-functions/workflow.asl.yaml',
+ * });
+ *
+ * // With Lambda function integration
+ * new StepFunctionFromFile(this, 'WorkflowWithLambdas', {
+ *   filepath: 'src/step-functions/workflow.asl.yaml',
+ *   lambdaFunctions: [processFunction, validateFunction],
+ *   definitionSubstitutions: {
+ *     BucketName: myBucket.bucketName,
+ *   },
+ * });
+ * ```
+ *
+ * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions.StateMachine.html
+ */
 @propertyInjectable
 export class StepFunctionFromFile extends StateMachine {
+    /**
+     * Creates a new StepFunctionFromFile construct
+     *
+     * @param scope - The parent construct
+     * @param id - The construct ID
+     * @param props - Properties including file path and optional Lambda functions
+     */
     constructor(scope: Construct, id: string, props: StepFunctionFromFileProps) {
         // Add lambda functions to definition substitutions if they have been provided
         const definitionSubstitutionsObject = prepareDefinitionSubstitutionsObject(props);
