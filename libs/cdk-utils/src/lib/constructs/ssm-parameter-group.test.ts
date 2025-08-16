@@ -1,4 +1,4 @@
-import { App, Stack } from 'aws-cdk-lib';
+import { App, Stack, Stage } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
@@ -7,31 +7,30 @@ import { beforeEach, describe, expect, test } from 'vitest';
 
 import { SsmParameterGroup } from './ssm-parameter-group';
 
-class TestParameters extends SsmParameterGroup {
+class TestParameters extends SsmParameterGroup<'PARAM_ONE' | 'PARAM_TWO'> {
     public readonly parameters;
 
     constructor(scope: Construct, id: string) {
         super(scope, id);
 
-        const param1 = new StringParameter(this, 'Param1', {
+        const PARAM_ONE = new StringParameter(this, 'Param1', {
             parameterName: '/test/param1',
             stringValue: 'value1',
         });
 
-        const param2 = new StringParameter(this, 'Param2', {
+        const PARAM_TWO = new StringParameter(this, 'Param2', {
             parameterName: '/test/param2',
             stringValue: 'value2',
         });
 
         this.parameters = {
-            PARAM_ONE: param1,
-            PARAM_TWO: param2,
+            PARAM_ONE,
+            PARAM_TWO,
         } as const;
     }
 }
 
 describe('SsmParameterGroup', () => {
-    let app: App;
     let stack: Stack;
     let template: Template;
     let testParameters: TestParameters;
@@ -39,8 +38,9 @@ describe('SsmParameterGroup', () => {
     let lambda2: Function;
 
     beforeEach(() => {
-        app = new App();
-        stack = new Stack(app, 'TestStack');
+        const app = new App();
+        const stage = new Stage(app, 'TestStage');
+        stack = new Stack(stage, 'TestStack');
         testParameters = new TestParameters(stack, 'MyTestParameters');
         lambda = new Function(stack, 'MyTestFunction', {
             runtime: Runtime.NODEJS_20_X,
