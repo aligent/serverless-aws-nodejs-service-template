@@ -8,7 +8,7 @@ import {
 import { IConstruct } from 'constructs';
 
 /**
- * Aspect that automatically adds versioning and aliases to resources
+ * Aspect that automatically adds versioning and aliases to Lambda and Step Functions
  *
  * Visits all constructs in the scope and automatically creates versions and aliases
  * for supported resource types. This enables blue-green deployments, traffic shifting,
@@ -21,15 +21,15 @@ import { IConstruct } from 'constructs';
  * @example
  * ```typescript
  * // Apply to entire app for automatic versioning
- * Aspects.of(app).add(new VersionResourcesAspect());
+ * Aspects.of(app).add(new VersionFunctionsAspect());
  *
  * // Or with custom alias name
- * Aspects.of(app).add(new VersionResourcesAspect({ alias: 'PROD' }));
+ * Aspects.of(app).add(new VersionFunctionsAspect({ alias: 'PROD' }));
  * ```
  */
 export class VersionFunctionsAspect implements IAspect {
     /**
-     * Creates a new VersionResourcesAspect
+     * Creates a new VersionFunctionsAspect
      *
      * @param props - Configuration for the aspect
      * @param props.alias - Name for the alias to create. Defaults to 'LATEST'

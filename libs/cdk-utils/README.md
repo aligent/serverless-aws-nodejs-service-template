@@ -8,7 +8,9 @@ This library contains custom constructs for common low level use cases.
 
 Current constructs:
 
-- StepFunctionFromFile
+- StepFunctionFromFile - Load Step Function definitions from YAML/JSON files
+- S3Bucket - S3 buckets with lifecycle management
+- SsmParameterGroup - Group and manage SSM parameters
 
 <details>
 
@@ -36,17 +38,81 @@ new StepFunctionFromFile(this, 'WorkflowWithLambdas', {
 });
 ```
 
+### S3Bucket
+
+An S3 bucket construct with built-in lifecycle management for different data retention needs.
+
+```typescript
+import { S3Bucket } from '@libs/cdk-utils';
+
+// Short-lived data (7 days)
+new S3Bucket(this, 'TempData', {
+  duration: 'SHORT',
+});
+
+// Medium-lived data (30 days)
+new S3Bucket(this, 'ProcessingData', {
+  duration: 'MEDIUM',
+});
+
+// Long-lived data (365 days)
+new S3Bucket(this, 'ArchiveData', {
+  duration: 'LONG',
+});
+
+// Permanent data with versioning
+new S3Bucket(this, 'ConfigData', {
+  duration: 'PERMANENT',
+  versioned: true,
+});
+```
+
+### SsmParameterGroup
+
+Abstract class to group SSM parameters together and manage permissions.
+
+```typescript
+import { SsmParameterGroup } from '@libs/cdk-utils';
+import { StringParameter } from 'aws-cdk-lib/aws-ssm';
+
+class ApiCredentials extends SsmParameterGroup<'API_KEY' | 'API_SECRET'> {
+  public readonly parameters;
+
+  constructor(scope: Construct, id = 'ApiCredentials') {
+    super(scope, id);
+
+    this.parameters = {
+      API_KEY: StringParameter.fromStringParameterName(
+        this,
+        'ApiKey',
+        `/myapp/${this.stageName}/api/key`
+      ),
+      API_SECRET: StringParameter.fromStringParameterName(
+        this,
+        'ApiSecret',
+        `/myapp/${this.stageName}/api/secret`
+      ),
+    };
+  }
+}
+
+// Usage
+const credentials = new ApiCredentials(this);
+credentials.grantToFunction(myLambda, 'read');
+```
+
 </details>
 
 ## Property Injectors
 
-This library provides stage-aware property injectors that automatically configure resources based on deployment stage (dev/stg/prd). Property injectors use CDK's built-in property injection system to apply defaults without requiring custom constructs.
+This library provides configuration-aware property injectors that automatically configure resources based on your requirements. Property injectors use CDK's built-in property injection system to apply defaults without requiring custom constructs.
 
 Current injectors:
 
-- NodeJsFunctionDefaultsInjector - Stage-specific Lambda function configuration
-- LogGroupDefaultsInjector - Stage-specific CloudWatch log group configuration  
+- NodeJsFunctionDefaultsInjector - Configuration-specific Lambda function bundling and runtime settings
+- LogGroupDefaultsInjector - Duration-based CloudWatch log group retention
 - StepFunctionDefaultsInjector - Automatic logging for EXPRESS Step Functions
+- BucketDefaultsInjector - Auto-cleanup policies for S3 buckets
 
 <details>
 
@@ -54,65 +120,93 @@ Current injectors:
 
 ### Using Property Injectors
 
-Property injectors are typically added at the application stage level to apply stage-specific defaults to all resources within that stage.
+Property injectors can be added at the app or stage level to apply configuration-specific defaults to all resources within that scope.
 
 ```typescript
 import {
   NodeJsFunctionDefaultsInjector,
   LogGroupDefaultsInjector,
   StepFunctionDefaultsInjector,
+  BucketDefaultsInjector,
 } from '@libs/cdk-utils';
-import { PropertyInjectors, Stage } from 'aws-cdk-lib';
+import { App, Stage } from 'aws-cdk-lib';
 
-class ApplicationStage extends Stage {
-  constructor(scope: Construct, id: string, props?: StageProps) {
-    super(scope, id, props);
+// Apply at app level
+const app = new App({
+  propertyInjectors: [
+    new NodeJsFunctionDefaultsInjector({
+      sourceMap: true,
+      esm: true,
+      minify: true,
+    }).withProps({
+      timeout: Duration.seconds(6),
+      memorySize: 192,
+      runtime: Runtime.NODEJS_22_X,
+      architecture: Architecture.ARM_64,
+    }),
+    new LogGroupDefaultsInjector({ duration: 'MEDIUM' }),
+    new StepFunctionDefaultsInjector(),
+    new BucketDefaultsInjector(),
+  ],
+});
 
-    // Apply stage-specific defaults
-    PropertyInjectors.of(this).add(
-      new NodeJsFunctionDefaultsInjector(id).addProps({
-        timeout: Duration.seconds(6),
-        memorySize: 192,
-        runtime: Runtime.NODEJS_22_X,
-        tracing: Tracing.ACTIVE,
-        architecture: Architecture.ARM_64,
-      }),
-      new StepFunctionDefaultsInjector(id),
-      new LogGroupDefaultsInjector(id)
-    );
-  }
-}
+// Or override at stage level
+new ApplicationStage(app, 'dev', {
+  propertyInjectors: [
+    new NodeJsFunctionDefaultsInjector({
+      sourceMap: false,
+      esm: true,
+      minify: false, // Faster builds for dev
+    }),
+    new LogGroupDefaultsInjector({ duration: 'SHORT' }), // Shorter retention for dev
+  ],
+});
 ```
 
 ### NodeJsFunctionDefaultsInjector
 
-Applies stage-specific defaults to Lambda functions:
-
-- **dev**: Optimized for debugging (source maps disabled, minimal bundling)
-- **stg**: Balanced configuration (source maps enabled, optimized bundling)
-- **prd**: Optimized for production (minified, tree-shaking enabled)
+Applies configuration-specific bundling and runtime settings to Lambda functions:
 
 ```typescript
-// Stage-specific bundling configuration is applied automatically
-new Function(stack, 'MyFunction', {
-  runtime: Runtime.NODEJS_22_X,
+// Development configuration - fast builds
+new NodeJsFunctionDefaultsInjector({
+  sourceMap: false,
+  esm: true,
+  minify: false,
+});
+
+// Production configuration - optimized bundles
+new NodeJsFunctionDefaultsInjector({
+  sourceMap: true,
+  esm: true,
+  minify: true,
+});
+
+// Functions automatically inherit configuration
+new NodejsFunction(stack, 'MyFunction', {
   handler: 'index.handler',
-  code: Code.fromAsset('src/lambda'),
-  // Bundling configuration, source maps, etc. applied via injector
+  entry: 'src/lambda/handler.ts',
+  // Bundling, source maps, ESM support applied via injector
 });
 ```
 
 ### LogGroupDefaultsInjector
 
-Applies stage-specific retention and removal policies:
-
-- **dev**: 1 week retention, DESTROY removal policy
-- **stg**: 6 months retention, DESTROY removal policy  
-- **prd**: 2 years retention, RETAIN removal policy
+Applies duration-based retention and removal policies:
 
 ```typescript
-// Retention and removal policies applied automatically
+// Short retention (1 week)
+new LogGroupDefaultsInjector({ duration: 'SHORT' });
+
+// Medium retention (6 months)
+new LogGroupDefaultsInjector({ duration: 'MEDIUM' });
+
+// Long retention (2 years)
+new LogGroupDefaultsInjector({ duration: 'LONG' });
+
+// Log groups automatically inherit retention settings
 new LogGroup(stack, 'MyLogGroup');
+// Retention and removal policies applied via injector
 ```
 
 ### StepFunctionDefaultsInjector
@@ -127,14 +221,41 @@ new StateMachine(stack, 'MyExpressWorkflow', {
 });
 ```
 
-### Customizing Injector Defaults
+### BucketDefaultsInjector
 
-You can override injector defaults using the `addProps` method:
+Automatically configures S3 buckets for clean stack deletion:
 
 ```typescript
-new NodeJsFunctionDefaultsInjector('prd').addProps({
+// Default configuration
+new BucketDefaultsInjector();
+// Applies: autoDeleteObjects: true, removalPolicy: DESTROY
+
+// Custom configuration
+new BucketDefaultsInjector({
+  autoDelete: false,
+  removalPolicy: 'RETAIN',
+});
+
+// Buckets automatically get cleanup defaults
+new Bucket(stack, 'MyBucket');
+// Auto-delete and removal policies applied via injector
+```
+
+### Customizing Injector Defaults
+
+You can override injector defaults using the `withProps` method:
+
+```typescript
+const customInjector = new NodeJsFunctionDefaultsInjector({
+  sourceMap: true,
+  esm: true,
+  minify: true,
+}).withProps({
   memorySize: 512, // Override default memory
   timeout: Duration.seconds(30), // Override default timeout
+  environment: {
+    LOG_LEVEL: 'DEBUG',
+  },
 });
 ```
 
@@ -146,25 +267,25 @@ This library provides aspects that automatically apply cross-cutting concerns to
 
 Current aspects:
 
-- VersionResourcesAspect - Automatic versioning and aliasing for Lambda functions and Step Functions
+- VersionFunctionsAspect - Automatic versioning and aliasing for Lambda functions and Step Functions
 
 <details>
 
 <summary>Instructions for working with Aspects</summary>
 
-### VersionResourcesAspect
+### VersionFunctionsAspect
 
 Automatically creates versions and aliases for Lambda functions and Step Functions. This is essential for blue-green deployments and traffic shifting.
 
 ```typescript
-import { VersionResourcesAspect } from '@libs/cdk-utils';
+import { VersionFunctionsAspect } from '@libs/cdk-utils';
 import { Aspects } from 'aws-cdk-lib';
 
 // Apply to entire app for automatic versioning
-Aspects.of(app).add(new VersionResourcesAspect());
+Aspects.of(app).add(new VersionFunctionsAspect());
 
 // Or with custom alias name
-Aspects.of(app).add(new VersionResourcesAspect({ alias: 'PROD' }));
+Aspects.of(app).add(new VersionFunctionsAspect({ alias: 'PROD' }))
 ```
 
 **What it does:**

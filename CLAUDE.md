@@ -10,6 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run tests for all projects**: `yarn test:all`
 - **Run a single test file**: `npx vitest run path/to/test.spec.ts`
 - **Run tests in watch mode**: `npx vitest watch`
+- **Run tests for specific project**: `npx nx test @libs/cdk-utils`
+- **Run specific test file with Nx**: `npx nx test @libs/cdk-utils -- path/to/test.spec.ts`
 
 ### Code Quality
 
@@ -66,17 +68,27 @@ This is an AWS microservices template using:
    - Step Functions use YAML definitions in `services/<service>/src/step-functions/`
    - Shared constructs in `services/<service>/src/lib/constructs/`
    - Step Functions use JSONata for output transformations
-   - Automatic versioning and aliasing applied via VersionResourcesAspect
+   - Automatic versioning and aliasing applied via VersionFunctionsAspect
    - Stage-specific configuration applied via property injectors
 
 4. **Property Injection Architecture**
 
-   - Stage-specific defaults applied via property injectors (NodeJsFunctionDefaultsInjector, LogGroupDefaultsInjector, StepFunctionDefaultsInjector)
-   - Cross-cutting concerns handled by aspects (VersionResourcesAspect for automatic versioning)
-   - Configuration scales automatically with environment (dev/stg/prd)
-   - No need for custom constructs - uses CDK's built-in property injection system
+   - Configuration-based defaults applied via property injectors:
+     - **NodeJsFunctionDefaultsInjector**: Bundling configuration (sourceMap, esm, minify)
+     - **LogGroupDefaultsInjector**: Duration-based retention (SHORT/MEDIUM/LONG)
+     - **StepFunctionDefaultsInjector**: Automatic logging for EXPRESS workflows
+     - **BucketDefaultsInjector**: Auto-cleanup policies for S3 buckets
+   - Cross-cutting concerns handled by aspects (VersionFunctionsAspect for automatic versioning)
+   - Configuration can be customized per stage or globally
+   - Uses CDK's built-in property injection system - no custom constructs needed
 
-5. **Testing Strategy**
+5. **CDK Constructs and Utilities**
+
+   - **S3Bucket**: Lifecycle management with duration-based rules (SHORT/MEDIUM/LONG/PERMANENT)
+   - **SsmParameterGroup**: Abstract class for grouping and managing SSM parameters
+   - **StepFunctionFromFile**: Load Step Function definitions from YAML/JSON files
+
+6. **Testing Strategy**
    - Vitest for unit testing with coverage reports
    - Test files colocated with source files as `*.spec.ts` or `*.test.ts`
    - Workspace-level Vitest configuration in `vitest.workspace.ts`
@@ -87,7 +99,7 @@ This is an AWS microservices template using:
 
 - Project migrated from Serverless Framework to CDK using property injection pattern
 - CDK construct IDs are critical - changing them will replace resources
-- Lambda versions and aliases are automatically created via VersionResourcesAspect
+- Lambda versions and aliases are automatically created via VersionFunctionsAspect
 - Step Functions use `LambdaInvoke` resource with automatic retry blocks
 - Task outputs are nested in `Payload` property - use JSONata to transform
 - Stage-specific resource configuration handled by property injectors
