@@ -2,7 +2,8 @@
 
 # environment
 *.env
-*.env.json
+*.env*.csv
+!.env.example.csv
 
 # compiled output
 dist

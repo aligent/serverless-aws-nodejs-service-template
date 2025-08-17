@@ -14,12 +14,10 @@
           "cwd": "{projectRoot}"
         }
       },
-      "pg": {
-        "configurations": {
-          "parameters": {
-            "cwd": "{projectRoot}",
-            "command": "scripts/setup-parameters.sh"
-          }
+      "parameters": {
+        "executor": "nx:run-commands",
+        "options": {
+          "path": "/application/dev"
         }
       }
     }

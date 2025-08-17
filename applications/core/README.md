@@ -12,14 +12,17 @@ _add details here_
 
 ### Environment Parameters
 
-Parameters are managed through the `config/.env.json` file
+Parameters are managed through the `parameters/.env.csv` file by default
 
 ```bash
-# Setup parameters for playground environment
-yarn pg:parameters
+# Pull down parameters from the playground environment to .env.csv
+yarn nx run core:parameters
 
-# Force update existing parameters
-yarn pg:parameters --force
+# Update parameters from .env.csv
+yarn nx run core:parameters:import
+
+# Custom filename and parameter path can be passed in as arguments
+yarn nx run core:parameters --file .env.dev.csv --path /my/dev/path
 ```
 
 ### Parameter Configuration

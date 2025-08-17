@@ -18,13 +18,20 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
 3. (Optional) Bootstrap SSM parameters:
 
-   ```bash
-   # Copy the example template
-   cp ./applications/core/config/.env.example.json ./applications/core/config/.env.json
+   If there are existing parameters in SSM Parameter store, import them
 
-   # Setup required SSM parameters for your environment
-   yarn pg:parameters
+   ```bash
+   yarn nx run core:parameters
    ```
+
+   Alternatively, copy the `parameters/.env.example.csv` file to `parameters/.env.csv` in the
+   application project, modify the contents, and push the parameters to AWS
+
+   ```bash
+   yarn nx run core:parameters:import
+   ```
+
+   The default SSM path and file path can be changed in an application's `parameters` target or via CLI arguments
 
 4. (Optional) Change default base branch
    If your pull requests will target a branch other than `main`, change the value of `defaultBranch` in `nx.json` to the name of the branch that Nx should compare to when running tasks with `affected`

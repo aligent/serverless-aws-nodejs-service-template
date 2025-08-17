@@ -48,6 +48,23 @@
                     "command": "cdk watch --method direct '{args.stack}' --exclusively --profile playground"
                 }
             }
+        },
+        "parameters": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "cwd": "{projectRoot}/parameters",
+                "file": ".env.csv"
+            },
+            "defaultConfiguration": "export",
+            "configurations": {
+                "import": {
+                    "command": "store-parameters import {args.file}"
+                },
+                "export": {
+                    "command": "store-parameters export {args.file} --path={args.path}"
+                }
+            }
         }
     },
     "namedInputs": {
