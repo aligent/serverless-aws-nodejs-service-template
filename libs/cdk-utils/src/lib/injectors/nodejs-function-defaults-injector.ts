@@ -1,6 +1,11 @@
 import { type InjectionContext, type IPropertyInjector } from 'aws-cdk-lib';
-import { Function, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { LogLevel, OutputFormat, type NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
+import {
+    NodejsFunction,
+    OutputFormat,
+    type NodejsFunctionProps,
+} from 'aws-cdk-lib/aws-lambda-nodejs';
+import { logInjector } from './log-injector';
 
 /**
  * ESM support banner
@@ -31,7 +36,11 @@ const ESM_SUPPORT_BANNER = [
  * ```typescript
  * // Apply configuration-specific defaults
  * PropertyInjectors.of(scope).add(
- *   new NodeJsFunctionDefaultsInjector('dev').withProps({
+ *   new NodeJsFunctionDefaultsInjector({
+ *     sourceMaps: true,
+ *     esm: true,
+ *     minify: true,
+ *   }).withProps({
  *     timeout: Duration.seconds(30),
  *     memorySize: 256,
  *   })
@@ -48,21 +57,33 @@ const ESM_SUPPORT_BANNER = [
  * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_lambda_nodejs.NodejsFunction.html
  */
 export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
-    public readonly constructUniqueId = Function.PROPERTY_INJECTION_ID;
+    public readonly constructUniqueId = NodejsFunction.PROPERTY_INJECTION_ID;
 
     private defaultProps: NodejsFunctionProps;
 
     /**
      * Creates a new NodeJsFunctionDefaultsInjector
      *
-     * @param configuration - Configuration identifier used to select appropriate defaults.
-     *                       Common values include 'dev', 'stg', 'prd', but any string is supported.
-     *                       Defaults to 'prd' if not specified.
+     * @param configuration - Configuration identifier used to select appropriate defaults. Uses production defaults if not specified.
+     * @param configuration.sourceMap - Whether to enable source maps.
+     * @param configuration.esm - Whether to enable ESM support.
+     * @param configuration.minify - Whether to enable minification.
      */
-    constructor(private readonly configuration: string = 'prd') {
+    constructor(
+        private readonly configuration: {
+            sourceMap: boolean;
+            esm: boolean;
+            minify: boolean;
+        } = {
+            sourceMap: true,
+            esm: true,
+            minify: true,
+        }
+    ) {
         this.defaultProps = {
             runtime: Runtime.NODEJS_22_X,
             bundling: bundlingProperties(configuration),
+            tracing: Tracing.ACTIVE,
         };
     }
 
@@ -77,12 +98,18 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
      *
      * @example
      * ```typescript
-     * const customInjector = new NodeJsFunctionDefaultsInjector('prod')
+     * const customInjector = new NodeJsFunctionDefaultsInjector({
+     *   sourceMaps: false,
+     *   esm: false,
+     *   minify: false,
+     * })
      *   .withProps({
      *     timeout: Duration.minutes(5),
      *     memorySize: 1024,
      *   });
      * ```
+     *
+     * TODO: Provide a nice way to inherit global properties from previous injectors
      */
     public withProps(props: NodejsFunctionProps) {
         const modifiedInjector = new NodeJsFunctionDefaultsInjector(this.configuration);
@@ -101,16 +128,16 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
      * @returns Merged properties with injected defaults
      */
     public inject(originalProps: NodejsFunctionProps, context: InjectionContext) {
-        console.log(
-            `${NodeJsFunctionDefaultsInjector.name}: Injecting ${this.configuration} defaults for ${context.id}`
-        );
+        logInjector(this.constructor.name, this.configuration, context);
+
+        // The NodeJsFunction constructor pre-sets runtime to 16.x or LATEST depending on feature flags
+        // We assume that using this injector means you want to standardise the runtime across all lambdas
+        const runtime = this.defaultProps.runtime;
 
         const props = {
             ...this.defaultProps,
             ...originalProps,
-            // The NodeJsFunction constructor pre-sets runtime to 16.x or LATEST depending on feature flags
-            // We assume that using this injector means you want to standardise the runtime across all lambdas
-            runtime: this.defaultProps.runtime,
+            runtime,
         };
 
         // If source maps are enabled in our bundling, add the required NODE_OPTIONS flag to the environment
@@ -137,52 +164,25 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
  * @param configuration - Configuration identifier to determine bundling strategy
  * @returns Bundling properties optimized for the specified configuration
  */
-function bundlingProperties(configuration: string) {
-    // Dev configuration optimised for debugging, analysis, and bundling speed
-    const devConfig = {
-        logLevel: LogLevel.INFO,
-        minify: false,
-        sourceMap: false,
-        metafile: true, // Required for bundle analysis
-        format: OutputFormat.ESM,
-        banner: ESM_SUPPORT_BANNER,
-    } satisfies NodejsFunctionProps['bundling'];
-
-    // Staging/Production configurations optimised for bundle size
-    const stagingConfig = {
-        keepNames: true,
-        logLevel: LogLevel.INFO,
-        minify: true,
-        sourceMap: true,
-        buildArgs: {
-            bundle: 'true',
-            treeShaking: 'true',
-        },
-        format: OutputFormat.ESM,
-        banner: ESM_SUPPORT_BANNER,
-    } satisfies NodejsFunctionProps['bundling'];
-
-    const productionConfig = {
-        keepNames: true,
-        // TODO is this necessary? It might only apply to ESBuild logs
-        logLevel: LogLevel.INFO,
-        minify: true,
-        // TODO: Source maps are really large, consider disabling for production
-        sourceMap: true,
-        buildArgs: {
-            bundle: 'true',
-            treeShaking: 'true',
-        },
-        format: OutputFormat.ESM,
-        banner: ESM_SUPPORT_BANNER,
-    } satisfies NodejsFunctionProps['bundling'];
-
-    switch (configuration) {
-        case 'dev':
-            return devConfig;
-        case 'stg':
-            return stagingConfig;
-        default:
-            return productionConfig;
-    }
+function bundlingProperties({
+    sourceMap,
+    esm,
+    minify,
+}: {
+    sourceMap: boolean;
+    esm: boolean;
+    minify: boolean;
+}) {
+    return {
+        ...(sourceMap && { sourceMap: true }),
+        ...(esm && { format: OutputFormat.ESM, banner: ESM_SUPPORT_BANNER }),
+        ...(minify && {
+            keepNames: true,
+            minify: true,
+            buildArgs: {
+                bundle: 'true',
+                treeShaking: 'true',
+            },
+        }),
+    };
 }

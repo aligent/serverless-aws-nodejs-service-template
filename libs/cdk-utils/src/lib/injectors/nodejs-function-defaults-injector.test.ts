@@ -33,7 +33,6 @@ describe('NodeJsFunctionDefaultsInjector', () => {
         });
 
         const template = Template.fromStack(stack);
-        console.log(template.findResources('AWS::Lambda::Function'));
         template.hasResourceProperties('AWS::Lambda::Function', {
             Environment: {
                 Variables: {
@@ -55,14 +54,19 @@ describe('NodeJsFunctionDefaultsInjector', () => {
         });
 
         const template = Template.fromStack(stack);
-        console.log(template.findResources('AWS::Lambda::Function'));
         template.hasResourceProperties('AWS::Lambda::Function', {
             MemorySize: 1024,
         });
     });
 
     test('merges bundling and environment properties correctly', () => {
-        PropertyInjectors.of(stack).add(new NodeJsFunctionDefaultsInjector('dev'));
+        PropertyInjectors.of(stack).add(
+            new NodeJsFunctionDefaultsInjector({
+                sourceMap: false,
+                esm: true,
+                minify: false,
+            })
+        );
 
         new NodejsFunction(stack, 'MyFunction', {
             entry: path.join(__dirname, '__data__', 'test-handler.ts'),

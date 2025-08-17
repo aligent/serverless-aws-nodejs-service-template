@@ -4,14 +4,14 @@ import { Code } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import path from 'node:path';
 import { StepFunctionFromFile } from '../constructs/step-function-from-file';
-import { VersionResourcesAspect } from './version-resources-aspect';
+import { VersionFunctionsAspect } from './version-functions-aspect';
 
 describe('VersionResourcesAspect', () => {
     let stack: Stack;
 
     beforeEach(() => {
         stack = new Stack();
-        Aspects.of(stack).add(new VersionResourcesAspect());
+        Aspects.of(stack).add(new VersionFunctionsAspect());
     });
 
     it('should add a version and alias to a lambda function', () => {
@@ -32,7 +32,7 @@ describe('VersionResourcesAspect', () => {
             code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
-        Aspects.of(stack).add(new VersionResourcesAspect({ alias: 'PROD' }));
+        Aspects.of(stack).add(new VersionFunctionsAspect({ alias: 'PROD' }));
 
         const template = Template.fromStack(stack);
         template.hasResourceProperties('AWS::Lambda::Alias', {

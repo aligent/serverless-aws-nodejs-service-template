@@ -4,7 +4,6 @@ import {
     StateMachine,
     type StateMachineProps,
 } from 'aws-cdk-lib/aws-stepfunctions';
-import { propertyInjectable } from 'aws-cdk-lib/core/lib/prop-injectable';
 import { Construct } from 'constructs';
 
 export interface StepFunctionFromFileProps extends StateMachineProps {
@@ -39,14 +38,15 @@ function prepareDefinitionSubstitutionsObject(props: StepFunctionFromFileProps) 
  * Step Function construct that loads its definition from a file
  *
  * Extends the standard StateMachine construct to load the state machine definition
- * from an external YAML or JSON file. Supports automatic Lambda function integration
+ * from an external YAML or JSON file.
+ *
+ * Supports automatic Lambda function integration
  * through definition substitutions and IAM permission grants.
  *
  * Features:
  * - Loads definition from external files (YAML or JSON)
  * - Automatic Lambda function ARN substitution using `${functionId}` placeholders
  * - Automatic IAM permission grants for Lambda function invocation
- * - Property injectable for configuration via CDK property injectors
  *
  * @example
  * ```typescript
@@ -67,7 +67,6 @@ function prepareDefinitionSubstitutionsObject(props: StepFunctionFromFileProps) 
  *
  * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_stepfunctions.StateMachine.html
  */
-@propertyInjectable
 export class StepFunctionFromFile extends StateMachine {
     /**
      * Creates a new StepFunctionFromFile construct

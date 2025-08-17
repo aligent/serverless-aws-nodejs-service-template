@@ -27,7 +27,7 @@ import { IConstruct } from 'constructs';
  * Aspects.of(app).add(new VersionResourcesAspect({ alias: 'PROD' }));
  * ```
  */
-export class VersionResourcesAspect implements IAspect {
+export class VersionFunctionsAspect implements IAspect {
     /**
      * Creates a new VersionResourcesAspect
      *

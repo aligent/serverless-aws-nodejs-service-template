@@ -1,5 +1,6 @@
 import { RemovalPolicy, type InjectionContext, type IPropertyInjector } from 'aws-cdk-lib';
 import { LogGroup, RetentionDays, type LogGroupProps } from 'aws-cdk-lib/aws-logs';
+import { logInjector } from './log-injector';
 
 /**
  * Property injector for CloudWatch Log Groups with configuration-aware defaults
@@ -16,7 +17,7 @@ import { LogGroup, RetentionDays, type LogGroupProps } from 'aws-cdk-lib/aws-log
  * ```typescript
  * // Apply configuration-specific defaults
  * PropertyInjectors.of(scope).add(
- *   new LogGroupDefaultsInjector('dev').withProps({
+ *   new LogGroupDefaultsInjector({ duration: 'SHORT' }).withProps({
  *     logGroupName: '/custom/log/group',
  *   })
  * );
@@ -30,18 +31,24 @@ import { LogGroup, RetentionDays, type LogGroupProps } from 'aws-cdk-lib/aws-log
  * @see https://docs.aws.amazon.com/cdk/api/v2/docs/aws-cdk-lib.aws_logs.LogGroup.html
  */
 export class LogGroupDefaultsInjector implements IPropertyInjector {
-    public readonly constructUniqueId = LogGroup.PROPERTY_INJECTION_ID;
+    readonly constructUniqueId = LogGroup.PROPERTY_INJECTION_ID;
     private defaultProps: LogGroupProps;
 
     /**
      * Creates a new LogGroupDefaultsInjector
      *
      * @param configuration - Configuration identifier used to select appropriate defaults.
-     *                       Common values include 'dev', 'stg', 'prd', but any string is supported.
-     *                       Defaults to 'prd' if not specified.
      */
-    constructor(private readonly configuration: string = 'prd') {
-        this.defaultProps = retentionProperties(configuration);
+    constructor(
+        private readonly configuration: {
+            duration: 'SHORT' | 'MEDIUM' | 'LONG';
+        } = {
+            duration: 'LONG',
+        }
+    ) {
+        this.defaultProps = {
+            ...retentionProperties(configuration.duration),
+        };
     }
 
     /**
@@ -55,7 +62,7 @@ export class LogGroupDefaultsInjector implements IPropertyInjector {
      *
      * @example
      * ```typescript
-     * const customInjector = new LogGroupDefaultsInjector('dev')
+     * const customInjector = new LogGroupDefaultsInjector({ duration: 'SHORT' })
      *   .withProps({
      *     logGroupName: '/aws/lambda/custom',
      *     retention: RetentionDays.ONE_MONTH,
@@ -78,10 +85,7 @@ export class LogGroupDefaultsInjector implements IPropertyInjector {
      * @returns Merged properties with injected defaults
      */
     public inject(originalProps: LogGroupProps, context: InjectionContext) {
-        console.log(
-            `${LogGroupDefaultsInjector.name}: Injecting ${this.configuration} defaults for ${context.id}`
-        );
-
+        logInjector(this.constructor.name, this.configuration, context);
         return {
             ...this.defaultProps,
             ...originalProps,
@@ -90,37 +94,27 @@ export class LogGroupDefaultsInjector implements IPropertyInjector {
 }
 
 /**
- * Get stage-specific log group properties
+ * Get duration-specific log group properties
  *
- * Development and staging log groups don't need to last forever
- * and should be cleaned up along with their stack when removed
- *
- *
- * @param stage - The stage to get the log group properties for
- * @returns The log group properties for the stage
+ * @param duration - The duration to get the log group properties for
+ * @returns The log group properties for the duration
  */
-function retentionProperties(stage: string) {
-    const devConfig = {
-        retention: RetentionDays.ONE_WEEK,
-        removalPolicy: RemovalPolicy.DESTROY,
-    };
-
-    const stagingConfig = {
-        retention: RetentionDays.SIX_MONTHS,
-        removalPolicy: RemovalPolicy.DESTROY,
-    };
-
-    const productionConfig = {
-        retention: RetentionDays.TWO_YEARS,
-        removalPolicy: RemovalPolicy.RETAIN,
-    };
-
+function retentionProperties(duration: 'SHORT' | 'MEDIUM' | 'LONG') {
     switch (true) {
-        case stage === 'dev':
-            return devConfig;
-        case stage === 'stg':
-            return stagingConfig;
+        case duration === 'SHORT':
+            return {
+                retention: RetentionDays.ONE_WEEK,
+                removalPolicy: RemovalPolicy.DESTROY,
+            };
+        case duration === 'MEDIUM':
+            return {
+                retention: RetentionDays.SIX_MONTHS,
+                removalPolicy: RemovalPolicy.DESTROY,
+            };
         default:
-            return productionConfig;
+            return {
+                retention: RetentionDays.TWO_YEARS,
+                removalPolicy: RemovalPolicy.RETAIN,
+            };
     }
 }

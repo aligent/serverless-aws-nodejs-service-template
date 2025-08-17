@@ -11,7 +11,7 @@ describe('LogGroupDefaultsInjector', () => {
         PropertyInjectors.of(stack).add(new LogGroupDefaultsInjector());
     });
 
-    it('applies production defaults to log groups', () => {
+    it('applies long duration defaults to log groups', () => {
         new LogGroup(stack, 'TestLogGroup');
 
         const template = Template.fromStack(stack);
@@ -21,26 +21,24 @@ describe('LogGroupDefaultsInjector', () => {
         });
     });
 
-    it('applies development configuration when specified', () => {
-        const devStack = new Stack();
-        PropertyInjectors.of(devStack).add(new LogGroupDefaultsInjector('dev'));
+    it('applies short duration configuration when specified', () => {
+        PropertyInjectors.of(stack).add(new LogGroupDefaultsInjector({ duration: 'SHORT' }));
 
-        new LogGroup(devStack, 'DevLogGroup');
+        new LogGroup(stack, 'ShortLogGroup');
 
-        const template = Template.fromStack(devStack);
+        const template = Template.fromStack(stack);
 
         template.hasResourceProperties('AWS::Logs::LogGroup', {
             RetentionInDays: RetentionDays.ONE_WEEK,
         });
     });
 
-    it('applies staging configuration when specified', () => {
-        const stagingStack = new Stack();
-        PropertyInjectors.of(stagingStack).add(new LogGroupDefaultsInjector('stg'));
+    it('applies medium duration configuration when specified', () => {
+        PropertyInjectors.of(stack).add(new LogGroupDefaultsInjector({ duration: 'MEDIUM' }));
 
-        new LogGroup(stagingStack, 'StagingLogGroup');
+        new LogGroup(stack, 'MediumLogGroup');
 
-        const template = Template.fromStack(stagingStack);
+        const template = Template.fromStack(stack);
 
         template.hasResourceProperties('AWS::Logs::LogGroup', {
             RetentionInDays: RetentionDays.SIX_MONTHS,

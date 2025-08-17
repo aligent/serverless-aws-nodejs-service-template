@@ -3,23 +3,27 @@ import {
     LogGroupDefaultsInjector,
     NodeJsFunctionDefaultsInjector,
     StepFunctionDefaultsInjector,
-    VersionResourcesAspect,
+    VersionFunctionsAspect,
 } from '@libs/cdk-utils';
-import {
-    App,
-    Aspects,
-    Duration,
-    PropertyInjectors,
-    Stage,
-    Tags,
-    type StageProps,
-} from 'aws-cdk-lib';
-import { Architecture, Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
+import { App, Aspects, Duration, Stage, Tags, type StageProps } from 'aws-cdk-lib';
+import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import type { Construct } from 'constructs';
 import { APPLICATION_CONTEXT } from '../lib/application-context';
 
 const app = new App({
     context: APPLICATION_CONTEXT,
+    propertyInjectors: [
+        new LogGroupDefaultsInjector(),
+        // Apply properties to the entire application
+        // NOTE: Aspects do not work here because the Stage construct doesn't pass them through
+        new NodeJsFunctionDefaultsInjector().withProps({
+            timeout: Duration.seconds(6),
+            memorySize: 192,
+            runtime: Runtime.NODEJS_22_X,
+            architecture: Architecture.ARM_64,
+        }),
+        new StepFunctionDefaultsInjector(),
+    ],
 });
 Tags.of(app).add('OWNER', APPLICATION_CONTEXT.APPLICATION_OWNER);
 
@@ -35,28 +39,33 @@ class ApplicationStage extends Stage {
 
         Tags.of(this).add('STAGE', id);
 
-        // Set up stage-specific defaults via aspects and property injection
-        Aspects.of(app).add(new VersionResourcesAspect());
-
-        PropertyInjectors.of(this).add(
-            new NodeJsFunctionDefaultsInjector(id).withProps({
-                timeout: Duration.seconds(6),
-                memorySize: 192,
-                runtime: Runtime.NODEJS_22_X,
-                tracing: Tracing.ACTIVE,
-                architecture: Architecture.ARM_64,
-            }),
-            new StepFunctionDefaultsInjector(id),
-            new LogGroupDefaultsInjector(id)
-        );
-
         // Instantiate service stacks here as required
     }
 }
 
 // Set up application stages
-new ApplicationStage(app, 'dev');
+new ApplicationStage(app, 'dev', {
+    propertyInjectors: [
+        // NOTE: Property Injectors will only apply ONCE each, so adding one here
+        // overrides the same injector at the app level
+        new NodeJsFunctionDefaultsInjector({
+            sourceMap: false,
+            esm: true,
+            minify: false,
+        }).withProps({
+            timeout: Duration.seconds(6),
+            memorySize: 192,
+            runtime: Runtime.NODEJS_22_X,
+            architecture: Architecture.ARM_64,
+        }),
+        new LogGroupDefaultsInjector({ duration: 'SHORT' }),
+    ],
+});
 
-new ApplicationStage(app, 'stg');
+new ApplicationStage(app, 'stg', {
+    propertyInjectors: [new LogGroupDefaultsInjector({ duration: 'MEDIUM' })],
+});
 
-new ApplicationStage(app, 'prd');
+const prd = new ApplicationStage(app, 'prd');
+// Ensure lambdas and step functions are versioned and have the default alias
+Aspects.of(prd).add(new VersionFunctionsAspect());

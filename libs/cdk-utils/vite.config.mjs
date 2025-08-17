@@ -5,5 +5,10 @@ export default mergeConfig(
     viteBaseConfig,
     defineConfig({
         cacheDir: '../../node_modules/.vite/cdk-utils',
+        test: {
+            environment: {
+                NODE_ENV: 'test',
+            },
+        },
     })
 );

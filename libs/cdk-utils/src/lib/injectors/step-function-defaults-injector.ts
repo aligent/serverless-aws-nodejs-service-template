@@ -1,4 +1,4 @@
-import type { InjectionContext, IPropertyInjector } from 'aws-cdk-lib';
+import { type InjectionContext, type IPropertyInjector } from 'aws-cdk-lib';
 import { LogGroup } from 'aws-cdk-lib/aws-logs';
 import {
     LogLevel,
@@ -7,6 +7,7 @@ import {
     type StateMachineProps,
 } from 'aws-cdk-lib/aws-stepfunctions';
 import type { Construct } from 'constructs';
+import { logInjector } from './log-injector';
 
 type StepFunctionDefaults = Omit<StateMachineProps, 'definition' | 'definitionSubstitutions'>;
 
@@ -47,7 +48,7 @@ export class StepFunctionDefaultsInjector implements IPropertyInjector {
      * @param configuration - Configuration identifier (currently unused but maintained for consistency).
      *                       All configurations enable tracing by default.
      */
-    constructor(private readonly configuration: string = 'prd') {
+    constructor(private readonly configuration?: Record<string, never>) {
         this.defaultProps = {
             tracingEnabled: true,
         };
@@ -88,12 +89,7 @@ export class StepFunctionDefaultsInjector implements IPropertyInjector {
      * @returns Merged properties with injected defaults and logging configuration
      */
     public inject(originalProps: StateMachineProps, context: InjectionContext) {
-        console.log(
-            `${StepFunctionDefaultsInjector.name}: Injecting ${this.configuration} defaults for ${context.id}`
-        );
-
-        console.log(this.defaultProps);
-        console.log(originalProps);
+        logInjector(this.constructor.name, this.configuration, context);
 
         // Prepare logging configuration for EXPRESS step functions
         const logging =

@@ -1,2 +1,2 @@
 /* v8 ignore start */
-export * from './version-resources-aspect';
+export * from './version-functions-aspect';
