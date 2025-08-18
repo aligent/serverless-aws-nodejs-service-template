@@ -222,47 +222,6 @@ describe('Process Shipments Step Function Integration', () => {
 });
 ```
 
-### Local Testing with SAM or LocalStack
-
-For faster feedback loops, consider using AWS SAM or LocalStack:
-
-#### SAM Local Example
-
-```yaml
-# template.yaml for local testing
-Resources:
-  ProcessShipmentsFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./dist
-      Handler: handlers/process-shipments.handler
-      Runtime: nodejs18.x
-      Environment:
-        Variables:
-          DATA_BUCKET: !Ref DataBucket
-```
-
-```bash
-# Run locally
-sam local start-lambda
-sam local invoke ProcessShipmentsFunction --event test-event.json
-```
-
-#### LocalStack Example
-
-```typescript
-// tests/integration/localstack.config.ts
-export const localStackConfig = {
-  services: ['s3', 'lambda', 'stepfunctions'],
-  region: 'us-east-1',
-  lambdaExecutor: 'docker',
-  environmentVariables: {
-    DATA_BUCKET: 'test-bucket',
-    AWS_ENDPOINT_URL: 'http://localhost:4566',
-  },
-};
-```
-
 ## Testing Best Practices
 
 1. **Separate Concerns**: Keep business logic in pure functions

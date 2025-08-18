@@ -13,7 +13,7 @@
         "build": {
             "dependsOn": ["^build"],
             "inputs": ["production", "^production"],
-            "outputs": ["{projectRoot}/.serverless"],
+            "outputs": ["{projectRoot}/dist"],
             "cache": true
         },
         "lint": {
