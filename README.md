@@ -12,11 +12,19 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
    Example: `@aligent-int/integrations`
 
-2. Install dependencies: `yarn install`
+2. Install the template and validate it's passing code standards
 
-   You may need to run `nvm use` to ensure you're on a compatible version of NodeJS
+   ```bash
+   nvm use && yarn install && yarn audit
+   ```
 
-3. (Optional) Bootstrap SSM parameters:
+3. (Optional) Commit the initial state of the template. This ensures subsequent changes are easy to review, rather than getting lost in the template boilerplate
+
+   ```bash
+   git add . && git commit -m 'Serverless application template'
+   ```
+
+4. (Optional) Bootstrap SSM parameters:
 
    If there are existing parameters in SSM Parameter store, import them
 
@@ -33,7 +41,7 @@ The monorepo workspace is managed using [Nx.](https://nx.dev)
 
    The default SSM path and file path can be changed in an application's `parameters` target or via CLI arguments
 
-4. (Optional) Change default base branch
+5. (Optional) Change default base branch
    If your pull requests will target a branch other than `main`, change the value of `defaultBranch` in `nx.json` to the name of the branch that Nx should compare to when running tasks with `affected`
 
    ```json
@@ -63,16 +71,25 @@ yarn nx g service test-app --type=general
 # Will create a project called @services/test-app in the services/ folder
 ```
 
-Import and instantiate the service in `applications/core/lib/create-application-stacks.ts`:
+Import and instantiate the service in `ApplicationStage` inside `applications/core/bin/main.ts`:
 
 ```typescript
 import { YourServiceStack } from '@services/your-service-name';
 
-export function createApplicationStacks(scope: Construct, _stage: string, props?: StageProps) {
-  new YourServiceStack(scope, 'your-service-name', {
-    ...props,
-    description: 'Your service description',
-  });
+// Application setup here...
+
+class ApplicationStage extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps) {
+    super(scope, id, props);
+
+    Tags.of(this).add('STAGE', id);
+
+    // Instantiate service stacks here as required..
+    new YourServiceStack(scope, 'your-service-name', {
+      ...props,
+      description: 'Your service description',
+    });
+  }
 }
 ```
 
@@ -94,6 +111,12 @@ By default, Nx will only test code impacted by recent changes to save time. Post
 
 ```bash
 yarn test:all
+```
+
+The `yarn audit` command is useful after making significant changes to ensure the entire repository is passing code checks
+
+```bash
+yarn audit
 ```
 
 ---

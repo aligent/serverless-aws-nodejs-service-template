@@ -1,9 +1,12 @@
 import { Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
-import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Code, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { join as pathJoin } from 'path';
 import { beforeEach, describe, expect, test } from 'vitest';
 import { StepFunctionFromFile } from './step-function-from-file';
+
+const snapshotMessage = 'Rerun tests with the -u flag to update snapshots if changes are expected';
 
 describe('StepFunctionFromFile', () => {
     let stack: Stack;
@@ -19,26 +22,26 @@ describe('StepFunctionFromFile', () => {
         const template = Template.fromStack(stack);
 
         const stateMachines = template.findResources('AWS::StepFunctions::StateMachine');
-        expect(stateMachines).toMatchSnapshot();
+        expect(stateMachines).toMatchSnapshot(snapshotMessage);
     });
 
     test('creates a state machine with lambda functions', () => {
         // Create test lambda functions
-        const lambda1 = new Function(stack, 'TestLambda1', {
-            runtime: Runtime.NODEJS_20_X,
+        const lambda = new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
             code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
-        const lambda2 = new Function(stack, 'TestLambda2', {
-            runtime: Runtime.NODEJS_20_X,
+        const otherLambda = new NodejsFunction(stack, 'OtherTestFunction', {
+            runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
             code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
         new StepFunctionFromFile(stack, 'LambdaStateMachine', {
             filepath: pathJoin(__dirname, '__data__', 'test-machine.asl.yaml'),
-            lambdaFunctions: [lambda1, lambda2],
+            lambdaFunctions: [lambda, otherLambda],
             definitionSubstitutions: {
                 ExtraParam: 'ExtraValue',
             },
@@ -49,8 +52,10 @@ describe('StepFunctionFromFile', () => {
         template.hasResourceProperties('AWS::StepFunctions::StateMachine', {
             DefinitionSubstitutions: {
                 ExtraParam: 'ExtraValue',
-                TestLambda1: { 'Fn::GetAtt': [Match.stringLikeRegexp('TestLambda1.*'), 'Arn'] },
-                TestLambda2: { 'Fn::GetAtt': [Match.stringLikeRegexp('TestLambda2.*'), 'Arn'] },
+                TestFunction: { 'Fn::GetAtt': [Match.stringLikeRegexp('TestFunction.*'), 'Arn'] },
+                OtherTestFunction: {
+                    'Fn::GetAtt': [Match.stringLikeRegexp('OtherTestFunction.*'), 'Arn'],
+                },
             },
         });
 

@@ -1,34 +1,34 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SsmParameterGroup > grantToFunction with "read" permission 1`] = `
+exports[`SsmParameterGroup > grantToFunction with "read" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
 {
-  "MyOtherTestFunction7633676A": {
+  "OtherTestFunction0FC8D02A": {
     "DependsOn": [
-      "MyOtherTestFunctionServiceRole6B72F272",
+      "OtherTestFunctionServiceRole5A690C20",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyOtherTestFunctionServiceRole6B72F272",
+          "OtherTestFunctionServiceRole5A690C20",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
-  "MyTestFunctionE5665775": {
+  "TestFunction22AD90FC": {
     "DependsOn": [
-      "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
-      "MyTestFunctionServiceRole1183FD15",
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Environment": {
         "Variables": {
@@ -43,20 +43,20 @@ exports[`SsmParameterGroup > grantToFunction with "read" permission 1`] = `
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyTestFunctionServiceRole1183FD15",
+          "TestFunctionServiceRole6ABD93C7",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunction with "read" permission 2`] = `
+exports[`SsmParameterGroup > grantToFunction with "read" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
 {
-  "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A": {
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
     "Properties": {
       "PolicyDocument": {
         "Statement": [
@@ -127,10 +127,10 @@ exports[`SsmParameterGroup > grantToFunction with "read" permission 2`] = `
         ],
         "Version": "2012-10-17",
       },
-      "PolicyName": "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
       "Roles": [
         {
-          "Ref": "MyTestFunctionServiceRole1183FD15",
+          "Ref": "TestFunctionServiceRole6ABD93C7",
         },
       ],
     },
@@ -139,35 +139,35 @@ exports[`SsmParameterGroup > grantToFunction with "read" permission 2`] = `
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunction with "readwrite" permission 1`] = `
+exports[`SsmParameterGroup > grantToFunction with "readwrite" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
 {
-  "MyOtherTestFunction7633676A": {
+  "OtherTestFunction0FC8D02A": {
     "DependsOn": [
-      "MyOtherTestFunctionServiceRole6B72F272",
+      "OtherTestFunctionServiceRole5A690C20",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyOtherTestFunctionServiceRole6B72F272",
+          "OtherTestFunctionServiceRole5A690C20",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
-  "MyTestFunctionE5665775": {
+  "TestFunction22AD90FC": {
     "DependsOn": [
-      "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
-      "MyTestFunctionServiceRole1183FD15",
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Environment": {
         "Variables": {
@@ -182,20 +182,20 @@ exports[`SsmParameterGroup > grantToFunction with "readwrite" permission 1`] = `
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyTestFunctionServiceRole1183FD15",
+          "TestFunctionServiceRole6ABD93C7",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunction with "readwrite" permission 2`] = `
+exports[`SsmParameterGroup > grantToFunction with "readwrite" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
 {
-  "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A": {
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
     "Properties": {
       "PolicyDocument": {
         "Statement": [
@@ -320,10 +320,10 @@ exports[`SsmParameterGroup > grantToFunction with "readwrite" permission 2`] = `
         ],
         "Version": "2012-10-17",
       },
-      "PolicyName": "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
       "Roles": [
         {
-          "Ref": "MyTestFunctionServiceRole1183FD15",
+          "Ref": "TestFunctionServiceRole6ABD93C7",
         },
       ],
     },
@@ -332,35 +332,35 @@ exports[`SsmParameterGroup > grantToFunction with "readwrite" permission 2`] = `
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunction with "write" permission 1`] = `
+exports[`SsmParameterGroup > grantToFunction with "write" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
 {
-  "MyOtherTestFunction7633676A": {
+  "OtherTestFunction0FC8D02A": {
     "DependsOn": [
-      "MyOtherTestFunctionServiceRole6B72F272",
+      "OtherTestFunctionServiceRole5A690C20",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyOtherTestFunctionServiceRole6B72F272",
+          "OtherTestFunctionServiceRole5A690C20",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
-  "MyTestFunctionE5665775": {
+  "TestFunction22AD90FC": {
     "DependsOn": [
-      "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
-      "MyTestFunctionServiceRole1183FD15",
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Environment": {
         "Variables": {
@@ -375,20 +375,20 @@ exports[`SsmParameterGroup > grantToFunction with "write" permission 1`] = `
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyTestFunctionServiceRole1183FD15",
+          "TestFunctionServiceRole6ABD93C7",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunction with "write" permission 2`] = `
+exports[`SsmParameterGroup > grantToFunction with "write" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
 {
-  "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A": {
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
     "Properties": {
       "PolicyDocument": {
         "Statement": [
@@ -449,10 +449,10 @@ exports[`SsmParameterGroup > grantToFunction with "write" permission 2`] = `
         ],
         "Version": "2012-10-17",
       },
-      "PolicyName": "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
       "Roles": [
         {
-          "Ref": "MyTestFunctionServiceRole1183FD15",
+          "Ref": "TestFunctionServiceRole6ABD93C7",
         },
       ],
     },
@@ -461,16 +461,16 @@ exports[`SsmParameterGroup > grantToFunction with "write" permission 2`] = `
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 1`] = `
+exports[`SsmParameterGroup > grantToFunctions grants to multiple functions > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
 {
-  "MyOtherTestFunction7633676A": {
+  "OtherTestFunction0FC8D02A": {
     "DependsOn": [
-      "MyOtherTestFunctionServiceRoleDefaultPolicy646DF3D8",
-      "MyOtherTestFunctionServiceRole6B72F272",
+      "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289",
+      "OtherTestFunctionServiceRole5A690C20",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Environment": {
         "Variables": {
@@ -485,22 +485,22 @@ exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 1`] =
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyOtherTestFunctionServiceRole6B72F272",
+          "OtherTestFunctionServiceRole5A690C20",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
-  "MyTestFunctionE5665775": {
+  "TestFunction22AD90FC": {
     "DependsOn": [
-      "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
-      "MyTestFunctionServiceRole1183FD15",
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
     ],
     "Properties": {
       "Code": {
-        "ZipFile": "foo",
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
       },
       "Environment": {
         "Variables": {
@@ -515,20 +515,20 @@ exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 1`] =
       "Handler": "index.handler",
       "Role": {
         "Fn::GetAtt": [
-          "MyTestFunctionServiceRole1183FD15",
+          "TestFunctionServiceRole6ABD93C7",
           "Arn",
         ],
       },
-      "Runtime": "nodejs20.x",
+      "Runtime": "nodejs22.x",
     },
     "Type": "AWS::Lambda::Function",
   },
 }
 `;
 
-exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 2`] = `
+exports[`SsmParameterGroup > grantToFunctions grants to multiple functions > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
 {
-  "MyOtherTestFunctionServiceRoleDefaultPolicy646DF3D8": {
+  "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289": {
     "Properties": {
       "PolicyDocument": {
         "Statement": [
@@ -599,16 +599,16 @@ exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 2`] =
         ],
         "Version": "2012-10-17",
       },
-      "PolicyName": "MyOtherTestFunctionServiceRoleDefaultPolicy646DF3D8",
+      "PolicyName": "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289",
       "Roles": [
         {
-          "Ref": "MyOtherTestFunctionServiceRole6B72F272",
+          "Ref": "OtherTestFunctionServiceRole5A690C20",
         },
       ],
     },
     "Type": "AWS::IAM::Policy",
   },
-  "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A": {
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
     "Properties": {
       "PolicyDocument": {
         "Statement": [
@@ -679,10 +679,10 @@ exports[`SsmParameterGroup > grantToFunctions grants to multiple functions 2`] =
         ],
         "Version": "2012-10-17",
       },
-      "PolicyName": "MyTestFunctionServiceRoleDefaultPolicy11BBEF1A",
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
       "Roles": [
         {
-          "Ref": "MyTestFunctionServiceRole1183FD15",
+          "Ref": "TestFunctionServiceRole6ABD93C7",
         },
       ],
     },

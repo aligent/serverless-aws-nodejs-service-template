@@ -1,11 +1,13 @@
 import { App, Stack, Stage } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { StringParameter } from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 import { beforeEach, describe, expect, test } from 'vitest';
-
 import { SsmParameterGroup } from './ssm-parameter-group';
+
+const snapshotMessage = 'Rerun tests with the -u flag to update snapshots if changes are expected';
 
 class TestParameters extends SsmParameterGroup<'PARAM_ONE' | 'PARAM_TWO'> {
     public readonly parameters;
@@ -42,15 +44,15 @@ describe('SsmParameterGroup', () => {
         const stage = new Stage(app, 'TestStage');
         stack = new Stack(stage, 'TestStack');
         testParameters = new TestParameters(stack, 'MyTestParameters');
-        lambda = new Function(stack, 'MyTestFunction', {
-            runtime: Runtime.NODEJS_20_X,
-            code: Code.fromInline('foo'),
+        lambda = new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
-        lambda2 = new Function(stack, 'MyOtherTestFunction', {
-            runtime: Runtime.NODEJS_20_X,
-            code: Code.fromInline('foo'),
+        lambda2 = new NodejsFunction(stack, 'OtherTestFunction', {
+            runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
     });
 
@@ -67,8 +69,8 @@ describe('SsmParameterGroup', () => {
         template = synth();
 
         const { functions, policies } = getFunctionAndPolicySnapshots();
-        expect(functions).toMatchSnapshot();
-        expect(policies).toMatchSnapshot();
+        expect(functions).toMatchSnapshot(snapshotMessage);
+        expect(policies).toMatchSnapshot(snapshotMessage);
     });
 
     test('grantToFunction with "write" permission', () => {
@@ -76,8 +78,8 @@ describe('SsmParameterGroup', () => {
         template = synth();
 
         const { functions, policies } = getFunctionAndPolicySnapshots();
-        expect(functions).toMatchSnapshot();
-        expect(policies).toMatchSnapshot();
+        expect(functions).toMatchSnapshot(snapshotMessage);
+        expect(policies).toMatchSnapshot(snapshotMessage);
     });
 
     test('grantToFunction with "readwrite" permission', () => {
@@ -85,8 +87,8 @@ describe('SsmParameterGroup', () => {
         template = synth();
 
         const { functions, policies } = getFunctionAndPolicySnapshots();
-        expect(functions).toMatchSnapshot();
-        expect(policies).toMatchSnapshot();
+        expect(functions).toMatchSnapshot(snapshotMessage);
+        expect(policies).toMatchSnapshot(snapshotMessage);
     });
 
     test('grantToFunctions grants to multiple functions', () => {
@@ -94,7 +96,7 @@ describe('SsmParameterGroup', () => {
         template = synth();
 
         const { functions, policies } = getFunctionAndPolicySnapshots();
-        expect(functions).toMatchSnapshot();
-        expect(policies).toMatchSnapshot();
+        expect(functions).toMatchSnapshot(snapshotMessage);
+        expect(policies).toMatchSnapshot(snapshotMessage);
     });
 });

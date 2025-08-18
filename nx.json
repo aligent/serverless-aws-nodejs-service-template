@@ -24,7 +24,12 @@
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
             "cache": true,
-            "dependsOn": ["^build"]
+            "dependsOn": ["^build"],
+            "configurations": {
+                "coverage": {
+                    "coverage": true
+                }
+            }
         },
         "@nx/js:tsc": {
             "cache": true,

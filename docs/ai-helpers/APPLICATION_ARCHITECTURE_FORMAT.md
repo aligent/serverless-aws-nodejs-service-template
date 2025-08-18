@@ -6,8 +6,8 @@ This document describes the process for creating comprehensive architecture diag
 
 ### 1. Analyze CDK Application Structure
 
-- Read the main application stages file (`applications/core/lib/application-stages.ts`)
-- Identify all services from the stack creation file (`applications/core/lib/create-application-stacks.ts`)
+- Read the main application file (`applications/core/bin/main.ts`)
+- Identify all services from the ApplicationStage class instantiation
 - List all services and their descriptions
 - Analyze each service to understand what business entities it integrates (products, orders, customers, etc.)
 

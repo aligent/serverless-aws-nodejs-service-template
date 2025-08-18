@@ -7,35 +7,26 @@ import { MicroserviceChecks } from './microservice-checks';
 
 describe('MicroserviceChecks', () => {
     it('should have the correct pack name', () => {
-        // Arrange
         const checks = new MicroserviceChecks();
 
-        // Assert
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        expect((checks as any).packName).toBe('Microservices');
+        expect(checks.readPackName).toBe('Microservices');
     });
 
     it('should instantiate with props', () => {
-        // Arrange & Act
         const checks = new MicroserviceChecks({ verbose: true });
 
-        // Assert
         expect(checks).toBeInstanceOf(MicroserviceChecks);
     });
 
     it('should instantiate without props', () => {
-        // Arrange & Act
         const checks = new MicroserviceChecks();
 
-        // Assert
         expect(checks).toBeInstanceOf(MicroserviceChecks);
     });
 
     it('should have a visit method', () => {
-        // Arrange
         const checks = new MicroserviceChecks();
 
-        // Assert
         expect(typeof checks.visit).toBe('function');
     });
 
@@ -43,14 +34,17 @@ describe('MicroserviceChecks', () => {
         let annotations: Annotations;
 
         beforeAll(() => {
-            // Arrange
-            const app = new App();
+            const app = new App({
+                context: {
+                    'aws:cdk:bundling-stacks': [],
+                },
+            });
             const stack = new Stack(app, 'TestStack');
             const checks = new MicroserviceChecks();
             Aspects.of(stack).add(checks);
 
             new Function(stack, 'TestFunction', {
-                runtime: Runtime.NODEJS_20_X,
+                runtime: Runtime.NODEJS_22_X,
                 handler: 'index.handler',
                 code: Code.fromInline('exports.handler = () => {};'),
             });
@@ -67,7 +61,6 @@ describe('MicroserviceChecks', () => {
         });
 
         it('should trigger a rule if the lambda does not have an explicit memory value configured', () => {
-            // Assert
             annotations.hasError(
                 '/TestStack/TestFunction/Resource',
                 Match.stringLikeRegexp('does not have an explicit memory value configured')
@@ -75,7 +68,6 @@ describe('MicroserviceChecks', () => {
         });
 
         it('should trigger a rule if the lambda does not have an explicit timeout value configured', () => {
-            // Assert
             annotations.hasError(
                 '/TestStack/TestFunction/Resource',
                 Match.stringLikeRegexp('does not have an explicitly defined timeout value')
@@ -83,7 +75,6 @@ describe('MicroserviceChecks', () => {
         });
 
         it('should trigger a rule if the lambda does not have tracing set to active', () => {
-            // Assert
             annotations.hasError(
                 '/TestStack/TestFunction/Resource',
                 Match.stringLikeRegexp('does not have tracing set to Tracing.ACTIVE')
@@ -91,7 +82,6 @@ describe('MicroserviceChecks', () => {
         });
 
         it('should trigger a rule if the cloudwatch log group does not have an explicit retention policy', () => {
-            // Assert
             annotations.hasError(
                 '/TestStack/TestLogGroup/Resource',
                 Match.stringLikeRegexp('does not have an explicit retention policy')

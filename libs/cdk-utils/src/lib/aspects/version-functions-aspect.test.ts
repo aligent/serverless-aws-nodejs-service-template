@@ -1,6 +1,6 @@
 import { Aspects, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { Code } from 'aws-cdk-lib/aws-lambda';
+import { Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import path from 'node:path';
 import { StepFunctionFromFile } from '../constructs/step-function-from-file';
@@ -11,11 +11,14 @@ describe('VersionResourcesAspect', () => {
 
     beforeEach(() => {
         stack = new Stack();
+
+        stack.node.setContext('aws:cdk:bundling-stacks', []);
         Aspects.of(stack).add(new VersionFunctionsAspect());
     });
 
     it('should add a version and alias to a lambda function', () => {
         new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
             code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });

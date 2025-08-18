@@ -1,6 +1,6 @@
 # Core CDK Application
 
-Core CDK application for the Modelflight integration services. This application manages the deployment of microservices and their shared infrastructure.
+This application manages the deployment of microservices and their shared infrastructure.
 
 ## Architecture
 
@@ -23,24 +23,6 @@ yarn nx run core:parameters:import
 
 # Custom filename and parameter path can be passed in as arguments
 yarn nx run core:parameters --file .env.dev.csv --path /my/dev/path
-```
-
-### Parameter Configuration
-
-The `config/.env.json` file defines all SSM parameters needed by the services:
-
-```json
-{
-  "parameters": [
-    {
-      "name": "/application/dev/url",
-      "value": "https://dev.magento.example.com",
-      "description": "API URL for development",
-      "type": "String",
-      "tier": "Standard"
-    }
-  ]
-}
 ```
 
 ## Deployment
@@ -75,7 +57,7 @@ The application includes mock services for testing integrations without external
 
 - _list mock services here_
 
-Change the value of the `/modelflight/myob/dev/url` SSM Parameter to switch between real and mock endpoints
+Change the value of the `/application/dev/url` SSM Parameter to switch between real and mock endpoints
 
 ### Local Development
 

@@ -53,7 +53,7 @@ This is an AWS microservices template using:
 
    - Each service is a separate CDK Stack defined in `services/<service-name>/src/index.ts`
    - Services export a Stack class that extends `aws-cdk-lib.Stack`
-   - Services are imported and instantiated in `applications/core/lib/create-application-stacks.ts`
+   - Services are imported and instantiated in `ApplicationStage` inside `applications/core/bin/main.ts`
 
 2. **CDK Application Structure**
 
@@ -116,3 +116,40 @@ This is an AWS microservices template using:
 2. Use Nx affected commands to optimize CI/CD performance
 3. Follow existing code patterns and conventions in the codebase
 4. Check `CDK-MIGRATION-NOTES.md` for CDK-specific guidance
+
+## AI Helpers
+
+The `docs/ai-helpers/` folder contains documentation templates to assist AI code assistants in creating consistent and comprehensive documentation:
+
+### Recommended MCP Servers
+
+When using Claude Code or other MCP-compatible tools, the following MCP servers are recommended for this repository:
+
+- **context7**: Provides up-to-date documentation for libraries and frameworks
+- **eslint**: Enables linting capabilities for code quality checks
+- **nx**: Offers Nx-specific commands and workspace insights
+
+These servers should be used when available to enhance development capabilities.
+
+### Available Templates
+
+- **`APPLICATION_ARCHITECTURE_FORMAT.md`**: Template for creating comprehensive architecture diagrams for AWS CDK services
+  - Provides guidelines for analyzing CDK application structure
+  - Includes Mermaid diagram formats with consistent color palettes
+  - Shows how to map Step Function workflows and Lambda functions
+  - Contains common architectural patterns and best practices
+
+- **`SERVICE_README_FORMAT.md`**: Template for creating service-specific README documentation
+  - Standardized format for service documentation
+  - Context diagram template showing external system interactions
+  - Sections for workflows, critical information, and operational details
+  - Consistent color palette for system visualization
+
+### When to Use
+
+Reference these templates when:
+- Creating new architecture documentation (`ARCHITECTURE.md`)
+- Documenting a new service with a README
+- Updating existing service documentation
+- Generating visual representations of service interactions
+- Ensuring consistency across all service documentation

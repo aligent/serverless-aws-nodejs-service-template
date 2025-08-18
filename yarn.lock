@@ -29,7 +29,7 @@ __metadata:
     "@vitest/ui": "npm:^3.2.4"
     arktype: "npm:^2.1.20"
     aws-cdk: "npm:^2.1023.0"
-    aws-cdk-lib: "npm:^2.208.0"
+    aws-cdk-lib: "npm:^2.211.0"
     cdk-nag: "npm:^2.36.54"
     constructs: "npm:^10.4.2"
     esbuild: "npm:~0.25.8"
@@ -114,13 +114,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-cdk/cloud-assembly-schema@npm:^45.2.0":
-  version: 45.2.0
-  resolution: "@aws-cdk/cloud-assembly-schema@npm:45.2.0"
+"@aws-cdk/cloud-assembly-schema@npm:^48.2.0":
+  version: 48.4.0
+  resolution: "@aws-cdk/cloud-assembly-schema@npm:48.4.0"
   dependencies:
     jsonschema: "npm:~1.4.1"
     semver: "npm:^7.7.2"
-  checksum: 10c0/2ccd1e64fce125072826bce6c3628728a841479880d9d7939d68683f40ffdfb4a2c7ba4389f1159684c8a45a1d3c3e74f1487237025fbbcf4ef38aa7b6d3ba1e
+  checksum: 10c0/3a06dce2da73aee790f1cbad02f71a2dcba1a3289919d06e589afd3665713f782f4161135db9c2f35e525940e61b563b88840b6ff9703775ab52752f6fc33e34
   languageName: node
   linkType: hard
 
@@ -4857,13 +4857,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-cdk-lib@npm:^2.208.0":
-  version: 2.208.0
-  resolution: "aws-cdk-lib@npm:2.208.0"
+"aws-cdk-lib@npm:^2.211.0":
+  version: 2.211.0
+  resolution: "aws-cdk-lib@npm:2.211.0"
   dependencies:
     "@aws-cdk/asset-awscli-v1": "npm:2.2.242"
     "@aws-cdk/asset-node-proxy-agent-v6": "npm:^2.1.0"
-    "@aws-cdk/cloud-assembly-schema": "npm:^45.2.0"
+    "@aws-cdk/cloud-assembly-schema": "npm:^48.2.0"
     "@balena/dockerignore": "npm:^1.0.2"
     case: "npm:1.6.3"
     fs-extra: "npm:^11.3.0"
@@ -4877,7 +4877,7 @@ __metadata:
     yaml: "npm:1.10.2"
   peerDependencies:
     constructs: ^10.0.0
-  checksum: 10c0/dfa1909c92050b82cb402697fd31922888d7c36b87789717bd53c8ee5e02eb2e81bc75ebfcc9348d007402996314b767cc76a57db5b42c0e1db73936bf1f760c
+  checksum: 10c0/9432df5c95dc3a317c5159fbbad42cd802637e285f192b7f73a5d58596cbe4946e9fbeb0d1eb7216ff562adadf63aa34e525188b447aa6c816fa05c37ee57001
   languageName: node
   linkType: hard
 
@@ -6556,13 +6556,13 @@ __metadata:
   linkType: hard
 
 "fs-extra@npm:^11.3.0":
-  version: 11.3.0
-  resolution: "fs-extra@npm:11.3.0"
+  version: 11.3.1
+  resolution: "fs-extra@npm:11.3.1"
   dependencies:
     graceful-fs: "npm:^4.2.0"
     jsonfile: "npm:^6.0.1"
     universalify: "npm:^2.0.0"
-  checksum: 10c0/5f95e996186ff45463059feb115a22fb048bdaf7e487ecee8a8646c78ed8fdca63630e3077d4c16ce677051f5e60d3355a06f3cd61f3ca43f48cc58822a44d0a
+  checksum: 10c0/61e5b7285b1ca72c68dfe1058b2514294a922683afac2a80aa90540f9bd85370763d675e3b408ef500077d355956fece3bd24b546790e261c3d3015967e2b2d9
   languageName: node
   linkType: hard
 
@@ -7592,15 +7592,15 @@ __metadata:
   linkType: hard
 
 "jsonfile@npm:^6.0.1":
-  version: 6.1.0
-  resolution: "jsonfile@npm:6.1.0"
+  version: 6.2.0
+  resolution: "jsonfile@npm:6.2.0"
   dependencies:
     graceful-fs: "npm:^4.1.6"
     universalify: "npm:^2.0.0"
   dependenciesMeta:
     graceful-fs:
       optional: true
-  checksum: 10c0/4f95b5e8a5622b1e9e8f33c96b7ef3158122f595998114d1e7f03985649ea99cb3cd99ce1ed1831ae94c8c8543ab45ebd044207612f31a56fd08462140e46865
+  checksum: 10c0/7f4f43b08d1869ded8a6822213d13ae3b99d651151d77efd1557ced0889c466296a7d9684e397bd126acf5eb2cfcb605808c3e681d0fdccd2fe5a04b47e76c0d
   languageName: node
   linkType: hard
 

@@ -8,6 +8,7 @@ describe('LogGroupDefaultsInjector', () => {
 
     beforeEach(() => {
         stack = new Stack();
+        stack.node.setContext('aws:cdk:bundling-stacks', []);
         PropertyInjectors.of(stack).add(new LogGroupDefaultsInjector());
     });
 

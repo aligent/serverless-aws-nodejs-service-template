@@ -1,8 +1,7 @@
 import { PropertyInjectors, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Code, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import path from 'node:path';
 import { NodeJsFunctionDefaultsInjector } from './nodejs-function-defaults-injector';
 
 describe('NodeJsFunctionDefaultsInjector', () => {
@@ -10,13 +9,16 @@ describe('NodeJsFunctionDefaultsInjector', () => {
 
     beforeEach(() => {
         stack = new Stack();
+        stack.node.setContext('aws:cdk:bundling-stacks', []); // Prevent CDK from bundling lambda functions
     });
 
     it('Should set the NodeJs runtime', () => {
         PropertyInjectors.of(stack).add(new NodeJsFunctionDefaultsInjector());
 
-        new NodejsFunction(stack, 'MyFunction', {
-            entry: path.join(__dirname, '__data__', 'test-handler.ts'),
+        new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
+            handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
         const template = Template.fromStack(stack);
@@ -28,8 +30,10 @@ describe('NodeJsFunctionDefaultsInjector', () => {
     it('Should default to production configuration', () => {
         PropertyInjectors.of(stack).add(new NodeJsFunctionDefaultsInjector());
 
-        new NodejsFunction(stack, 'MyFunction', {
-            entry: path.join(__dirname, '__data__', 'test-handler.ts'),
+        new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
+            handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
         const template = Template.fromStack(stack);
@@ -49,8 +53,10 @@ describe('NodeJsFunctionDefaultsInjector', () => {
             })
         );
 
-        new NodejsFunction(stack, 'MyFunction', {
-            entry: path.join(__dirname, '__data__', 'test-handler.ts'),
+        new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
+            handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
         });
 
         const template = Template.fromStack(stack);
@@ -68,8 +74,10 @@ describe('NodeJsFunctionDefaultsInjector', () => {
             })
         );
 
-        new NodejsFunction(stack, 'MyFunction', {
-            entry: path.join(__dirname, '__data__', 'test-handler.ts'),
+        new NodejsFunction(stack, 'TestFunction', {
+            runtime: Runtime.NODEJS_22_X,
+            handler: 'index.handler',
+            code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
             bundling: {
                 // Sourcemaps would normally be false in 'dev' configuration
                 sourceMap: true,

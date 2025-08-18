@@ -6,19 +6,29 @@ This document outlines the architectural patterns and best practices for buildin
 
 ### 1. Service Composition in Application Stages
 
-Services are composed in the CDK application through a centralized pattern:
+Services are composed in the CDK application through the ApplicationStage class:
 
 #### Application Stage Structure
 
+Import and instantiate the service in `ApplicationStage` inside `applications/core/bin/main.ts`:
+
 ```typescript
-// applications/core/lib/create-application-stacks.ts
 import { YourServiceStack } from '@services/your-service-name';
 
-export function createApplicationStacks(scope: Construct, stage: string, props?: StageProps) {
-  new YourServiceStack(scope, 'your-service-name', {
-    ...props,
-    description: 'Your service description',
-  });
+// Application setup here...
+
+class ApplicationStage extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps) {
+    super(scope, id, props);
+
+    Tags.of(this).add('STAGE', id);
+
+    // Instantiate service stacks here as required..
+    new YourServiceStack(scope, 'your-service-name', {
+      ...props,
+      description: 'Your service description',
+    });
+  }
 }
 ```
 
@@ -68,28 +78,6 @@ services/[service-name]/
 
 ### 3. Default Constructs and Utilities
 
-#### LambdaFunction Construct
-
-Use the standardized `LambdaFunction` construct from `@libs/cdk-utils`:
-
-```typescript
-import { LambdaFunction } from '@libs/cdk-utils/infra';
-
-const myFunction = new LambdaFunction(this, 'MyFunction', {
-  entry: resolveAssetPath('runtime/handlers/my-handler.ts'),
-  environment: {
-    DATA_BUCKET: bucket.bucketName,
-  },
-});
-```
-
-**Benefits:**
-
-- Stage-aware bundling optimizations
-- Automatic log group creation with appropriate retention
-- Environment variable management
-- Source map support for debugging
-
 #### Step Functions
 
 Use `StepFunctionFromFile` for YAML-based definitions:
@@ -135,6 +123,9 @@ const parameters = new MyServiceParameters(this);
 parameters.grantToFunction(myFunction, 'read');
 ```
 
+Development parameter values for an application should be stored in `parameters/.env.csv`.\
+The `parameters` Nx target can be used to import/export them from AWS SSM Parameter store.
+
 ### 4. Asset Resolution and Service Naming
 
 #### Service Name Pattern
@@ -176,21 +167,55 @@ export function resolveAssetPath(assetPath: `${'runtime/' | 'infra/'}${string}`)
 
 #### For services with multiple functions:
 
+Wrap lambda functions with shared purpose in a factory function
+
+```typescript
+// services/your-service/src/infra/functions/lambda-functions.ts
+function lambdaFunctions(props: { commonEnvironment: Record<string, string> }) {
+  const functionA = new NodejsFunction(this, 'FunctionA', {
+    entry: resolveAssetPath('runtime/handlers/function-a.ts'),
+    environment: props?.commonEnvironment,
+  });
+
+  const functionB = new NodejsFunction(this, 'FunctionB', {
+    entry: resolveAssetPath('runtime/handlers/function-b.ts'),
+    environment: props?.commonEnvironment,
+  });
+
+  return { functionA, functionB };
+}
+
+// services/your-service/src/index.ts
+class Service extends Stack {
+  constructor(scope: Construct, id: string, props: StackProps) {
+    super(scope, id, props);
+
+    const { functionA, functionB } = lambdaFunctions({
+      commonEnvironment: {
+        DATA_BUCKET: 'data-bucket',
+      },
+    });
+  }
+}
+```
+
+Functions can also be wrapped in a construct, but note that this will cause the construct's id to be included in the lambda names
+
 ```typescript
 // services/your-service/src/infra/functions/lambda-functions.ts
 export class LambdaFunctions extends Construct {
-  public readonly functionA: LambdaFunction;
-  public readonly functionB: LambdaFunction;
+  public readonly functionA: NodejsFunction;
+  public readonly functionB: NodejsFunction;
 
-  constructor(scope: Construct, id: string, props?: LambdaFunctionsProps) {
+  constructor(scope: Construct, id: string, props?: NodejsFunctionProps) {
     super(scope, id);
 
-    this.functionA = new LambdaFunction(this, 'FunctionA', {
+    this.functionA = new NodejsFunction(this, 'FunctionA', {
       entry: resolveAssetPath('runtime/handlers/function-a.ts'),
       environment: props?.commonEnvironment,
     });
 
-    this.functionB = new LambdaFunction(this, 'FunctionB', {
+    this.functionB = new NodejsFunction(this, 'FunctionB', {
       entry: resolveAssetPath('runtime/handlers/function-b.ts'),
       environment: props?.commonEnvironment,
     });
