@@ -6,20 +6,40 @@
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-# This take the current active node version you want to verify the hook
-export NVM_DIR="$HOME/.nvm"
-a=$(nvm current)
-
-export PATH="$NVM_DIR/versions/node/$a/bin:$PATH"
-
 # Define colours for nicer CLI output
 RED="\033[1;31m"
 GREEN="\033[1;32m"
 NO_COLOUR="\033[0m"
 
-echo -e "${GREEN} Executing git hook $0 $@ ${NO_COLOUR}"
+echo -e "${GREEN}Executing git hook $0 $@${NO_COLOUR}"
 
-commands=("npx nx affected -t lint, typecheck --parallel=3" "npx nx affected:test --coverage")
+# Use the current Node version explicitly
+nvm use
+
+# Get the list of staged changes
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+# Exclude files that shouldn't trigger pre-commit checks
+# This is done here because `nx affected` doesn't look at task inputs
+# when determining if a project is affected
+EXCLUDED_FILES_REGEX='.*\.md$' # Ignore markdown files
+EXCLUDED_FILES_REGEX+='|.*\/step-functions\/.*\.(yml|yaml)$' # Ignore step function yaml files
+EXCLUDED_FILES_REGEX+='|^\/?([^\/]*)$' # Ignore all root-level files
+AFFECTED_FILES=$(echo "$STAGED_FILES" | \
+  grep -vE "$EXCLUDED_FILES_REGEX" | \
+  paste -sd,)
+
+echo -e "${GREEN}\nAffected files: $AFFECTED_FILES\n${NO_COLOUR}"
+
+# Exit early if there are no affected files
+if [ -z "$AFFECTED_FILES" ]; then
+  echo -e "${GREEN}No affected files found. Exiting pre-commit hook.${NO_COLOUR}"
+  exit 0
+fi
+
+# Prepare the affected commands for static analysis targets
+AFFECTED_COMMAND="yarn nx affected --files=$AFFECTED_FILES --nxBail --tui=false"
+commands=("$AFFECTED_COMMAND -t lint typecheck --parallel=3", "$AFFECTED_COMMAND -t test --configuration coverage")
 failures=()
 
 # Loop over commands, execute and push failure message if we see one

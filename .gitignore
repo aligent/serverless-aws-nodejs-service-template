@@ -2,12 +2,13 @@
 
 # environment
 *.env
+*.env*.csv
+!.env.example.csv
 
 # compiled output
 dist
 tmp
-/out-tsc
-.serverless
+out-tsc
 .build
 
 # dependencies
@@ -58,3 +59,7 @@ Thumbs.db
 # Vite temporary config files
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out

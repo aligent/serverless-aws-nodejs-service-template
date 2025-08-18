@@ -1,0 +1,50 @@
+import { MicroserviceChecks } from '@libs/cdk-utils/infra';
+import { App, Aspects, Duration, Stack } from 'aws-cdk-lib';
+import { Annotations, Match, Template } from 'aws-cdk-lib/assertions';
+import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
+import { describe, expect, it } from 'vitest';
+import { <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack } from '../src/index';
+
+let stack: Stack;
+let template: Template;
+
+beforeEach(() => {
+    const app = new App({
+        context: {
+            // This feature flag prevents bundling lambda functions when running tests
+            'aws:cdk:bundling-stacks': [],
+        },
+    });
+
+    stack = new <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack(app, 'TestStack');
+
+    Aspects.of(stack).add(new MicroserviceChecks());
+
+    template = Template.fromStack(stack);
+});
+
+describe('CdkNag', () => {
+    it('should pass Microservices cdk-nag checks', () => {
+        const errors = Annotations.fromStack(stack).findError(
+            '*',
+            Match.stringLikeRegexp('Microservices.*')
+        );
+
+        if (errors.length > 0) {
+            console.log(errors);
+        }
+
+        expect(
+            errors,
+            'Microservice checks failed - inspect console logs for details'
+        ).toHaveLength(0);
+    });
+});
+
+describe('<%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack', () => {
+    it('should create a notification SNS Topic', () => {
+        template.hasResourceProperties('AWS::SNS::Topic', {
+            DisplayName: '<%= name %> Notifications',
+        });
+    });
+});

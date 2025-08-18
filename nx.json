@@ -1,13 +1,8 @@
 {
     "$schema": "./node_modules/nx/schemas/nx-schema.json",
-    "defaultBase": "main",
+    "defaultBase": "origin/main",
     "generators": {
-        "@aligent/openapi-plugin:client": {
-            "brand": "brand-name"
-        },
-        "@aligent/serverless-plugin:service": {
-            "brand": "brand-name"
-        },
+        "@tools/cdk-service-plugin:service": {},
         "@nx/js:library": {
             "bundler": "none",
             "linter": "eslint",
@@ -28,7 +23,53 @@
         "test": {
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
-            "cache": true
+            "cache": true,
+            "dependsOn": ["^build"],
+            "configurations": {
+                "coverage": {
+                    "coverage": true
+                }
+            }
+        },
+        "@nx/js:tsc": {
+            "cache": true,
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
+        },
+        "pg": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "cwd": "{workspaceRoot}/applications/core"
+            },
+            "configurations": {
+                "synth": {
+                    "command": "cdk synth '{args.stack}' --exclusively --profile playground"
+                },
+                "deploy": {
+                    "command": "cdk deploy --method direct '{args.stack}' --exclusively --profile playground"
+                },
+                "watch": {
+                    "command": "cdk watch --method direct '{args.stack}' --exclusively --profile playground"
+                }
+            }
+        },
+        "parameters": {
+            "executor": "nx:run-commands",
+            "options": {
+                "color": true,
+                "cwd": "{projectRoot}/parameters",
+                "file": ".env.csv"
+            },
+            "defaultConfiguration": "export",
+            "configurations": {
+                "import": {
+                    "command": "store-parameters import {args.file}"
+                },
+                "export": {
+                    "command": "store-parameters export {args.file} --path={args.path}"
+                }
+            }
         }
     },
     "namedInputs": {
@@ -38,7 +79,8 @@
             "!{projectRoot}/eslint.config.m[jt]s",
             "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
             "!{projectRoot}/tsconfig.spec.json",
-            "!{projectRoot}/vite.config.m[jt]s"
+            "!{projectRoot}/vite.config.m[jt]s",
+            "!{projectRoot}/src/test-setup.[jt]s"
         ],
         "sharedGlobals": []
     },
@@ -50,10 +92,30 @@
         {
             "plugin": "@nx/vite/plugin",
             "options": {}
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "typecheck"
+                },
+                "build": {
+                    "targetName": "build",
+                    "configName": "tsconfig.lib.json",
+                    "buildDepsName": "build-deps",
+                    "watchDepsName": "watch-deps"
+                }
+            },
+            "include": ["tools/cdk-service-plugin/*"]
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "typecheck"
+                }
+            },
+            "include": ["libs/cdk-utils/*", "applications/core/*"]
         }
-    ],
-    "workspaceLayout": {
-        "appsDir": "services",
-        "libsDir": "libs"
-    }
+    ]
 }

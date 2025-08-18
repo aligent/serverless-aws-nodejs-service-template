@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`StepFunctionFromFile > creates a state machine from a file > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
+{
+  "MyStateMachine6C968CA5": {
+    "DeletionPolicy": "Delete",
+    "DependsOn": [
+      "MyStateMachineRoleD59FFEBC",
+    ],
+    "Properties": {
+      "DefinitionS3Location": {
+        "Bucket": "[SNAPSHOT_PLACEHOLDER]",
+        "Key": "[SNAPSHOT_PLACEHOLDER]",
+      },
+      "RoleArn": {
+        "Fn::GetAtt": [
+          "MyStateMachineRoleD59FFEBC",
+          "Arn",
+        ],
+      },
+    },
+    "Type": "AWS::StepFunctions::StateMachine",
+    "UpdateReplacePolicy": "Delete",
+  },
+}
+`;

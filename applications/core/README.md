@@ -1,0 +1,73 @@
+# Core CDK Application
+
+This application manages the deployment of microservices and their shared infrastructure.
+
+## Architecture
+
+This application deploys:
+
+_add details here_
+
+## Configuration
+
+### Environment Parameters
+
+Parameters are managed through the `parameters/.env.csv` file by default
+
+```bash
+# Pull down parameters from the playground environment to .env.csv
+yarn nx run core:parameters
+
+# Update parameters from .env.csv
+yarn nx run core:parameters:import
+
+# Custom filename and parameter path can be passed in as arguments
+yarn nx run core:parameters --file .env.dev.csv --path /my/dev/path
+```
+
+## Deployment
+
+### Using Nx (Recommended)
+
+```bash
+# From workspace root
+yarn pg:deploy
+
+# Synthesize templates
+yarn pg:synth
+```
+
+### Direct CDK Commands
+
+```bash
+yarn nx run core:cdk <command> <args>
+```
+
+## Services
+
+This application deploys the following services:
+
+- _list services here_
+
+## Testing
+
+### Mock Services
+
+The application includes mock services for testing integrations without external dependencies.
+
+- _list mock services here_
+
+Change the value of the `/application/dev/url` SSM Parameter to switch between real and mock endpoints
+
+### Local Development
+
+```bash
+# Type checking
+yarn typecheck
+
+# Testing
+yarn test
+
+# Linting
+yarn lint
+```

@@ -1,9 +1,0 @@
-{
-    "generators": {
-        "client": {
-            "factory": "./src/generators/client/generator",
-            "schema": "./src/generators/client/schema.json",
-            "description": "client generator"
-        }
-    }
-}

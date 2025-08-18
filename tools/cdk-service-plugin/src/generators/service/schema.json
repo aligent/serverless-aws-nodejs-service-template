@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "CdkService",
+    "title": "CDK Service Generator",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "The name of the service",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            },
+            "x-prompt": "What is the name of the service?",
+            "pattern": "^(?!.*[Ss]tack|.*[Ss]ervice).*$",
+            "patternErrorMessage": "Service name cannot contain '[Ss]tack' or '[Ss]ervice'"
+        },
+        "type": {
+            "type": "string",
+            "description": "The type of CDK service to generate",
+            "enum": ["general", "notification"],
+            "default": "general",
+            "x-prompt": {
+                "message": "What type of service would you like to generate?",
+                "type": "list",
+                "items": [
+                    {
+                        "value": "general",
+                        "label": "General CDK service"
+                    },
+                    {
+                        "value": "notification",
+                        "label": "Notification CDK service"
+                    }
+                ]
+            }
+        }
+    },
+    "required": ["name"]
+}

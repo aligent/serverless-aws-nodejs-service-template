@@ -1,0 +1,16 @@
+cdk-pipe:
+  commands:
+    cdk:
+      bootstrap: yarn nx run core:cdk bootstrap
+      deploy: yarn nx run core:cdk deploy
+      synth: yarn nx run core:cdk synth
+      diff: yarn nx run core:cdk diff
+    npm:
+      checks:
+        lint: yarn lint
+        format: yarn lint # Formatting is controlled by the lint step, we turn this off in the pipeline anyway
+      install: yarn install --immutable
+  beforeScripts:
+    - yarn --version
+  afterScripts:
+    - echo "Deployment is completed"

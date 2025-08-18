@@ -3,6 +3,9 @@
         "nrwl.angular-console",
         "esbenp.prettier-vscode",
         "dbaeumer.vscode-eslint",
-        "editorconfig.editorconfig"
+        "editorconfig.editorconfig",
+        "amazonwebservices.aws-toolkit-vscode",
+        "usernamehw.errorlens",
+        "yoavbls.pretty-ts-errors"
     ]
 }

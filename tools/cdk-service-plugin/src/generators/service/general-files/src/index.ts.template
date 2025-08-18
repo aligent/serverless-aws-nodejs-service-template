@@ -1,0 +1,31 @@
+import { Stack, StackProps, Stage, Tags } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import path from 'node:path';
+import { SERVICE_NAME } from './service-name';
+
+export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps extends StackProps {
+    description: string;
+}
+
+/**
+ * Resolves a path to runtime or infra assets relative to this stack
+ *
+ * @param assetPath - The path to the asset.
+ * @returns The resolved path.
+ */
+export function resolveAssetPath(assetPath: `${'runtime/' | 'infra/'}${string}`) {
+    return path.resolve(import.meta.dirname, assetPath);
+}
+
+export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {
+    constructor(scope: Construct, id: typeof SERVICE_NAME | (string & {}), props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
+        super(scope, id, props);
+
+        const STAGE = Stage.of(this)?.stageName;
+        if (!STAGE) {
+            throw new Error('This construct must be used within a CDK Stage');
+        }
+
+        Tags.of(this).add('SERVICE', id);
+    }
+}

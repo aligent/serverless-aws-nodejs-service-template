@@ -1,0 +1,692 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SsmParameterGroup > grantToFunction with "read" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
+{
+  "OtherTestFunction0FC8D02A": {
+    "DependsOn": [
+      "OtherTestFunctionServiceRole5A690C20",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "OtherTestFunctionServiceRole5A690C20",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+  "TestFunction22AD90FC": {
+    "DependsOn": [
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Environment": {
+        "Variables": {
+          "PARAM_ONE": {
+            "Ref": "MyTestParametersParam137FCD884",
+          },
+          "PARAM_TWO": {
+            "Ref": "MyTestParametersParam24E319C53",
+          },
+        },
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "TestFunctionServiceRole6ABD93C7",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunction with "read" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
+{
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
+    "Properties": {
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        "Version": "2012-10-17",
+      },
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "Roles": [
+        {
+          "Ref": "TestFunctionServiceRole6ABD93C7",
+        },
+      ],
+    },
+    "Type": "AWS::IAM::Policy",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunction with "readwrite" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
+{
+  "OtherTestFunction0FC8D02A": {
+    "DependsOn": [
+      "OtherTestFunctionServiceRole5A690C20",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "OtherTestFunctionServiceRole5A690C20",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+  "TestFunction22AD90FC": {
+    "DependsOn": [
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Environment": {
+        "Variables": {
+          "PARAM_ONE": {
+            "Ref": "MyTestParametersParam137FCD884",
+          },
+          "PARAM_TWO": {
+            "Ref": "MyTestParametersParam24E319C53",
+          },
+        },
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "TestFunctionServiceRole6ABD93C7",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunction with "readwrite" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
+{
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
+    "Properties": {
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Action": "ssm:PutParameter",
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": "ssm:PutParameter",
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        "Version": "2012-10-17",
+      },
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "Roles": [
+        {
+          "Ref": "TestFunctionServiceRole6ABD93C7",
+        },
+      ],
+    },
+    "Type": "AWS::IAM::Policy",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunction with "write" permission > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
+{
+  "OtherTestFunction0FC8D02A": {
+    "DependsOn": [
+      "OtherTestFunctionServiceRole5A690C20",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "OtherTestFunctionServiceRole5A690C20",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+  "TestFunction22AD90FC": {
+    "DependsOn": [
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Environment": {
+        "Variables": {
+          "PARAM_ONE": {
+            "Ref": "MyTestParametersParam137FCD884",
+          },
+          "PARAM_TWO": {
+            "Ref": "MyTestParametersParam24E319C53",
+          },
+        },
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "TestFunctionServiceRole6ABD93C7",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunction with "write" permission > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
+{
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
+    "Properties": {
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Action": "ssm:PutParameter",
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": "ssm:PutParameter",
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        "Version": "2012-10-17",
+      },
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "Roles": [
+        {
+          "Ref": "TestFunctionServiceRole6ABD93C7",
+        },
+      ],
+    },
+    "Type": "AWS::IAM::Policy",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunctions grants to multiple functions > Rerun tests with the -u flag to update snapshots if changes are expected 1`] = `
+{
+  "OtherTestFunction0FC8D02A": {
+    "DependsOn": [
+      "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289",
+      "OtherTestFunctionServiceRole5A690C20",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Environment": {
+        "Variables": {
+          "PARAM_ONE": {
+            "Ref": "MyTestParametersParam137FCD884",
+          },
+          "PARAM_TWO": {
+            "Ref": "MyTestParametersParam24E319C53",
+          },
+        },
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "OtherTestFunctionServiceRole5A690C20",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+  "TestFunction22AD90FC": {
+    "DependsOn": [
+      "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "TestFunctionServiceRole6ABD93C7",
+    ],
+    "Properties": {
+      "Code": {
+        "ZipFile": "exports.handler = async () => ({ statusCode: 200 });",
+      },
+      "Environment": {
+        "Variables": {
+          "PARAM_ONE": {
+            "Ref": "MyTestParametersParam137FCD884",
+          },
+          "PARAM_TWO": {
+            "Ref": "MyTestParametersParam24E319C53",
+          },
+        },
+      },
+      "Handler": "index.handler",
+      "Role": {
+        "Fn::GetAtt": [
+          "TestFunctionServiceRole6ABD93C7",
+          "Arn",
+        ],
+      },
+      "Runtime": "nodejs22.x",
+    },
+    "Type": "AWS::Lambda::Function",
+  },
+}
+`;
+
+exports[`SsmParameterGroup > grantToFunctions grants to multiple functions > Rerun tests with the -u flag to update snapshots if changes are expected 2`] = `
+{
+  "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289": {
+    "Properties": {
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        "Version": "2012-10-17",
+      },
+      "PolicyName": "OtherTestFunctionServiceRoleDefaultPolicyFF9E1289",
+      "Roles": [
+        {
+          "Ref": "OtherTestFunctionServiceRole5A690C20",
+        },
+      ],
+    },
+    "Type": "AWS::IAM::Policy",
+  },
+  "TestFunctionServiceRoleDefaultPolicy810BAB0B": {
+    "Properties": {
+      "PolicyDocument": {
+        "Statement": [
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam137FCD884",
+                  },
+                ],
+              ],
+            },
+          },
+          {
+            "Action": [
+              "ssm:DescribeParameters",
+              "ssm:GetParameters",
+              "ssm:GetParameter",
+              "ssm:GetParameterHistory",
+            ],
+            "Effect": "Allow",
+            "Resource": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition",
+                  },
+                  ":ssm:",
+                  {
+                    "Ref": "AWS::Region",
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId",
+                  },
+                  ":parameter",
+                  {
+                    "Ref": "MyTestParametersParam24E319C53",
+                  },
+                ],
+              ],
+            },
+          },
+        ],
+        "Version": "2012-10-17",
+      },
+      "PolicyName": "TestFunctionServiceRoleDefaultPolicy810BAB0B",
+      "Roles": [
+        {
+          "Ref": "TestFunctionServiceRole6ABD93C7",
+        },
+      ],
+    },
+    "Type": "AWS::IAM::Policy",
+  },
+}
+`;

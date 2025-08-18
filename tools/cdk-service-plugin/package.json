@@ -1,0 +1,38 @@
+{
+  "name": "@tools/cdk-service-plugin",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "development": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "@nx/esbuild:esbuild",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "tools/cdk-service-plugin/dist",
+          "main": "tools/cdk-service-plugin/src/index.ts",
+          "tsConfig": "tools/cdk-service-plugin/tsconfig.lib.json",
+          "format": [
+            "esm"
+          ],
+          "declarationRootDir": "tools/cdk-service-plugin/src"
+        }
+      }
+    }
+  },
+  "generators": "./generators.json"
+}
