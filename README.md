@@ -1,8 +1,6 @@
-# Aligent AWS microservices template using Typescript and Serverless Framework
+# Aligent AWS Microservices template
 
-A template for developing a suite of AWS microservices using Typescript and [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html).
-
-The monorepo workspace is managed using [Nx.](https://nx.dev)
+A template for developing a suite of AWS microservices using [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html), [Typescript](https://www.typescriptlang.org/), and [Nx.](https://nx.dev)
 
 ## Setup
 
