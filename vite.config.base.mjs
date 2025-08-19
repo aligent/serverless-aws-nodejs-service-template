@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 // More information about mode: https://vite.dev/guide/env-and-mode.html#node-env-and-modes
-export const viteBaseConfig = defineConfig(({ mode }) => {
+export const viteBaseConfig = defineConfig(({ command, mode }) => {
     return {
         build: {
             sourcemap: mode !== 'production',
@@ -21,9 +21,7 @@ export const viteBaseConfig = defineConfig(({ mode }) => {
                 },
             },
         },
-        // FIXME: test and find a way around this
-        // ssr: { target: 'node', noExternal: true },
-        ssr: { target: 'node' },
+        ssr: { target: 'node', ...(command === 'build' ? { noExternal: true } : {}) },
         test: {
             globals: true,
             watch: false,
