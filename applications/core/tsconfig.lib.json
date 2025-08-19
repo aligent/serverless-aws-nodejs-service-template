@@ -10,11 +10,7 @@
         "types": ["node"]
     },
     "include": ["src/**/*.ts"],
-    "references": [
-        {
-            "path": "../../libs/cdk-utils/tsconfig.lib.json"
-        }
-    ],
+    "references": [],
     "exclude": [
         "vite.config.ts",
         "vite.config.mts",

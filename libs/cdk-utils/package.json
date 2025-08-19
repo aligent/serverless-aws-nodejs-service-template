@@ -3,11 +3,6 @@
   "version": "0.0.1",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts",
-      "default": "./src/index.ts"
-    },
     "./infra": {
       "types": "./src/infra.ts",
       "import": "./src/infra.ts"
@@ -19,5 +14,17 @@
     "./package.json": "./package.json"
   },
   "main": "./src/index.ts",
-  "types": "./src/index.ts"
+  "types": "./src/index.ts",
+  "nx": {
+    "targets": {
+      "build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "command": "tsc --build tsconfig.lib.json",
+          "color": true,
+          "cwd": "{projectRoot}"
+        }
+      }
+    }
+  }
 }

@@ -14,6 +14,7 @@
         "noUncheckedSideEffectImports": true,
         "types": ["node", "vitest", "vitest/globals"],
         "strictNullChecks": true,
+        "target": "ES2023", // Support top-level await
         // Aligent defaults from ts-code-standards
         "lib": ["ES2023"],
         "strict": true,
