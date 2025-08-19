@@ -1,4 +1,5 @@
 import { Stack, StackProps, Stage, Tags } from 'aws-cdk-lib';
+import { Code } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import path from 'node:path';
 import { SERVICE_NAME } from './service-name';
@@ -8,13 +9,24 @@ export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + 
 }
 
 /**
- * Resolves a path to runtime or infra assets relative to this stack
+ * Resolves a path to infra assets relative to this stack
  *
  * @param assetPath - The path to the asset.
  * @returns The resolved path.
  */
-export function resolveAssetPath(assetPath: `${'runtime/' | 'infra/'}${string}`) {
+export function resolveAssetPath(assetPath: `${'infra/'}${string}`) {
     return path.resolve(import.meta.dirname, assetPath);
+}
+
+/**
+ * Resolves a path to runtime assets relative to this stack
+ *
+ * @param assetPath - The path to the asset.
+ * @returns The resolved bundled code path.
+ */
+export function resolveRuntimeAssetPath(assetPath: `${'runtime/'}${string}${'.ts'}`) {
+    const bundledPath = assetPath.replace(path.extname(assetPath), '');
+    return Code.fromAsset(path.resolve(import.meta.dirname, 'dist', bundledPath, 'index.mjs'));
 }
 
 export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {

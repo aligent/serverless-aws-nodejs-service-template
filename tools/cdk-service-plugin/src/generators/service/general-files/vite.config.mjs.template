@@ -1,16 +1,28 @@
+import fg from 'fast-glob';
+import { basename, extname, resolve } from 'node:path';
 import { defineConfig, mergeConfig } from 'vitest/config';
 import { viteBaseConfig } from '../../vite.config.base.mjs';
 
-export default mergeConfig(
-    viteBaseConfig,
-    defineConfig({
-        cacheDir: '../../node_modules/.vite/<%= name %>',
-        test: {
-            env: {
-                NODE_ENV: 'test',
-                YOUR_ENV_VAR: 'environment-variable',
+const HANDLERS_PATH = 'src/runtime/handlers';
+const handlers = Object.fromEntries(
+    fg
+        .sync(`${resolve(import.meta.dirname, HANDLERS_PATH)}/**/*.ts`)
+        .map(handler => [basename(handler, extname(handler)), handler])
+);
+
+export default defineConfig(configEnv =>
+    mergeConfig(
+        viteBaseConfig(configEnv),
+        defineConfig({
+            cacheDir: '../../node_modules/.vite/<%= name %>',
+            build: { rollupOptions: { input: handlers } },
+            test: {
+                env: {
+                    NODE_ENV: 'test',
+                    YOUR_ENV_VAR: 'environment-variable',
+                },
+                unstubEnvs: true,
             },
-            unstubEnvs: true,
-        },
-    })
+        })
+    )
 );
