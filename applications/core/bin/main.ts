@@ -17,6 +17,7 @@ const app = new App({
         // Apply properties to the entire application
         // NOTE: Aspects do not work here because the Stage construct doesn't pass them through
         new NodeJsFunctionDefaultsInjector().withProps({
+            handler: 'index.handler',
             timeout: Duration.seconds(6),
             memorySize: 192,
             runtime: Runtime.NODEJS_22_X,
