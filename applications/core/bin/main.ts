@@ -4,7 +4,7 @@ import {
     NodeJsFunctionDefaultsInjector,
     StepFunctionDefaultsInjector,
     VersionFunctionsAspect,
-} from '@libs/cdk-utils';
+} from '@libs/cdk-utils/infra';
 import { App, Aspects, Duration, Stage, Tags, type StageProps } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import type { Construct } from 'constructs';
