@@ -6,11 +6,6 @@ export default defineConfig(configEnv =>
         viteBaseConfig(configEnv),
         defineConfig({
             cacheDir: '../../node_modules/.vite/cdk-utils',
-            test: {
-                env: {
-                    NODE_ENV: 'test',
-                },
-            },
         })
     )
 );
