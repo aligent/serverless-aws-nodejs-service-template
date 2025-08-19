@@ -17,7 +17,6 @@ const app = new App({
         // Apply properties to the entire application
         // NOTE: Aspects do not work here because the Stage construct doesn't pass them through
         new NodeJsFunctionDefaultsInjector().withProps({
-            handler: 'index.handler',
             timeout: Duration.seconds(6),
             memorySize: 192,
             runtime: Runtime.NODEJS_22_X,
@@ -49,11 +48,7 @@ new ApplicationStage(app, 'dev', {
     propertyInjectors: [
         // NOTE: Property Injectors will only apply ONCE each, so adding one here
         // overrides the same injector at the app level
-        new NodeJsFunctionDefaultsInjector({
-            sourceMap: false,
-            esm: true,
-            minify: false,
-        }).withProps({
+        new NodeJsFunctionDefaultsInjector({ sourceMap: false }).withProps({
             timeout: Duration.seconds(6),
             memorySize: 192,
             runtime: Runtime.NODEJS_22_X,
