@@ -4,18 +4,18 @@ import { defineConfig, mergeConfig } from 'vitest/config';
 import { viteBaseConfig } from '../../vite.config.base.mjs';
 
 const HANDLERS_PATH = 'src/runtime/handlers';
-const handlers = Object.fromEntries(
-    fg
-        .sync(`${resolve(import.meta.dirname, HANDLERS_PATH)}/**/*.ts`)
-        .map(handler => [basename(handler, extname(handler)), handler])
-);
 
-export default defineConfig(configEnv =>
-    mergeConfig(
+export default defineConfig(configEnv => {
+    const handlers = fg.sync(`${resolve(import.meta.dirname, HANDLERS_PATH)}/**/*.ts`);
+    const input = Object.fromEntries(
+        handlers.map(handler => [basename(handler, extname(handler)), handler])
+    );
+
+    return mergeConfig(
         viteBaseConfig(configEnv),
         defineConfig({
+            build: handlers.length ? { rollupOptions: { input } } : undefined,
             cacheDir: '../../node_modules/.vite/<%= name %>',
-            build: { rollupOptions: { input: handlers } },
             test: {
                 env: {
                     NODE_ENV: 'test',
@@ -24,5 +24,5 @@ export default defineConfig(configEnv =>
                 unstubEnvs: true,
             },
         })
-    )
-);
+    );
+});
