@@ -1,5 +1,5 @@
 {
-  "name": "@aligent/app",
+  "name": "@torbs/test",
   "version": "4.0.0",
   "description": "Aligent AWS microservices template using Typescript and AWS CDK",
   "author": "Aligent Consulting",

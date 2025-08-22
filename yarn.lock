@@ -5,51 +5,6 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
-"@aligent/app@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@aligent/app@workspace:."
-  dependencies:
-    "@aligent/ts-code-standards": "npm:^4.0.2"
-    "@aws-lambda-powertools/logger": "npm:^2.24.1"
-    "@nx/devkit": "npm:21.4.0"
-    "@nx/esbuild": "npm:21.4.0"
-    "@nx/eslint": "npm:21.4.0"
-    "@nx/eslint-plugin": "npm:21.4.0"
-    "@nx/js": "npm:21.4.0"
-    "@nx/vite": "npm:21.4.0"
-    "@nx/web": "npm:21.4.0"
-    "@swc-node/register": "npm:^1.10.10"
-    "@swc/core": "npm:^1.13.3"
-    "@swc/helpers": "npm:^0.5.17"
-    "@types/aws-lambda": "npm:^8.10.152"
-    "@types/node": "npm:^22.17.0"
-    "@typescript-eslint/eslint-plugin": "npm:^8.39.0"
-    "@typescript-eslint/parser": "npm:^8.39.0"
-    "@vitest/coverage-v8": "npm:^3.2.4"
-    "@vitest/ui": "npm:^3.2.4"
-    arktype: "npm:^2.1.20"
-    aws-cdk: "npm:^2.1023.0"
-    aws-cdk-lib: "npm:^2.211.0"
-    cdk-nag: "npm:^2.36.54"
-    constructs: "npm:^10.4.2"
-    esbuild: "npm:~0.25.8"
-    esbuild-visualizer: "npm:^0.7.0"
-    eslint: "npm:^9.32.0"
-    eslint-config-prettier: "npm:10.1.8"
-    fast-glob: "npm:^3.3.3"
-    jiti: "npm:2.5.1"
-    jsonc-eslint-parser: "npm:^2.4.0"
-    nx: "npm:21.4.0"
-    open: "npm:^10.2.0"
-    prettier: "npm:^3.6.2"
-    store-parameters: "npm:^1.0.6"
-    tslib: "npm:^2.8.1"
-    typescript: "npm:~5.9.2"
-    vite: "npm:6.3.5"
-    vitest: "npm:^3.2.4"
-  languageName: unknown
-  linkType: soft
-
 "@aligent/ts-code-standards@npm:^4.0.2":
   version: 4.0.2
   resolution: "@aligent/ts-code-standards@npm:4.0.2"
@@ -4051,6 +4006,51 @@ __metadata:
 "@tools/cdk-service-plugin@workspace:tools/cdk-service-plugin":
   version: 0.0.0-use.local
   resolution: "@tools/cdk-service-plugin@workspace:tools/cdk-service-plugin"
+  languageName: unknown
+  linkType: soft
+
+"@torbs/test@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@torbs/test@workspace:."
+  dependencies:
+    "@aligent/ts-code-standards": "npm:^4.0.2"
+    "@aws-lambda-powertools/logger": "npm:^2.24.1"
+    "@nx/devkit": "npm:21.4.0"
+    "@nx/esbuild": "npm:21.4.0"
+    "@nx/eslint": "npm:21.4.0"
+    "@nx/eslint-plugin": "npm:21.4.0"
+    "@nx/js": "npm:21.4.0"
+    "@nx/vite": "npm:21.4.0"
+    "@nx/web": "npm:21.4.0"
+    "@swc-node/register": "npm:^1.10.10"
+    "@swc/core": "npm:^1.13.3"
+    "@swc/helpers": "npm:^0.5.17"
+    "@types/aws-lambda": "npm:^8.10.152"
+    "@types/node": "npm:^22.17.0"
+    "@typescript-eslint/eslint-plugin": "npm:^8.39.0"
+    "@typescript-eslint/parser": "npm:^8.39.0"
+    "@vitest/coverage-v8": "npm:^3.2.4"
+    "@vitest/ui": "npm:^3.2.4"
+    arktype: "npm:^2.1.20"
+    aws-cdk: "npm:^2.1023.0"
+    aws-cdk-lib: "npm:^2.211.0"
+    cdk-nag: "npm:^2.36.54"
+    constructs: "npm:^10.4.2"
+    esbuild: "npm:~0.25.8"
+    esbuild-visualizer: "npm:^0.7.0"
+    eslint: "npm:^9.32.0"
+    eslint-config-prettier: "npm:10.1.8"
+    fast-glob: "npm:^3.3.3"
+    jiti: "npm:2.5.1"
+    jsonc-eslint-parser: "npm:^2.4.0"
+    nx: "npm:21.4.0"
+    open: "npm:^10.2.0"
+    prettier: "npm:^3.6.2"
+    store-parameters: "npm:^1.0.6"
+    tslib: "npm:^2.8.1"
+    typescript: "npm:~5.9.2"
+    vite: "npm:6.3.5"
+    vitest: "npm:^3.2.4"
   languageName: unknown
   linkType: soft
 
