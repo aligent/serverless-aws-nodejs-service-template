@@ -17,7 +17,6 @@ export const viteBaseConfig = defineConfig(({ command, mode }) => {
                 output: {
                     entryFileNames: '[name]/index.mjs',
                     format: 'es',
-                    inlineDynamicImports: true,
                 },
             },
         },
