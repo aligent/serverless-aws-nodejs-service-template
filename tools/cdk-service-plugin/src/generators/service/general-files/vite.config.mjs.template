@@ -6,9 +6,14 @@ import { viteBaseConfig } from '../../vite.config.base.mjs';
 const HANDLERS_PATH = 'src/runtime/handlers';
 
 export default defineConfig(configEnv => {
-    const handlers = fg.sync(`${resolve(import.meta.dirname, HANDLERS_PATH)}/**/*.ts`);
+    const basePath = resolve(import.meta.dirname, HANDLERS_PATH);
+    const handlers = fg.sync(`${basePath}/**/*.ts`);
     const input = Object.fromEntries(
-        handlers.map(handler => [basename(handler, extname(handler)), handler])
+        handlers.map(handler => {
+            const bundledPath = handler.replace(`${basePath}/`, '');
+            const entryName = bundledPath.replace(extname(bundledPath), '');
+            return [entryName, handler];
+        })
     );
 
     return mergeConfig(
