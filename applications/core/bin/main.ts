@@ -5,6 +5,7 @@ import {
     StepFunctionDefaultsInjector,
     VersionFunctionsAspect,
 } from '@libs/cdk-utils/infra';
+import { TestAppStack } from '@services/test-app';
 import { App, Aspects, Duration, Stage, Tags, type StageProps } from 'aws-cdk-lib';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import type { Construct } from 'constructs';
@@ -40,6 +41,7 @@ class ApplicationStage extends Stage {
         Tags.of(this).add('STAGE', id);
 
         // Instantiate service stacks here as required
+        new TestAppStack(this, 'TestAppStack');
     }
 }
 

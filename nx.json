@@ -120,7 +120,7 @@
                     "targetName": "typecheck"
                 }
             },
-            "include": ["libs/cdk-utils/*", "applications/core/*"]
+            "include": ["libs/cdk-utils/*", "applications/core/*", "services/test-app/*"]
         }
     ]
 }

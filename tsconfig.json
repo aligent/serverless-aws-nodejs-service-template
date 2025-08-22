@@ -11,6 +11,9 @@
         },
         {
             "path": "./libs/cdk-utils"
+        },
+        {
+            "path": "./services/test-app"
         }
     ]
 }

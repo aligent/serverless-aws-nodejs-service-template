@@ -4,10 +4,10 @@
     "include": [],
     "references": [
         {
-            "path": "../../services/test-app"
+            "path": "./tsconfig.lib.json"
         },
         {
-            "path": "../../libs/cdk-utils"
+            "path": "./tsconfig.spec.json"
         }
     ]
 }
