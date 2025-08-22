@@ -25,8 +25,11 @@ export function resolveAssetPath(assetPath: `${'infra/'}${string}`) {
  * @returns The resolved bundled code path.
  */
 export function resolveRuntimeAssetPath(assetPath: `${'runtime/'}${string}${'.ts'}`) {
-    const bundledPath = assetPath.replace(path.extname(assetPath), '');
-    return Code.fromAsset(path.resolve(import.meta.dirname, 'dist', bundledPath, 'index.mjs'));
+    const bundledPath = path.basename(assetPath).replace(path.extname(assetPath), '');
+    return {
+        code: Code.fromAsset(path.resolve(import.meta.dirname, '../dist', bundledPath)),
+        handler: 'index.handler',
+    };
 }
 
 export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {

@@ -53,7 +53,6 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
         }
     ) {
         this.defaultProps = {
-            handler: 'index.handler',
             runtime: Runtime.NODEJS_22_X,
             tracing: Tracing.ACTIVE,
         };
