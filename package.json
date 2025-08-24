@@ -1,6 +1,6 @@
 {
   "name": "@aligent/app",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Aligent AWS microservices template using Typescript and AWS CDK",
   "author": "Aligent Consulting",
   "type": "module",
