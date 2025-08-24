@@ -1,4 +1,5 @@
 import { Stack, StackProps, Stage, Tags } from 'aws-cdk-lib';
+import { Code } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import path from 'node:path';
 import { SERVICE_NAME } from './service-name';
@@ -8,15 +9,12 @@ export interface <%= name.split('-').map(part => part.charAt(0).toUpperCase() + 
 }
 
 /**
- * Resolves a path to runtime or infra assets relative to this stack
+ * Entrypoint for the <%= name %> service
  *
- * @param assetPath - The path to the asset.
- * @returns The resolved path.
+ * Instantiate in a CDK Application Stage to deploy to AWS.
+ *
+ * Use 'resolve' helpers below when referencing lambda handlers, step function files etc.
  */
-export function resolveAssetPath(assetPath: `${'runtime/' | 'infra/'}${string}`) {
-    return path.resolve(import.meta.dirname, assetPath);
-}
-
 export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>Stack extends Stack {
     constructor(scope: Construct, id: typeof SERVICE_NAME | (string & {}), props?: <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('') %>StackProps) {
         super(scope, id, props);
@@ -28,4 +26,40 @@ export class <%= name.split('-').map(part => part.charAt(0).toUpperCase() + part
 
         Tags.of(this).add('SERVICE', id);
     }
+}
+
+/**
+ * Resolves a path to infra assets relative to this stack
+ *
+ * @param assetPath - The path to the asset.
+ * @returns The resolved path.
+ */
+export function resolveAssetPath(assetPath: `${'infra/'}${string}`) {
+    return path.resolve(import.meta.dirname, assetPath);
+}
+
+/**
+ * Return an object with the default bundled code asset and
+ * handler property for use with the NodejsFunction construct.
+ *
+ * @example
+ * ```ts
+ * new NodejsFunction(this, 'FetchData', {
+ *     ...resolveLambdaHandler('runtime/handlers/fetch-data.ts'),
+ * });
+ * ```
+ *
+ * @param assetPath - The path to the typescript handler file.
+ * @returns The resolved bundled code path and handler name.
+ */
+export function resolveLambdaHandler(assetPath: `${'runtime/handlers/'}${string}${'.ts'}`) {
+    // Replace 'runtime/handlers/' with '..dist/' and remove the file extension
+    const bundledPath = assetPath.replace(
+        /^runtime\/handlers\/(?<path>.*)\.ts$/,
+        '../dist/$<path>'
+    );
+    return {
+        code: Code.fromAsset(path.resolve(import.meta.dirname, bundledPath)),
+        handler: 'index.handler',
+    };
 }

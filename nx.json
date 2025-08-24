@@ -36,8 +36,13 @@
             "dependsOn": ["^build"],
             "inputs": ["production", "^production"]
         },
+        "cdk": {
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
+        },
         "pg": {
             "executor": "nx:run-commands",
+            "dependsOn": ["^build"],
             "options": {
                 "color": true,
                 "cwd": "{workspaceRoot}/applications/core"

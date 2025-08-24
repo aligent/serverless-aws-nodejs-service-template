@@ -10,7 +10,8 @@
         "experimentalDecorators": true, // Required by ESBuild to bundle property decorators
         "importHelpers": true,
         "module": "ESNext",
-        "moduleResolution": "bundler",
+        "target": "ESNext",
+        "moduleResolution":"bundler",
         "noUncheckedSideEffectImports": true,
         "types": ["node", "vitest", "vitest/globals"],
         "strictNullChecks": true,
