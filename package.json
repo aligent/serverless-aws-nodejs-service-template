@@ -43,7 +43,7 @@
     "@vitest/ui": "^3.2.4",
     "aws-cdk": "^2.1023.0",
     "aws-cdk-lib": "^2.211.0",
-    "cdk-nag": "^2.36.54",
+    "cdk-nag": "^2.37.9",
     "constructs": "^10.4.2",
     "esbuild": "~0.25.8",
     "esbuild-visualizer": "^0.7.0",
