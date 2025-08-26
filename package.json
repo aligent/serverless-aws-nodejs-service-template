@@ -25,7 +25,7 @@
   ],
   "devDependencies": {
     "@aligent/ts-code-standards": "^4.0.2",
-    "@nx/devkit": "21.4.0",
+    "@nx/devkit": "21.4.1",
     "@nx/esbuild": "21.4.0",
     "@nx/eslint": "21.4.0",
     "@nx/eslint-plugin": "21.4.0",
