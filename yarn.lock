@@ -30,7 +30,7 @@ __metadata:
     arktype: "npm:^2.1.20"
     aws-cdk: "npm:^2.1023.0"
     aws-cdk-lib: "npm:^2.211.0"
-    cdk-nag: "npm:^2.36.54"
+    cdk-nag: "npm:^2.37.9"
     constructs: "npm:^10.4.2"
     esbuild: "npm:~0.25.8"
     esbuild-visualizer: "npm:^0.7.0"
@@ -5186,13 +5186,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cdk-nag@npm:^2.36.54":
-  version: 2.36.54
-  resolution: "cdk-nag@npm:2.36.54"
+"cdk-nag@npm:^2.37.9":
+  version: 2.37.9
+  resolution: "cdk-nag@npm:2.37.9"
   peerDependencies:
     aws-cdk-lib: ^2.176.0
     constructs: ^10.0.5
-  checksum: 10c0/4f26c6fd280bbacb6d75deb67da8193cf7900e93998da7471464ecde11d2b62d53ac6a899cb23811fe703c1d2ce2cdcc61ee2579bf20cf8134b3c48e730f7fa0
+  checksum: 10c0/e1a36b20e9f30f936aa249a5a37d630c52a6a4280a4ec4f74922c77b999fee2f0313e003a2a0ac4971046d6719ab73522bf3e9c87b9879d9009a4f04258385c2
   languageName: node
   linkType: hard
 
