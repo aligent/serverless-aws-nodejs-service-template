@@ -99,7 +99,7 @@ class ApplicationStage extends Stage {
     Tags.of(this).add('STAGE', id);
 
     // Instantiate service stacks here as required..
-    new YourServiceStack(scope, 'your-service-name', {
+    new YourServiceStack(this, 'your-service-name', {
       ...props,
       description: 'Your service description',
     });
