@@ -10,10 +10,11 @@ A template for developing a suite of AWS microservices using [AWS CDK](https://d
 
    Example: `@aligent-int/integrations`
 
-2. Install the template and validate it's passing code standards
+2. Install the template, then validate all code standard tests are passing
 
    ```bash
-   nvm use && yarn install && yarn audit
+   nvm use && yarn install
+   yarn audit
    ```
 
 3. (Optional) Commit the initial state of the template. This ensures subsequent changes are easy to review, rather than getting lost in the template boilerplate
@@ -99,7 +100,7 @@ class ApplicationStage extends Stage {
     Tags.of(this).add('STAGE', id);
 
     // Instantiate service stacks here as required..
-    new YourServiceStack(scope, 'your-service-name', {
+    new YourServiceStack(this, 'your-service-name', {
       ...props,
       description: 'Your service description',
     });
