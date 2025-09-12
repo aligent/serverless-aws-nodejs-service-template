@@ -54,10 +54,10 @@ export function resolveAssetPath(assetPath: `${'infra/'}${string}`) {
  */
 export function resolveLambdaHandler(assetPath: `${'runtime/handlers/'}${string}${'.ts'}`) {
     // Replace 'runtime/handlers/' with '..dist/' and remove the file extension
-    const bundledPath = assetPath.replace(
-        /^runtime\/handlers\/(?<path>.*)\.ts$/,
-        '../dist/$<path>'
-    );
+    // Extracting just the filename from the path ensures we can have sub-directories in the handlers directory
+    // eg. 'handlers/<platform>/get-product.ts'
+    const filename = assetPath.split('/').pop()?.replace('.ts', '') || '';
+    const bundledPath = `../dist/${filename}`;
     return {
         code: Code.fromAsset(path.resolve(import.meta.dirname, bundledPath)),
         handler: 'index.handler',
