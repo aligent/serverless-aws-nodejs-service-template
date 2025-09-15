@@ -1,29 +1,7 @@
 import { type InjectionContext, type IPropertyInjector } from 'aws-cdk-lib';
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
-import {
-    NodejsFunction,
-    OutputFormat,
-    type NodejsFunctionProps,
-} from 'aws-cdk-lib/aws-lambda-nodejs';
+import { NodejsFunction, type NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { logInjector } from './log-injector';
-
-/**
- * ESM support banner
- *
- * This is a workaround to support ESM in Lambda functions.
- * Aliases are used to avoid name conflicts, this may not be a real issue
- *
- * @see https://github.com/evanw/esbuild/issues/1944
- * @see https://aws.plainenglish.io/significantly-improve-typescript-lambda-function-readability-in-aws-console-613bc5ae98f6
- */
-const ESM_SUPPORT_BANNER = [
-    `import { fileURLToPath } from 'url';`,
-    `import { createRequire as topLevelCreateRequire } from 'module';`,
-    `import { dirname as ddirname } from 'path';`,
-    `const require = topLevelCreateRequire(import.meta.url);`,
-    `const __filename = fileURLToPath(import.meta.url);`,
-    `const __dirname = ddirname(__filename);`,
-].join(''); // Must be a single line, if the banner has `\n` characters they cause a syntax error
 
 /**
  * Property injector for Node.js Lambda functions with configuration-aware defaults
@@ -66,23 +44,16 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
      *
      * @param configuration - Configuration identifier used to select appropriate defaults. Uses production defaults if not specified.
      * @param configuration.sourceMap - Whether to enable source maps.
-     * @param configuration.esm - Whether to enable ESM support.
-     * @param configuration.minify - Whether to enable minification.
      */
     constructor(
         private readonly configuration: {
             sourceMap: boolean;
-            esm: boolean;
-            minify: boolean;
         } = {
             sourceMap: true,
-            esm: true,
-            minify: true,
         }
     ) {
         this.defaultProps = {
             runtime: Runtime.NODEJS_22_X,
-            bundling: bundlingProperties(configuration),
             tracing: Tracing.ACTIVE,
         };
     }
@@ -100,8 +71,6 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
      * ```typescript
      * const customInjector = new NodeJsFunctionDefaultsInjector({
      *   sourceMaps: false,
-     *   esm: false,
-     *   minify: false,
      * })
      *   .withProps({
      *     timeout: Duration.minutes(5),
@@ -143,7 +112,7 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
         // If source maps are enabled in our bundling, add the required NODE_OPTIONS flag to the environment
         const environment = {
             ...props.environment,
-            ...(props.bundling?.sourceMap ? { NODE_OPTIONS: '--enable-source-maps' } : {}),
+            ...(this.configuration.sourceMap ? { NODE_OPTIONS: '--enable-source-maps' } : {}),
         };
 
         return {
@@ -151,38 +120,4 @@ export class NodeJsFunctionDefaultsInjector implements IPropertyInjector {
             environment,
         };
     }
-}
-
-/**
- * Returns configuration-specific bundling properties for Lambda functions
- *
- * Provides optimized bundling configurations for different environments:
- * - 'dev': Fast builds for development (no minification, bundle analysis enabled)
- * - 'stg': Balanced configuration for staging
- * - Default: Production-optimized (minified, tree-shaking enabled)
- *
- * @param configuration - Configuration identifier to determine bundling strategy
- * @returns Bundling properties optimized for the specified configuration
- */
-function bundlingProperties({
-    sourceMap,
-    esm,
-    minify,
-}: {
-    sourceMap: boolean;
-    esm: boolean;
-    minify: boolean;
-}) {
-    return {
-        ...(sourceMap && { sourceMap: true }),
-        ...(esm && { format: OutputFormat.ESM, banner: ESM_SUPPORT_BANNER }),
-        ...(minify && {
-            keepNames: true,
-            minify: true,
-            buildArgs: {
-                bundle: 'true',
-                treeShaking: 'true',
-            },
-        }),
-    };
 }

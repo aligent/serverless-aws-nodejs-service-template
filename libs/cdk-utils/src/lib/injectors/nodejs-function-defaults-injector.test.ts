@@ -66,22 +66,13 @@ describe('NodeJsFunctionDefaultsInjector', () => {
     });
 
     test('merges bundling and environment properties correctly', () => {
-        PropertyInjectors.of(stack).add(
-            new NodeJsFunctionDefaultsInjector({
-                sourceMap: false,
-                esm: true,
-                minify: false,
-            })
-        );
+        // Sourcemaps would normally be false in 'dev' configuration
+        PropertyInjectors.of(stack).add(new NodeJsFunctionDefaultsInjector({ sourceMap: true }));
 
         new NodejsFunction(stack, 'TestFunction', {
             runtime: Runtime.NODEJS_22_X,
             handler: 'index.handler',
             code: Code.fromInline('exports.handler = async () => ({ statusCode: 200 });'),
-            bundling: {
-                // Sourcemaps would normally be false in 'dev' configuration
-                sourceMap: true,
-            },
             environment: {
                 BUCKET_NAME: 'test-bucket',
             },

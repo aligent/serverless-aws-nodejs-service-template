@@ -10,10 +10,11 @@ A template for developing a suite of AWS microservices using [AWS CDK](https://d
 
    Example: `@aligent-int/integrations`
 
-2. Install the template and validate it's passing code standards
+2. Install the template, then validate all code standard tests are passing
 
    ```bash
-   nvm use && yarn install && yarn audit
+   nvm use && yarn install
+   yarn audit
    ```
 
 3. (Optional) Commit the initial state of the template. This ensures subsequent changes are easy to review, rather than getting lost in the template boilerplate
@@ -69,6 +70,22 @@ yarn nx g service test-app --type=general
 # Will create a project called @services/test-app in the services/ folder
 ```
 
+Newly added service may not be detected by Nx immediately. You will need to update lockfile then reset Nx cache & stop its daemon and update Nx’s internal dependency graph and ensure your workspace is in sync.
+
+```bash
+# Update lockfile
+yarn install
+
+# Reset Nx cache and stop the daemon
+yarn nx reset
+
+# Update Nx's internal dependency graph and ensure workspace is in sync
+yarn nx sync
+
+# Alternatively, you can combine them into one line
+yarn install && yarn nx reset && yarn nx sync
+```
+
 Import and instantiate the service in `ApplicationStage` inside `applications/core/bin/main.ts`:
 
 ```typescript
@@ -83,15 +100,13 @@ class ApplicationStage extends Stage {
     Tags.of(this).add('STAGE', id);
 
     // Instantiate service stacks here as required..
-    new YourServiceStack(scope, 'your-service-name', {
+    new YourServiceStack(this, 'your-service-name', {
       ...props,
       description: 'Your service description',
     });
   }
 }
 ```
-
-Note: You will need to run `yarn install` and `yarn nx sync` before other projects will detect the new service
 
 ---
 
@@ -161,6 +176,7 @@ yarn nx g remove <service-name>
 
 You may need to remove imports of the service from the application first.
 You may need to remove references to the service in `nx.json` afterwards.
+You may need to run `yarn install` to remove the service reference from the lock file.
 
 ### 🧪 Testing with Mock Services
 
