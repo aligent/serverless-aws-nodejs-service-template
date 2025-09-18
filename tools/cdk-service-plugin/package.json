@@ -16,6 +16,9 @@
     }
   },
   "nx": {
+    "tags": [
+      "scope:tools"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
