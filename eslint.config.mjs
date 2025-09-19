@@ -26,12 +26,20 @@ const eslintBaseConfig = [
             '@nx/enforce-module-boundaries': [
                 'error',
                 {
-                enforceBuildableLibDependency: true,
                 allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+                enforceBuildableLibDependency: true,
                 depConstraints: [
                     {
-                        sourceTag: '*',
-                        onlyDependOnLibsWithTags: ['*'],
+                        sourceTag: 'scope:applications',
+                        onlyDependOnLibsWithTags: ['scope:libs', 'scope:services'],
+                    },
+                    {
+                        sourceTag: 'scope:services',
+                        onlyDependOnLibsWithTags: ['scope:libs', 'scope:services'],
+                    },
+                    {
+                        sourceTag: 'scope:libs',
+                        onlyDependOnLibsWithTags: ['scope:libs'],
                     },
                 ],
                 },

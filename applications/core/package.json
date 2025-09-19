@@ -5,6 +5,9 @@
   "main": "./bin/main.ts",
   "types": "./bin/main.ts",
   "nx": {
+    "tags": [
+      "scope:applications"
+    ],
     "targets": {
       "cdk": {
         "executor": "nx:run-commands",

@@ -1,26 +1,9 @@
-import { builtinModules } from 'node:module';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vitest/config';
 
 // More information about mode: https://vite.dev/guide/env-and-mode.html#node-env-and-modes
 export const viteBaseConfig = defineConfig(({ command, mode }) => {
     return {
-        build: {
-            sourcemap: mode !== 'production',
-            minify: mode !== 'development',
-            emptyOutDir: true,
-            reportCompressedSize: true,
-            ssr: true,
-            target: 'esnext',
-            rollupOptions: {
-                external: [...builtinModules],
-                output: {
-                    entryFileNames: '[name]/index.mjs',
-                    format: 'es',
-                },
-            },
-        },
-        ssr: { target: 'node', ...(command === 'build' ? { noExternal: true } : {}) },
         test: {
             globals: true,
             watch: false,

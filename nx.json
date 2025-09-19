@@ -24,25 +24,26 @@
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
             "cache": true,
-            "dependsOn": ["^build"],
+            // Stack tests may require lambda handlers to be built first
+            "dependsOn": ["^build", "build:lambda"],
             "configurations": {
                 "coverage": {
                     "coverage": true
                 }
             }
         },
-        "@nx/js:tsc": {
+        "typecheck": {
             "cache": true,
             "dependsOn": ["^build"],
             "inputs": ["production", "^production"]
         },
         "cdk": {
-            "dependsOn": ["^build"],
+            "dependsOn": ["^build", "^build:lambda"],
             "inputs": ["production", "^production"]
         },
         "pg": {
             "executor": "nx:run-commands",
-            "dependsOn": ["^build"],
+            "dependsOn": ["^build", "build:lambda"],
             "options": {
                 "color": true,
                 "cwd": "{workspaceRoot}/applications/core"
@@ -84,7 +85,7 @@
             "!{projectRoot}/eslint.config.m[jt]s",
             "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
             "!{projectRoot}/tsconfig.spec.json",
-            "!{projectRoot}/vite.config.m[jt]s",
+            "!{projectRoot}/vitest.config.m[jt]s",
             "!{projectRoot}/src/test-setup.[jt]s"
         ],
         "sharedGlobals": []
@@ -99,28 +100,17 @@
             "options": {}
         },
         {
-            "plugin": "@nx/js/typescript",
+            "plugin": "@nx/rsbuild",
             "options": {
-                "typecheck": {
-                    "targetName": "typecheck"
-                },
-                "build": {
-                    "targetName": "build",
-                    "configName": "tsconfig.lib.json",
-                    "buildDepsName": "build-deps",
-                    "watchDepsName": "watch-deps"
-                }
+                "buildTargetName": "build:lambda",
+                "devTargetName": "dev:lambda",
+                "inspectTargetName": "inspect:lambda"
             },
-            "include": ["tools/cdk-service-plugin/*"]
-        },
-        {
-            "plugin": "@nx/js/typescript",
-            "options": {
-                "typecheck": {
-                    "targetName": "typecheck"
-                }
-            },
-            "include": ["libs/cdk-utils/*", "applications/core/*"]
+            // This plugin configuration is only for bundling lambda code in services
+            // The `**` glob is required to include all services
+            "include": ["services/**"],
+            // Services with no lambda handlers should be excluded from here
+            "exclude": []
         }
     ]
 }
