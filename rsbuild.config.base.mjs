@@ -13,6 +13,7 @@ const HANDLERS_PATH = 'src/runtime/handlers';
  * @returns Rsbuild config for multiple lambda handlers
  */
 export function defineLambdaConfig(configPath, subPath = HANDLERS_PATH) {
+    if (subPath.includes('..')) throw new Error('Invalid path provided');
     const basePath = resolve(configPath, subPath);
     const handlers = fg.sync(`${basePath}/**/*.ts`);
 
