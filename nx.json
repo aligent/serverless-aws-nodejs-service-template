@@ -24,7 +24,6 @@
             "inputs": ["default", "^production"],
             "outputs": ["{projectRoot}/coverage"],
             "cache": true,
-            // Stack tests may require lambda handlers to be built first
             "dependsOn": ["^build", "build:lambda"],
             "configurations": {
                 "coverage": {
@@ -106,11 +105,17 @@
                 "devTargetName": "dev:lambda",
                 "inspectTargetName": "inspect:lambda"
             },
-            // This plugin configuration is only for bundling lambda code in services
-            // The `**` glob is required to include all services
             "include": ["services/**"],
-            // Services with no lambda handlers should be excluded from here
             "exclude": []
+        },
+        {
+            "plugin": "@nx/js/typescript",
+            "options": {
+                "typecheck": {
+                    "targetName": "typecheck"
+                }
+            },
+            "include": ["services/ssm-config-gateway/*"]
         }
     ]
 }

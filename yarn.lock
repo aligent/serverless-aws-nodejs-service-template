@@ -4533,6 +4533,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@services/ssm-config-gateway@workspace:services/ssm-config-gateway":
+  version: 0.0.0-use.local
+  resolution: "@services/ssm-config-gateway@workspace:services/ssm-config-gateway"
+  languageName: unknown
+  linkType: soft
+
 "@sinclair/typebox@npm:^0.34.0":
   version: 0.34.38
   resolution: "@sinclair/typebox@npm:0.34.38"
