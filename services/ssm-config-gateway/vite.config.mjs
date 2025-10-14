@@ -1,0 +1,33 @@
+import fg from 'fast-glob';
+import { extname, resolve } from 'node:path';
+import { defineConfig, mergeConfig } from 'vitest/config';
+import { viteBaseConfig } from '../../vite.config.base.mjs';
+
+const HANDLERS_PATH = 'src/runtime/handlers';
+
+export default defineConfig(configEnv => {
+    const basePath = resolve(import.meta.dirname, HANDLERS_PATH);
+    const handlers = fg.sync(`${basePath}/**/*.ts`);
+    const input = Object.fromEntries(
+        handlers.map(handler => {
+            const bundledPath = handler.replace(`${basePath}/`, '');
+            const entryName = bundledPath.replace(extname(bundledPath), '');
+            return [entryName, handler];
+        })
+    );
+
+    return mergeConfig(
+        viteBaseConfig(configEnv),
+        defineConfig({
+            build: handlers.length ? { rollupOptions: { input } } : undefined,
+            cacheDir: '../../node_modules/.vite/ssm-config-gateway',
+            test: {
+                env: {
+                    NODE_ENV: 'test',
+                    YOUR_ENV_VAR: 'environment-variable',
+                },
+                unstubEnvs: true,
+            },
+        })
+    );
+});
