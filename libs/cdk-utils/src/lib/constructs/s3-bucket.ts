@@ -1,4 +1,4 @@
-import { Duration } from 'aws-cdk-lib';
+import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 import { Bucket, type BucketProps } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
@@ -47,6 +47,8 @@ export class S3Bucket extends Bucket {
      */
     constructor(scope: Construct, id: string, props: S3BucketProps) {
         const defaultProps = {
+            removalPolicy:
+                props.duration === 'PERMANENT' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
             versioned: props?.versioned ?? false,
             lifecycleRules: formatLifecycleRules(props?.duration),
         } satisfies BucketProps;
