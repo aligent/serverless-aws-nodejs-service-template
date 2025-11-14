@@ -31,7 +31,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     arktype: "npm:^2.1.20"
-    aws-cdk: "npm:^2.1023.0"
+    aws-cdk: "npm:^2.1031.2"
     aws-cdk-lib: "npm:^2.211.0"
     cdk-nag: "npm:^2.36.54"
     constructs: "npm:^10.4.2"
@@ -6755,9 +6755,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"aws-cdk@npm:^2.1023.0":
-  version: 2.1023.0
-  resolution: "aws-cdk@npm:2.1023.0"
+"aws-cdk@npm:^2.1031.2":
+  version: 2.1031.2
+  resolution: "aws-cdk@npm:2.1031.2"
   dependencies:
     fsevents: "npm:2.3.2"
   dependenciesMeta:
@@ -6765,7 +6765,7 @@ __metadata:
       optional: true
   bin:
     cdk: bin/cdk
-  checksum: 10c0/2f80eccc08721dda1671287e9705f28931213043a4cbb3472adbccfebfb19cdf2095e27bacb77406ac72e667a6a67f1dddb0fbce9c7942e4cd4c3b8fabbc430a
+  checksum: 10c0/c6aba70184d23d5d48e6dd0a8a223dab93632faa2c154a89e88d4c05f29518d4c81a97b995988b0b8254c7e907336d50918e1cff41b9e598d4c47847af02beef
   languageName: node
   linkType: hard
 
