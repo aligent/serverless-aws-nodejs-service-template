@@ -12,7 +12,7 @@ __metadata:
     "@aligent/ts-code-standards": "npm:^4.0.2"
     "@aws-lambda-powertools/logger": "npm:^2.24.1"
     "@aws-sdk/client-s3": "npm:^3.888.0"
-    "@nx/devkit": "npm:21.5.2"
+    "@nx/devkit": "npm:22.0.3"
     "@nx/esbuild": "npm:21.5.2"
     "@nx/eslint": "npm:21.5.2"
     "@nx/eslint-plugin": "npm:21.5.2"
@@ -3564,6 +3564,23 @@ __metadata:
   peerDependencies:
     nx: ">= 20 <= 22"
   checksum: 10c0/ed46fcf078247907dbd1f324ca76ff3681cf5b39837f7655760021d5870df94161c836bf3e9af5f6d49819deec35567af8e3c0e82dc222ef49284adcfb9d5ede
+  languageName: node
+  linkType: hard
+
+"@nx/devkit@npm:22.0.3":
+  version: 22.0.3
+  resolution: "@nx/devkit@npm:22.0.3"
+  dependencies:
+    "@zkochan/js-yaml": "npm:0.0.7"
+    ejs: "npm:^3.1.7"
+    enquirer: "npm:~2.3.6"
+    minimatch: "npm:9.0.3"
+    semver: "npm:^7.6.3"
+    tslib: "npm:^2.3.0"
+    yargs-parser: "npm:21.1.1"
+  peerDependencies:
+    nx: ">= 21 <= 23 || ^22.0.0-0"
+  checksum: 10c0/8d3ce8ff976b2e2d82815b582d56ada1edcc5b7b145fc2e5a288dce9a74f5dc4d95e1c88a5e8621b1ac5437ec8adafa29811e15c2fbb999d8fbb96a0c4cf3c59
   languageName: node
   linkType: hard
 
