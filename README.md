@@ -1,5 +1,7 @@
 # Aligent AWS Microservices template
 
+> **This project is no longer maintained.** The [nx-cdk generator](https://github.com/aligent/microservice-development-utilities/tree/main/packages/nx-cdk) should be used instead.
+
 A template for developing a suite of AWS microservices using [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/home.html), [Typescript](https://www.typescriptlang.org/), and [Nx.](https://nx.dev)
 
 ## Setup
